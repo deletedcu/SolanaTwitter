@@ -1,4 +1,4 @@
-use crate::errors::*;
+use crate::errors::ErrorCode::*;
 use crate::state::dm::*;
 use anchor_lang::*;
 
