@@ -9,7 +9,7 @@ pub struct Status {
 #[derive(Accounts)]
 pub struct CreateStatus<'info> {
   // space: 8 discriminator + (4 length prefix + 50 * 4 ) status + 1 bump
-  #[account(init, payer = user, space = 8 + (4 + 50 * 4) + 1), seeds = [b"status", user.key().as_ref()], bump]
+  #[account(init, payer = user, space = 8 + (4 + 50 * 4) + 1, seeds = [b"status", user.key().as_ref()], bump)]
   pub status: Account<'info, Status>,
   pub system_program: Program<'info, System>,
   #[account(mut)]

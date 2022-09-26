@@ -33,10 +33,5 @@ pub fn update_dm(ctx: Context<UpdateDm>, new_content: String) -> Result<()> {
 }
 
 pub fn delete_dm(ctx: Context<DeleteDm>) -> Result<()> {
-  let dm = &mut ctx.accounts.dm;
-
-  dm.content = "".to_string();
-  dm.edited = true;
-
   Ok(())
 }
