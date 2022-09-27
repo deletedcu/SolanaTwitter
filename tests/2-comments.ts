@@ -1,7 +1,6 @@
 import * as anchor from "@project-serum/anchor";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import * as assert from "assert";
-import * as bs58 from "bs58";
 import { program, user } from "../tests";
 import { sendTweet } from "./1-tweets";
 
