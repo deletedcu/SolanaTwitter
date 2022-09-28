@@ -26,7 +26,7 @@ pub fn update_reaction(ctx: Context<UpdateReaction>, input_char: String) -> Resu
     Ok(())
 }
 
-pub fn delete_reaction(ctx: Context<DeleteReaction>) -> Result<()> {
+pub fn delete_reaction(_ctx: Context<DeleteReaction>) -> Result<()> {
     Ok(())
 }
 

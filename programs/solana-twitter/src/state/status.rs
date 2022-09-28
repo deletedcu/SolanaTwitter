@@ -26,6 +26,6 @@ pub struct UpdateStatus<'info> {
 #[derive(Accounts)]
 pub struct DeleteStatus<'info> {
     pub user: Signer<'info>,
-    #[account(mut, seeds=[b"status", user.key().as_ref()], bump = status.bump)]
+    #[account(mut, close = user, seeds=[b"status", user.key().as_ref()], bump = status.bump)]
     pub status: Account<'info, Status>,
 }

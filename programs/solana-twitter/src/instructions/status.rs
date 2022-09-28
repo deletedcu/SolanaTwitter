@@ -24,6 +24,6 @@ pub fn update_status(ctx: Context<UpdateStatus>, new_message: String) -> Result<
     Ok(())
 }
 
-pub fn delete_status(ctx: Context<DeleteStatus>) -> Result<()> {
+pub fn delete_status(_ctx: Context<DeleteStatus>) -> Result<()> {
     Ok(())
 }

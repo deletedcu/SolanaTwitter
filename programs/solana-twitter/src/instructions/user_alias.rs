@@ -24,6 +24,6 @@ pub fn update_user_alias(ctx: Context<UpdateUserAlias>, new_alias: String) -> Re
     Ok(())
 }
 
-pub fn delete_user_alias(ctx: Context<DeleteUserAlias>) -> Result<()> {
+pub fn delete_user_alias(_ctx: Context<DeleteUserAlias>) -> Result<()> {
     Ok(())
 }
