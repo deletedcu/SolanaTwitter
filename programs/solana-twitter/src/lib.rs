@@ -1,76 +1,101 @@
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::system_program;
+use state::*;
 
-declare_id!("2eyJNpUiqaLghKUctM91UQET66Yx8BVbds2LvVvjd1Cg");
+pub mod errors;
+pub mod instructions;
+pub mod state;
+
+declare_id!("4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62");
 
 #[program]
 pub mod solana_twitter {
     use super::*;
 
-    pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> Result<()> {
-        let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
-        let author: &Signer = &ctx.accounts.author;
-        let clock: Clock = Clock::get().unwrap();
-    
-        if topic.chars().count() > 50 {
-            return Err(ErrorCode::TopicTooLong.into())
-        }
-    
-        if content.chars().count() > 280 {
-            return Err(ErrorCode::ContentTooLong.into())
-        }
-    
-        tweet.author = *author.key;
-        tweet.timestamp = clock.unix_timestamp;
-        tweet.topic = topic;
-        tweet.content = content;
-    
-        Ok(())
+    // tweet
+    pub fn send_tweet(ctx: Context<SendTweet>, tag: String, content: String) -> Result<()> {
+        instructions::send_tweet(ctx, tag, content)
     }
-}
 
-#[derive(Accounts)]
-pub struct SendTweet<'info> {
-    #[account(init, payer = author, space = Tweet::LEN)]
-    pub tweet: Account<'info, Tweet>,
-    #[account(mut)]
-    pub author: Signer<'info>,
-    #[account(address = system_program::ID)]
-    pub system_program: Program<'info, System>,
-}
+    pub fn update_tweet(ctx: Context<UpdateTweet>, new_tag: String, new_content: String) -> Result<()> {
+        instructions::update_tweet(ctx, new_tag, new_content)
+    }
 
-// 1. Define the structure of the Tweet account
-#[account]
-pub struct Tweet {
-    pub author: Pubkey,
-    pub timestamp: i64,
-    pub topic: String,
-    pub content: String,
-}
+    pub fn delete_tweet(ctx: Context<DeleteTweet>) -> Result<()> {
+        instructions::delete_tweet(ctx)
+    }
 
-// 2. Add some useful constants for sizing properties
-const DISCRIMINATOR_LENGTH: usize = 8;
-const PUBLIC_KEY_LENGTH: usize = 32;
-const TIMESTAMP_LENGTH: usize = 8;
-const STRING_LENGTH_PREFIX: usize = 4; // Stores the size of the string.
-const MAX_TOPIC_LENGTH: usize = 50 * 4; // 50 chars max.
-const MAX_CONTENT_LENGTH: usize = 280 * 4; // 280 chars max.
+    // comment
+    pub fn send_comment(ctx: Context<SendComment>, tweet: Pubkey, content: String, parent: Option<Pubkey>) -> Result<()> {
+        instructions::send_comment(ctx, tweet, content, parent)
+    }
 
-// 3. Add a constant on the Tweet account that provides its total size.
-impl Tweet {
-    const LEN: usize = DISCRIMINATOR_LENGTH
-        + PUBLIC_KEY_LENGTH
-        + TIMESTAMP_LENGTH
-        + STRING_LENGTH_PREFIX
-        + MAX_TOPIC_LENGTH
-        + STRING_LENGTH_PREFIX
-        + MAX_CONTENT_LENGTH;
-}
+    pub fn update_comment(ctx: Context<UpdateComment>, new_content: String) -> Result<()> {
+        instructions::update_comment(ctx, new_content)
+    }
 
-#[error_code]
-pub enum ErrorCode {
-    #[msg("The provided topic should be 50 characters long maximum.")]
-    TopicTooLong,
-    #[msg("The provided content should be 280 characters long maximum.")]
-    ContentTooLong,
+    pub fn delete_comment(ctx: Context<DeleteComment>) -> Result<()> {
+        instructions::delete_comment(ctx)
+    }
+
+    // dm
+    pub fn send_dm(ctx: Context<SendDm>, recipient: Pubkey, content: String) -> Result<()> {
+        instructions::send_dm(ctx, recipient, content)
+    }
+
+    pub fn update_dm(ctx: Context<UpdateDm>, new_content: String) -> Result<()> {
+        instructions::update_dm(ctx, new_content)
+    }
+
+    pub fn delete_dm(ctx: Context<DeleteDm>) -> Result<()> {
+        instructions::delete_dm(ctx)
+    }
+
+    // reaction
+    pub fn react(ctx: Context<React>, tweet: Pubkey, input_char: String, bump: u8) -> Result<()> {
+        instructions::react(ctx, tweet, input_char, bump)
+    }
+
+    pub fn update_reaction(ctx: Context<UpdateReaction>, input_char: String) -> Result<()> {
+        instructions::update_reaction(ctx, input_char)
+    }
+
+    pub fn delete_reaction(ctx: Context<DeleteReaction>) -> Result<()> {
+        instructions::delete_reaction(ctx)
+    }
+
+    // status
+    pub fn create_status(ctx: Context<CreateStatus>, message: String) -> Result<()> {
+        instructions::create_status(ctx, message)
+    }
+
+    pub fn update_status(ctx: Context<UpdateStatus>, new_message: String) -> Result<()> {
+        instructions::update_status(ctx, new_message)
+    }
+
+    pub fn delete_status(ctx: Context<DeleteStatus>) -> Result<()> {
+        instructions::delete_status(ctx)
+    }
+
+    // user_alias
+    pub fn create_user_alias(ctx: Context<CreateUserAlias>, alias: String) -> Result<()>                       {
+        instructions::create_user_alias(ctx, alias)
+    }
+
+    pub fn update_user_alias(ctx: Context<UpdateUserAlias>, new_alias: String) -> Result<()> {
+        instructions::update_user_alias(ctx, new_alias)
+    }
+    
+    pub fn delete_user_alias(ctx: Context<DeleteUserAlias>) -> Result<()> {
+        instructions::delete_user_alias(ctx)
+    }
+
+    // voting
+    pub fn vote(ctx: Context<Vote>, tweet: Pubkey, result: VotingResult, voting_bump: u8) -> Result<()> {
+        instructions::vote(ctx, tweet, result, voting_bump)
+    }
+
+    pub fn update_voting(ctx: Context<UpdateVoting>, new_result: VotingResult) -> Result<()> {
+        instructions::update_voting(ctx, new_result)
+    }
+
 }
