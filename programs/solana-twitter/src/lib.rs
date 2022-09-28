@@ -5,7 +5,7 @@ pub mod errors;
 pub mod instructions;
 pub mod state;
 
-declare_id!("2eyJNpUiqaLghKUctM91UQET66Yx8BVbds2LvVvjd1Cg");
+declare_id!("4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62");
 
 #[program]
 pub mod solana_twitter {
