@@ -11,6 +11,7 @@ describe("reactions", () => {
     const [reactionPDA, bump] = await PublicKey.findProgramAddress([
       anchor.utils.bytes.utf8.encode("reaction"),
       user.publicKey.toBuffer(),
+      tweet.publickey.toBuffer(),
     ], program.programId);
 
     // react on tweet
@@ -27,7 +28,7 @@ describe("reactions", () => {
       .accounts({ user: user.publicKey, reaction: reactionPDA })
       .rpc();
     const updatedReaction = await program.account.reaction.fetch(reactionPDA);
-    assert.deepEqual(updatedReaction.reactionChar, { eye: {} });
+    assert.deepEqual(updatedReaction.reactionChar, { eyes: {} });
 
     // delete reaction
     await program.methods.deleteReaction()
@@ -42,6 +43,7 @@ describe("reactions", () => {
     const [reactionPDA, bump] = await PublicKey.findProgramAddress([
       anchor.utils.bytes.utf8.encode("reaction"),
       user.publicKey.toBuffer(),
+      tweet.publickey.toBuffer(),
     ], program.programId);
 
     try {
