@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 import { toCapitalize } from "../utils";
 
 interface Props {
