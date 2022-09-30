@@ -2,29 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+.wallet-adapter-dropdown {
+  @apply w-full;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.wallet-adapter-button {
+  @apply w-full rounded-full;
 }
 
-* {
-  box-sizing: border-box;
+.wallet-adapter-button-trigger {
+  @apply justify-center bg-primary-500 !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.wallet-adapter-dropdown-list {
+  @apply top-auto bottom-full md:top-full md:bottom-auto md:left-0 md:right-auto;
+}
+
+.wallet-adapter-dropdown-list-active {
+  @apply -translate-y-3 transform md:translate-y-3;
 }
