@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wallet-adapter-dropdown {
+  @apply w-full;
+}
+
+.wallet-adapter-button {
+  @apply w-full rounded-full;
+}
+
+.wallet-adapter-button-trigger {
+  @apply justify-center bg-primary-500 !important;
+}
+
+.wallet-adapter-dropdown-list {
+  @apply top-auto bottom-full md:top-full md:bottom-auto md:left-0 md:right-auto;
+}
+
+.wallet-adapter-dropdown-list-active {
+  @apply -translate-y-3 transform md:translate-y-3;
+}
