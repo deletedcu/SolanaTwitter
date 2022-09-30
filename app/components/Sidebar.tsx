@@ -1,5 +1,6 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -8,18 +9,10 @@ export default function Sidebar() {
   const { connected } = useWallet();
 
   return (
-    <aside>
+    <aside className="fixed flex w-20 flex-col items-center space-y-2 py-4 md:w-64 md:items-stretch md:space-y-4 md:py-8 md:pl-4 md:pr-8">
       <Link href="/">
         <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-primary-500 h-8 w-8 md:h-10 md:w-10"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-          </svg>
+          <Image src="/twitter.svg" alt="Solana Twitter" width={64} height={64}/>
         </a>
       </Link>
       <div className="flex flex-col items-center space-y-2 md:items-stretch">
