@@ -20,10 +20,12 @@ const Home: NextPage = () => {
   }, [wallet, connection]);
 
   useEffect(() => {
-    fetchTweets()
-      .then((data) => setTweets(data))
-      .finally(() => setLoading(false));
-  }, []);
+    if (wallet) {
+      fetchTweets()
+        .then((data) => setTweets(data))
+        .finally(() => setLoading(false));
+    }
+  }, [wallet]);
 
   const addTweet = (tweet: Tweet) => setTweets([...tweets, tweet]);
 
