@@ -4,7 +4,7 @@ import { Tweet } from "../../models";
 import { useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 
-export const fetchTweets = async (filters = []) => {
+export const fetchTweets = async (filters: any[] = []) => {
   const workspace = useWorkspace();
   if (!workspace) return [];
   const { program } = workspace;
@@ -40,10 +40,10 @@ export const sendTweet = async (tag: string, content: string) => {
   return new Tweet(tweet.publicKey, tweetAccount);
 };
 
-export const userFilter = (user: PublicKey) => ({
+export const userFilter = (userBase58PublicKey: string) => ({
   memcmp: {
     offset: 8, // discriminator,
-    bytes: user.toBase58(),
+    bytes: userBase58PublicKey,
   },
 });
 
@@ -51,9 +51,9 @@ export const tagFilter = (tag: string) => ({
   memcmp: {
     offset:
       8 + // Discriminator.
-      32 + // Author public key.
+      32 + // User public key.
       8 + // Timestamp.
-      4, // Topic string prefix.
+      4, // Tag string prefix.
     bytes: bs58.encode(Buffer.from(tag)),
   },
 });

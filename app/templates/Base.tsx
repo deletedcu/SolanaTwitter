@@ -4,12 +4,12 @@ import Sidebar from "../components/Sidebar";
 import { toCapitalize } from "../utils";
 
 interface Props {
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 export default function Base({ children }: Props) {
   const router = useRouter();
-  const [routeName, setRouteName] = useState<string|false>();
+  const [routeName, setRouteName] = useState<string>();
 
   useEffect(() => {
     if (router.pathname === "/") setRouteName("Home");
@@ -24,8 +24,8 @@ export default function Base({ children }: Props) {
         <header className="flex items-center justify-between space-x-6 border-b px-8 py-4">
           <div className="text-xl font-bold">{routeName}</div>
         </header>
-        { children }
+        {children}
       </main>
     </div>
-  )
+  );
 }
