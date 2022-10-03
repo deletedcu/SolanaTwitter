@@ -1,17 +1,16 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
-import { Tweet } from "../../models";
+import { TagType, Tweet, UserType } from "../../models";
 import { useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 
 type TagOriginalType = {
-  [key: string]: number;
+  [key: string]: TagType;
 };
 
-export interface TagType {
-  tag: string,
-  count: number,
-}
+type UserOriginalType = {
+  [key: string]: UserType;
+};
 
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = useWorkspace();
@@ -58,18 +57,40 @@ export const fetchTags = async () => {
   tweets.forEach((data) => {
     const tweet = new Tweet(data.publicKey, data.account);
     if (Object.keys(tags).includes(tweet.tag)) {
-      tags[tweet.tag] += 1;
+      tags[tweet.tag].count += 1;
     } else {
-      tags[tweet.tag] = 1;
+      tags[tweet.tag] = new TagType(tweet.tag, 1);
     }
   });
 
-  const orderedTags: TagType[] = Object.entries(tags)
+  const orderedTags: TagType[] = Object.values(tags)
     .slice()
-    .sort((a, b) => b[1] - a[1])
-    .map((val) => ({ tag: val[0], count: val[1] }));
+    .sort((a, b) => b.count - a.count);
 
   return orderedTags;
+};
+
+export const fetchUsers = async () => {
+  const workspace = useWorkspace();
+  if (!workspace) return [];
+  const { program } = workspace;
+  const tweets = await program.account.tweet.all();
+
+  let users: UserOriginalType = {};
+  tweets.forEach((data) => {
+    const tweet = new Tweet(data.publicKey, data.account);
+    if (Object.keys(users).includes(tweet.user.toBase58())) {
+      users[tweet.user.toBase58()].total_posts += 1;
+      if (tweet.timestamp > users[tweet.user.toBase58()].last_timestamp) {
+        users[tweet.user.toBase58()].last_timestamp = tweet.timestamp;
+        users[tweet.user.toBase58()].last_tag = tweet.tag;
+      }
+    } else {
+      users[tweet.user.toBase58()] = new UserType(tweet.user, tweet.publickey, tweet.tag, tweet.timestamp, 1);
+    }
+  });
+
+  return Object.values(users);
 };
 
 export const userFilter = (userBase58PublicKey: string) => ({

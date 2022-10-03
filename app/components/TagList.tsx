@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TagType } from "../pages/api/tweets";
+import { TagType } from "../models";
 
 interface TagListProps {
   tags: TagType[];

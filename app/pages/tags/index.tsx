@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import Search from "../../templates/Search";
 import { useSlug } from "../../utils";
 import { tagIcon } from "../../public/assets/icons";
-import { fetchTags, TagType } from "../api/tweets";
+import { fetchTags } from "../api/tweets";
 import TagList from "../../components/TagList";
+import { TagType } from "../../models";
 
 export default function Tags() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function Tags() {
     const fTags = allTags.filter((k) => k.tag.includes(text));
     setTag(text);
     setFilterTags(fTags);
-  }
+  };
 
   useEffect(() => {
     fetchTweetTags();
