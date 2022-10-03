@@ -19,7 +19,7 @@ export const fetchTweets = async (filters: any[] = []) => {
   const tweets = await program.account.tweet.all(filters);
   const orderedTweets = tweets
     .map((tweet) => new Tweet(tweet.publicKey, tweet.account))
-    // .slice()
+    .filter((tweet) => tweet.tag !== "[deleted]")
     .sort((a, b) => b.timestamp - a.timestamp);
   return orderedTweets;
 };
@@ -121,7 +121,8 @@ export const fetchTags = async () => {
 
   const orderedTags: TagType[] = Object.values(tags)
     .slice()
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count)
+    .filter((tag) => tag.tag !== "[deleted]");
 
   return orderedTags;
 };
@@ -135,20 +136,22 @@ export const fetchUsers = async () => {
   let users: UserOriginalType = {};
   tweets.forEach((data) => {
     const tweet = new Tweet(data.publicKey, data.account);
-    if (Object.keys(users).includes(tweet.user.toBase58())) {
-      users[tweet.user.toBase58()].total_posts += 1;
-      if (tweet.timestamp > users[tweet.user.toBase58()].last_timestamp) {
-        users[tweet.user.toBase58()].last_timestamp = tweet.timestamp;
-        users[tweet.user.toBase58()].last_tag = tweet.tag;
+    if (tweet.tag !== "[deleted]") {
+      if (Object.keys(users).includes(tweet.user.toBase58())) {
+        users[tweet.user.toBase58()].total_posts += 1;
+        if (tweet.timestamp > users[tweet.user.toBase58()].last_timestamp) {
+          users[tweet.user.toBase58()].last_timestamp = tweet.timestamp;
+          users[tweet.user.toBase58()].last_tag = tweet.tag;
+        }
+      } else {
+        users[tweet.user.toBase58()] = new UserType(
+          tweet.user,
+          tweet.publickey,
+          tweet.tag,
+          tweet.timestamp,
+          1
+        );
       }
-    } else {
-      users[tweet.user.toBase58()] = new UserType(
-        tweet.user,
-        tweet.publickey,
-        tweet.tag,
-        tweet.timestamp,
-        1
-      );
     }
   });
 
