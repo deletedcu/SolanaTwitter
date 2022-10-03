@@ -11,6 +11,8 @@ type FormValues = {
   tag: string;
 }
 
+const LIMIT = 280;
+
 export default function TweetForm({
   added,
   forceTag,
@@ -28,14 +30,14 @@ export default function TweetForm({
   const effectiveTag = forceTag ?? slugTag;
 
   // Character limit / count-down
-  const characterLimit = useCountCharacterLimit(watch("content"), 280);
+  const characterLimit = useCountCharacterLimit(watch("content"), LIMIT);
   let characterLimitColor = "text-gray-400";
-  if (characterLimit <= 10) characterLimitColor = "text-yellow-500";
-  if (characterLimit < 0) characterLimitColor = "text-red-500";
+  if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
+  if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
 
   // Permissions
   const { connected } = useWallet();
-  const canTweet = watch("content") && characterLimit > 0;
+  const canTweet = watch("content") && (LIMIT - characterLimit) > 0;
 
   // Actions
   const send = async (data: FormValues) => {
@@ -55,11 +57,9 @@ export default function TweetForm({
           <TextareaAutosize
             {...register("content", {
               required: true,
-              maxLength: 280,
+              maxLength: LIMIT,
             })}
             id="content"
-            // value={content}
-            // onChange={(e) => setContent(e.currentTarget.value)}
             rows={1}
             className="mb-3 w-full resize-none text-xl focus:outline-none"
             placeholder="What's happening?"
@@ -96,7 +96,10 @@ export default function TweetForm({
             </div>
             <div className="m-2 ml-auto flex items-center space-x-6">
               {/* <!-- Character limit. --> */}
-              <div className={characterLimitColor}>{characterLimit} left</div>
+              <div className="text-sm">
+                <span className={characterLimitColor}>{characterLimit}</span>
+                <span>{` / ${LIMIT}`}</span>
+              </div>
               {/* <!-- Tweet button. --> */}
               <button
                 disabled={!canTweet}

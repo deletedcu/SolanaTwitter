@@ -17,7 +17,11 @@ export const fetchTweets = async (filters: any[] = []) => {
   if (!workspace) return [];
   const { program } = workspace;
   const tweets = await program.account.tweet.all(filters);
-  return tweets.map((tweet) => new Tweet(tweet.publicKey, tweet.account));
+  const orderedTweets = tweets
+    .map((tweet) => new Tweet(tweet.publicKey, tweet.account))
+    // .slice()
+    .sort((a, b) => b.timestamp - a.timestamp);
+  return orderedTweets;
 };
 
 export const getTweet = async (publicKey: PublicKey) => {
@@ -30,22 +34,74 @@ export const getTweet = async (publicKey: PublicKey) => {
 
 export const sendTweet = async (tag: string, content: string) => {
   const workspace = useWorkspace();
-  if (!workspace) return null;
+  if (!workspace) return;
+
   const { wallet, program } = workspace;
   const tweet = web3.Keypair.generate();
 
-  await program.methods
-    .sendTweet(tag, content)
-    .accounts({
-      user: wallet.publicKey,
-      tweet: tweet.publicKey,
-      systemPrgram: web3.SystemProgram.programId,
-    })
-    .signers([tweet])
-    .rpc();
+  try {
+    await program.methods
+      .sendTweet(tag, content)
+      .accounts({
+        user: wallet.publicKey,
+        tweet: tweet.publicKey,
+        systemPrgram: web3.SystemProgram.programId,
+      })
+      .signers([tweet])
+      .rpc();
 
-  const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
-  return new Tweet(tweet.publicKey, tweetAccount);
+    const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
+    return new Tweet(tweet.publicKey, tweetAccount);
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+};
+
+export const updateTweet = async (
+  tweet: Tweet,
+  tag: string,
+  content: string
+) => {
+  const workspace = useWorkspace();
+  if (!workspace) return;
+  const { wallet, program } = workspace;
+
+  try {
+    await program.methods
+      .updateTweet(tag, content)
+      .accounts({
+        tweet: tweet.publickey,
+        user: wallet.publicKey,
+      })
+      .rpc();
+
+    tweet.tag = tag;
+    tweet.content = content;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+};
+
+export const deleteTweet = async (tweet: Tweet) => {
+  const workspace = useWorkspace();
+  if (!workspace) return false;
+  const { wallet, program } = workspace;
+
+  try {
+    await program.methods
+      .deleteTweet()
+      .accounts({
+        tweet: tweet.publickey,
+        user: wallet.publicKey,
+      })
+      .rpc();
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 };
 
 export const fetchTags = async () => {
@@ -86,7 +142,13 @@ export const fetchUsers = async () => {
         users[tweet.user.toBase58()].last_tag = tweet.tag;
       }
     } else {
-      users[tweet.user.toBase58()] = new UserType(tweet.user, tweet.publickey, tweet.tag, tweet.timestamp, 1);
+      users[tweet.user.toBase58()] = new UserType(
+        tweet.user,
+        tweet.publickey,
+        tweet.tag,
+        tweet.timestamp,
+        1
+      );
     }
   });
 

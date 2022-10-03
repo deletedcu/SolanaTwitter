@@ -16,7 +16,9 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    initWorkspace(wallet, connection);
+    if (wallet) {
+      initWorkspace(wallet, connection);
+    }
   }, [wallet, connection]);
 
   useEffect(() => {

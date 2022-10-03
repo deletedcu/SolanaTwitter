@@ -24,16 +24,9 @@ export default function TagList(props: TagListProps) {
   );
 }
 
-function TagBadge({
-  key,
-  tag,
-}: {
-  key: number;
-  tag: TagType;
-}) {
+function TagBadge({tag}: {tag: TagType}) {
   return (
     <div
-      key={key}
       className="border border-solid border-sky-500 rounded-full mb-2 mr-2"
     >
       <Link href={`/tags/${tag.tag}`}>
