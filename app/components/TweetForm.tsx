@@ -20,12 +20,11 @@ export default function TweetForm({
   added: (a: Tweet) => void;
   forceTag?: string;
 }) {
-  const { register, handleSubmit, watch } = useForm<FormValues>();
+  const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
   // Form data
   const [tag, setTag] = useState<string>("");
-  const [content, setContent] = useState<string>("");
   const slugTag = useSlug(tag);
   const effectiveTag = forceTag ?? slugTag;
 
@@ -41,11 +40,11 @@ export default function TweetForm({
 
   // Actions
   const send = async (data: FormValues) => {
-    const tweet = await sendTweet(tag, data.content);
+    const tweet = await sendTweet(effectiveTag, data.content);
     if (tweet) {
       added(tweet);
+      resetField("content");
       setTag("");
-      setContent("");
     }
   };
 

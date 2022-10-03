@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     }
   }, [wallet]);
 
-  const addTweet = (tweet: Tweet) => setTweets([...tweets, tweet]);
+  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   return (
     <>

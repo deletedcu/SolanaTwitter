@@ -32,7 +32,7 @@ export default function tags() {
     }
   };
 
-  const addTweet = (tweet: Tweet) => setTweets([...tweets, tweet]);
+  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
     fetchTagTweets();

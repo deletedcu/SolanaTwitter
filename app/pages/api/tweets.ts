@@ -1,7 +1,7 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { useWorkspace } from "../../utils";
+import { sleep, useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 
 type TagOriginalType = {
@@ -50,6 +50,7 @@ export const sendTweet = async (tag: string, content: string) => {
       .signers([tweet])
       .rpc();
 
+    sleep(1000);
     const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
     return new Tweet(tweet.publicKey, tweetAccount);
   } catch (err) {

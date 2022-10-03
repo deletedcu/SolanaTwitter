@@ -12,7 +12,7 @@ export default function Profile() {
 
   const wallet = useAnchorWallet();
 
-  const addTweet = (tweet: Tweet) => setTweets([...tweets, tweet]);
+  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
     if (!wallet) return;
