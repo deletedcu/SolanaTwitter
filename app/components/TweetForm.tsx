@@ -29,7 +29,7 @@ export default function TweetForm({
   const effectiveTag = forceTag ?? slugTag;
 
   // Character limit / count-down
-  const characterLimit = useCountCharacterLimit(watch("content"), LIMIT);
+  const characterLimit = useCountCharacterLimit(watch("content"));
   let characterLimitColor = "text-gray-400";
   if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
   if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
