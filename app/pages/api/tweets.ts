@@ -4,6 +4,15 @@ import { Tweet } from "../../models";
 import { useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 
+type TagOriginalType = {
+  [key: string]: number;
+};
+
+export interface TagType {
+  tag: string,
+  count: number,
+}
+
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = useWorkspace();
   if (!workspace) return [];
@@ -38,6 +47,29 @@ export const sendTweet = async (tag: string, content: string) => {
 
   const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
   return new Tweet(tweet.publicKey, tweetAccount);
+};
+
+export const fetchTags = async () => {
+  const workspace = useWorkspace();
+  if (!workspace) return [];
+  const { program } = workspace;
+  const tweets = await program.account.tweet.all();
+  let tags: TagOriginalType = {};
+  tweets.forEach((data) => {
+    const tweet = new Tweet(data.publicKey, data.account);
+    if (Object.keys(tags).includes(tweet.tag)) {
+      tags[tweet.tag] += 1;
+    } else {
+      tags[tweet.tag] = 1;
+    }
+  });
+
+  const orderedTags: TagType[] = Object.entries(tags)
+    .slice()
+    .sort((a, b) => b[1] - a[1])
+    .map((val) => ({ tag: val[0], count: val[1] }));
+
+  return orderedTags;
 };
 
 export const userFilter = (userBase58PublicKey: string) => ({
