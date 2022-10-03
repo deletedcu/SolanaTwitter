@@ -39,7 +39,7 @@ export default function TweetForm({
 
   // Actions
   const send = async (data: FormValues) => {
-    const tweet = await sendTweet(tag, content);
+    const tweet = await sendTweet(tag, data.content);
     if (tweet) {
       added(tweet);
       setTag("");
@@ -58,8 +58,8 @@ export default function TweetForm({
               maxLength: 280,
             })}
             id="content"
-            value={content}
-            onChange={(e) => setContent(e.currentTarget.value)}
+            // value={content}
+            // onChange={(e) => setContent(e.currentTarget.value)}
             rows={1}
             className="mb-3 w-full resize-none text-xl focus:outline-none"
             placeholder="What's happening?"
