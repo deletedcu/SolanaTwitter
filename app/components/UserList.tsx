@@ -1,7 +1,7 @@
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
 import { UserType } from "../models";
-import { useWorkspace } from "../utils";
 
 interface UserListProps {
   users: UserType[];
@@ -10,8 +10,7 @@ interface UserListProps {
 
 export default function UserList(props: UserListProps) {
   const { users, loading } = props;
-  // @ts-ignore
-  const { wallet } = useWorkspace();
+  const wallet = useAnchorWallet();
 
   return (
     <>
@@ -38,7 +37,7 @@ export default function UserList(props: UserListProps) {
             <tbody>
               {users.map((user, key) => {
                 const userRoute =
-                  wallet && wallet.publicKey.toBase58() === user.user.toBase58()
+                  wallet.publicKey.toBase58() === user.user.toBase58()
                     ? "/profile"
                     : `/users/${user.user.toBase58()}`;
                 return (
