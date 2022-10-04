@@ -3,6 +3,7 @@ import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
 import { sleep, useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
+import { usePagination } from "../../utils/usePagination";
 
 type TagOriginalType = {
   [key: string]: TagType;
@@ -22,6 +23,68 @@ export const fetchTweets = async (filters: any[] = []) => {
     .filter((tweet) => tweet.tag !== "[deleted]")
     .sort((a, b) => b.timestamp - a.timestamp);
   return orderedTweets;
+};
+
+export const paginateTweets = async (
+  filters: any[] = [],
+  perPage = 10,
+  onNewPage = (tweets: Tweet[]) => {}
+) => {
+  const workspace = useWorkspace();
+  if (!workspace) return [];
+  const { program, connection } = workspace;
+  let page = 0;
+
+  const prefetchCb = async () => {
+    // Reset page number
+    page = 0;
+
+    // Prepare the discriminator filter
+    const tweetClient = program.account.tweet;
+    const tweetAccountName = program.idl.name;
+    const tweetDiscriminatorFilter = {
+      memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
+    };
+
+    // Prefetch all tweets with their timestamps only
+    const allTweets = await connection.getProgramAccounts(program.programId, {
+      filters: [tweetDiscriminatorFilter, ...filters],
+      dataSlice: { offset: 40, length: 8 },
+    });
+
+    // Parse the timestamp from the account's data
+    const allTweetsWithTimestamps = allTweets.map(({ account, pubkey }) => ({
+      pubkey,
+      timestamp: Number(account.data),
+    }));
+
+    return allTweetsWithTimestamps
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .map(({ pubkey }) => pubkey);
+  };
+
+  const pageCb = async (page: number, paginatedPublicKeys: PublicKey[]) => {
+    const tweets = await program.account.tweet.fetchMultiple(
+      paginatedPublicKeys
+    );
+
+    return tweets.map((tweet, index) => {
+      const publicKey = paginatedPublicKeys[index];
+      return new Tweet(publicKey, tweet);
+    });
+  };
+
+  const pagination = usePagination(perPage, prefetchCb, pageCb);
+  const { hasPage, getPage } = pagination;
+
+  const hasNextPage = hasPage(page + 1);
+  const getNextPage = async () => {
+    const newPageTweets = await getPage(page + 1);
+    page += 1;
+    onNewPage(newPageTweets);
+  }
+
+  return { page, hasNextPage, getNextPage, ...pagination };
 };
 
 export const getTweet = async (publicKey: PublicKey) => {
