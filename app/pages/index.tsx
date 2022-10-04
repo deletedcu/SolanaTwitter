@@ -15,7 +15,7 @@ const Home: NextPage = () => {
 
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
-  
+
   const onNewPage = (newTweets: Tweet[]) =>
     setTweets([...tweets, ...newTweets]);
 

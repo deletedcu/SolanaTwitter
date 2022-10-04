@@ -12,7 +12,6 @@ interface TweetListProps {
 
 export default function TweetList(props: TweetListProps) {
   const { tweets, loading, hasMore, loadMore } = props;
-  console.log('TweetList', props);
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
 
   useEffect(() => {

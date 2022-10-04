@@ -68,10 +68,9 @@ export const paginateTweets = (
       paginatedPublicKeys
     );
 
-    return tweets.map((tweet, index) => {
-      const publicKey = paginatedPublicKeys[index];
-      return new Tweet(publicKey, tweet);
-    }).filter((tweet) => tweet.tag !== "[deleted]");
+    return tweets
+      .map((tweet, index) => new Tweet(paginatedPublicKeys[index], tweet))
+      .filter((tweet) => tweet.tag !== "[deleted]");
   };
 
   const pagination = usePagination(perPage, prefetchCb, pageCb);
@@ -82,7 +81,7 @@ export const paginateTweets = (
     const newPageTweets = await getPage(page + 1);
     page += 1;
     onNewPage(newPageTweets);
-  }
+  };
 
   return { page, hasNextPage, getNextPage, ...pagination };
 };
@@ -171,22 +170,45 @@ export const deleteTweet = async (tweet: Tweet) => {
 export const fetchTags = async () => {
   const workspace = useWorkspace();
   if (!workspace) return [];
-  const { program } = workspace;
-  const tweets = await program.account.tweet.all();
-  let tags: TagOriginalType = {};
-  tweets.forEach((data) => {
-    const tweet = new Tweet(data.publicKey, data.account);
-    if (Object.keys(tags).includes(tweet.tag)) {
-      tags[tweet.tag].count += 1;
-    } else {
-      tags[tweet.tag] = new TagType(tweet.tag, 1);
-    }
+  const { program, connection } = workspace;
+
+  // Prepare the discriminator filter
+  const tweetClient = program.account.tweet;
+  const tweetAccountName = "Tweet";
+  const tweetDiscriminatorFilter = {
+    memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
+  };
+
+  // Prefetch all tweets with their tags only
+  const allTweets = await connection.getProgramAccounts(program.programId, {
+    filters: [tweetDiscriminatorFilter],
+    dataSlice: { offset: 8 + 32 + 8, length: 4 + 50 * 4},
   });
 
-  const orderedTags: TagType[] = Object.values(tags)
-    .slice()
-    .sort((a, b) => b.count - a.count)
-    .filter((tag) => tag.tag !== "[deleted]");
+  const allTags = allTweets.map(({ pubkey, account}) => {
+    const prefix = account.data.subarray(0, 4).readInt8();
+    const tag = account.data.subarray(4, 4 + prefix).toString();
+    return tag;
+  });
+
+  type tagProps = {
+    [key: string]: number
+  }
+
+  const tags = allTags.reduce((acc: tagProps, tag: string) => {
+    if (tag !== "[deleted]") {
+      if (acc[tag]) {
+        acc[tag] += 1;
+      } else {
+        acc[tag] = 1;
+      }
+    }
+    return acc;
+  }, {});
+
+  const orderedTags: TagType[] = Object.entries(tags)
+    .map((k) => ({ tag: k[0], count: k[1] }))
+    .sort((a, b) => b.count - a.count);
 
   return orderedTags;
 };
