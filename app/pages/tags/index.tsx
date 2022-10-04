@@ -10,7 +10,6 @@ import { TagType } from "../../models";
 export default function Tags() {
   const router = useRouter();
   const [tag, setTag] = useState("");
-  const [viewedTag, setViewedTag] = useState("");
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [filterTags, setFilterTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +18,6 @@ export default function Tags() {
 
   const search = () => {
     router.push(`/tags/${slugTag}`);
-    setViewedTag(slugTag);
   };
 
   const fetchTweetTags = () => {

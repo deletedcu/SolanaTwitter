@@ -9,14 +9,12 @@ import UserList from "../../components/UserList";
 export default function Users() {
   const router = useRouter();
   const [user, setUser] = useState("");
-  const [viewedUser, setViewedUser] = useState("");
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
   const [filterUsers, setFilterUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
 
   const search = () => {
     router.push(`/users/${user}`);
-    setViewedUser(user);
   };
 
   const fetchTweetUsers = () => {

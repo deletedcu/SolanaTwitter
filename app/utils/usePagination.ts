@@ -1,5 +1,4 @@
 import { PublicKey } from "@solana/web3.js";
-import { useState } from "react";
 import { Tweet } from "../models";
 
 export const usePagination = (
@@ -7,9 +6,9 @@ export const usePagination = (
   prefetchCb: () => Promise<PublicKey[]>,
   pageCb: (page: number, pubkeys: PublicKey[]) => Promise<Tweet[]>
 ) => {
-  const [allPublicKeys, setAllPublicKeys] = useState<PublicKey[]>([]);
-  const [prefetchLoading, setPrefetchLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(false);
+  let allPublicKeys: PublicKey[] = [];
+  let prefetchLoading = false;
+  let pageLoading = false;
 
   const loading = prefetchLoading || pageLoading;
   let prefetchPromise: Promise<void>;
@@ -17,11 +16,10 @@ export const usePagination = (
   const prefetch = () => {
     prefetchPromise = (async () => {
       try {
-        setPrefetchLoading(true);
-        const allKeys = await prefetchCb();
-        setAllPublicKeys(allKeys);
+        prefetchLoading = true;
+        allPublicKeys = await prefetchCb();
       } finally {
-        setPrefetchLoading(false);
+        prefetchLoading = false;
       }
     })();
 
@@ -40,10 +38,10 @@ export const usePagination = (
     await prefetchPromise;
     if (!hasPage(page)) return [];
     try {
-      setPageLoading(true);
+      pageLoading = true;
       return await pageCb(page, getPagePublicKeys(page));
     } finally {
-      setPageLoading(false);
+      pageLoading = false;
     }
   };
 

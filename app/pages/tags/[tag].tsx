@@ -6,36 +6,42 @@ import { tagIcon } from "../../public/assets/icons";
 import Search from "../../templates/Search";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
-import { fetchTweets, tagFilter } from "../api/tweets";
+import { paginateTweets, tagFilter } from "../api/tweets";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function tags() {
   const router = useRouter();
   const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [loading, setLoading] = useState(true);
   const [tag, setTag] = useState<string>(router.query.tag as string);
-  const [viewedTag, setViewedTag] = useState<string>(
-    router.query.tag as string
-  );
-
+  const [viewedTag, setViewedTag] = useState<string>();
+  const [pagination, setPagination] = useState<any>();
   const slugTag = useSlug(tag);
+
+  const onNewPage = (newTweets: Tweet[]) =>
+    setTweets([...tweets, ...newTweets]);
 
   const search = () => {
     router.push(`/tags/${slugTag}`);
-    setViewedTag(slugTag);
-  };
-
-  const fetchTagTweets = () => {
-    if (slugTag === viewedTag) {
-      fetchTweets([tagFilter(slugTag)])
-        .then((fetchedTweets) => setTweets(fetchedTweets))
-        .finally(() => setLoading(false));
-    }
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
-    fetchTagTweets();
+    if (tag) {
+      if (slugTag === viewedTag) return;
+      setTweets([]);
+      setViewedTag(slugTag);
+      const filters = [tagFilter(slugTag)];
+
+      setPagination(() => {
+        const newPagination = paginateTweets(filters, 10, onNewPage);
+        newPagination?.prefetch().then(newPagination.getNextPage);
+        return newPagination;
+      });
+    } else {
+      setTweets([]);
+      setViewedTag("");
+    }
   }, [tag]);
 
   return (
@@ -48,10 +54,17 @@ export default function tags() {
       search={search}
     >
       <TweetForm added={addTweet} forceTag={viewedTag} />
-      <TweetList tweets={tweets} loading={loading} />
-      {tweets.length === 0 && (
+      {pagination && (
+        <TweetList
+          tweets={tweets}
+          loading={pagination.loading}
+          hasMore={pagination.hasNextPage}
+          loadMore={pagination.getNextPage}
+        />
+      )}
+      {pagination && !pagination.loading && tweets.length === 0 && (
         <div className="p-8 text-center text-gray-500">
-          No tweets were found in this topic...
+          No tweets were found in this tag...
         </div>
       )}
     </Search>

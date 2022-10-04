@@ -25,13 +25,13 @@ export const fetchTweets = async (filters: any[] = []) => {
   return orderedTweets;
 };
 
-export const paginateTweets = async (
+export const paginateTweets = (
   filters: any[] = [],
   perPage = 10,
-  onNewPage = (tweets: Tweet[]) => {}
+  onNewPage = (a: Tweet[]) => {}
 ) => {
   const workspace = useWorkspace();
-  if (!workspace) return [];
+  if (!workspace) return;
   const { program, connection } = workspace;
   let page = 0;
 
@@ -41,7 +41,7 @@ export const paginateTweets = async (
 
     // Prepare the discriminator filter
     const tweetClient = program.account.tweet;
-    const tweetAccountName = program.idl.name;
+    const tweetAccountName = "Tweet";
     const tweetDiscriminatorFilter = {
       memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
     };
@@ -71,7 +71,7 @@ export const paginateTweets = async (
     return tweets.map((tweet, index) => {
       const publicKey = paginatedPublicKeys[index];
       return new Tweet(publicKey, tweet);
-    });
+    }).filter((tweet) => tweet.tag !== "[deleted]");
   };
 
   const pagination = usePagination(perPage, prefetchCb, pageCb);

@@ -7,25 +7,27 @@ import TweetList from "../components/TweetList";
 import { Tweet } from "../models";
 import Base from "../templates/Base";
 import { initWorkspace } from "../utils";
-import { fetchTweets } from "./api/tweets";
+import { paginateTweets } from "./api/tweets";
 
 const Home: NextPage = () => {
+  const [tweets, setTweets] = useState<Tweet[]>([]);
+  const [pagination, setPagination] = useState<any>();
+
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  const onNewPage = (newTweets: Tweet[]) =>
+    setTweets([...tweets, ...newTweets]);
 
   useEffect(() => {
     if (wallet) {
       initWorkspace(wallet, connection);
-    }
-  }, [wallet, connection]);
-
-  useEffect(() => {
-    if (wallet) {
-      fetchTweets()
-        .then((data) => setTweets(data))
-        .finally(() => setLoading(false));
+      setTweets([]);
+      setPagination(() => {
+        const newPagination = paginateTweets([], 10, onNewPage);
+        newPagination?.prefetch().then(newPagination.getNextPage);
+        return newPagination;
+      });
     }
   }, [wallet]);
 
@@ -39,7 +41,14 @@ const Home: NextPage = () => {
       </Head>
       <Base>
         <TweetForm added={addTweet} />
-        <TweetList tweets={tweets} loading={loading} />
+        {pagination && (
+          <TweetList
+            tweets={tweets}
+            loading={pagination.loading}
+            hasMore={pagination.hasNextPage}
+            loadMore={pagination.getNextPage}
+          />
+        )}
       </Base>
     </>
   );

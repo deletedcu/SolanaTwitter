@@ -20,6 +20,7 @@ import "../styles/globals.css";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const wallets = useMemo(() => {
     return [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })];
   }, [network]);
-
+  
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>

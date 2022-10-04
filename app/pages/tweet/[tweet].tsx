@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
-import { getTweet } from "../api/tweets";
+import { deleteTweet, getTweet } from "../api/tweets";
 
 export default function Tweet() {
   const router = useRouter();
@@ -22,6 +22,13 @@ export default function Tweet() {
     fetchTweet();
   }, []);
 
+  const onDelete = async (tweet: TweetModel) => {
+    const result = await deleteTweet(tweet);
+    if (result) {
+      setTweet(null);
+    }
+  };
+
   return (
     <Base>
       {loading ? (
@@ -29,7 +36,7 @@ export default function Tweet() {
       ) : (
         <>
           {tweet ? (
-            <TweetCard tweet={tweet} />
+            <TweetCard tweet={tweet} onDelete={onDelete} />
           ) : (
             <div className="p-8 text-center text-gray-500">Tweet not found</div>
           )}

@@ -1,35 +1,51 @@
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { fetchTweets, userFilter } from "../api/tweets";
+import { useWorkspace } from "../../utils";
+import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState<any>();
 
-  const wallet = useAnchorWallet();
+  const workspace = useWorkspace();
+
+  const onNewPage = (newTweets: Tweet[]) =>
+    setTweets([...tweets, ...newTweets]);
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
-    if (!wallet) return;
-    fetchTweets([userFilter(wallet.publicKey.toBase58())])
-      .then((fetchedTweets) => setTweets(fetchedTweets))
-      .finally(() => setLoading(false));
-  }, []);
+    if (workspace) {
+      setTweets([]);
+      const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
+
+      setPagination(() => {
+        const newPagination = paginateTweets(filters, 10, onNewPage);
+        newPagination?.prefetch().then(newPagination.getNextPage);
+        return newPagination;
+      });
+    }
+  }, [workspace]);
 
   return (
     <Base>
-      {wallet && (
+      {workspace && (
         <div className="border-b bg-gray-50 px-8 py-4">
-          {wallet.publicKey.toBase58()}
+          {workspace.wallet.publicKey.toBase58()}
         </div>
       )}
       <TweetForm added={addTweet} />
-      <TweetList tweets={tweets} loading={loading} />
+      {pagination && (
+        <TweetList
+          tweets={tweets}
+          loading={pagination.loading}
+          hasMore={pagination.hasNextPage}
+          loadMore={pagination.getNextPage}
+        />
+      )}
     </Base>
   );
 }
