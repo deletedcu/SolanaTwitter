@@ -15,10 +15,14 @@ export default function tags() {
   const [tag, setTag] = useState<string>(router.query.tag as string);
   const [viewedTag, setViewedTag] = useState<string>();
   const [pagination, setPagination] = useState<any>();
+  const [hasMore, setHasMore] = useState(false);
+
   const slugTag = useSlug(tag);
 
-  const onNewPage = (newTweets: Tweet[]) =>
-    setTweets([...tweets, ...newTweets]);
+  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+    setTweets((prev) => [...prev, ...newTweets]);
+    setHasMore(more);
+  }
 
   const search = () => {
     router.push(`/tags/${slugTag}`);
@@ -58,7 +62,7 @@ export default function tags() {
         <TweetList
           tweets={tweets}
           loading={pagination.loading}
-          hasMore={pagination.hasNextPage}
+          hasMore={hasMore}
           loadMore={pagination.getNextPage}
         />
       )}

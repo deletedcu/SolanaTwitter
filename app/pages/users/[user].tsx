@@ -12,9 +12,12 @@ export default function User() {
   const [user, setUser] = useState<string>(router.query.user as string);
   const [viewedUser, setViewedUser] = useState("");
   const [pagination, setPagination] = useState<any>();
+  const [hasMore, setHasMore] = useState(false);
 
-  const onNewPage = (newTweets: Tweet[]) =>
-    setTweets([...tweets, ...newTweets]);
+  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+    setTweets((prev) => [...prev, ...newTweets]);
+    setHasMore(more);
+  }
   
   const search = () => {
     router.push(`/users/${user}`);
@@ -50,7 +53,7 @@ export default function User() {
           <TweetList
             tweets={tweets}
             loading={pagination.loading}
-            hasMore={pagination.hasNextPage}
+            hasMore={hasMore}
             loadMore={pagination.getNextPage}
           />
         )}

@@ -5,14 +5,6 @@ import { sleep, useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 import { usePagination } from "../../utils/usePagination";
 
-type TagOriginalType = {
-  [key: string]: TagType;
-};
-
-type UserOriginalType = {
-  [key: string]: UserType;
-};
-
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = useWorkspace();
   if (!workspace) return [];
@@ -28,7 +20,7 @@ export const fetchTweets = async (filters: any[] = []) => {
 export const paginateTweets = (
   filters: any[] = [],
   perPage = 10,
-  onNewPage = (a: Tweet[]) => {}
+  onNewPage = (a: Tweet[], b: boolean) => {}
 ) => {
   const workspace = useWorkspace();
   if (!workspace) return;
@@ -55,7 +47,7 @@ export const paginateTweets = (
     // Parse the timestamp from the account's data
     const allTweetsWithTimestamps = allTweets.map(({ account, pubkey }) => ({
       pubkey,
-      timestamp: Number(account.data),
+      timestamp: account.data.readInt32LE(),
     }));
 
     return allTweetsWithTimestamps
@@ -76,14 +68,14 @@ export const paginateTweets = (
   const pagination = usePagination(perPage, prefetchCb, pageCb);
   const { hasPage, getPage } = pagination;
 
-  const hasNextPage = hasPage(page + 1);
   const getNextPage = async () => {
     const newPageTweets = await getPage(page + 1);
     page += 1;
-    onNewPage(newPageTweets);
+    const hasNextPage = hasPage(page + 1);
+    onNewPage(newPageTweets, hasNextPage);
   };
 
-  return { page, hasNextPage, getNextPage, ...pagination };
+  return { page, getNextPage, ...pagination };
 };
 
 export const getTweet = async (publicKey: PublicKey) => {
@@ -185,7 +177,7 @@ export const fetchTags = async () => {
     dataSlice: { offset: 8 + 32 + 8, length: 4 + 50 * 4 },
   });
 
-  const allTags = allTweets.map(({ pubkey, account }) => {
+  const allTags = allTweets.map(({ account }) => {
     const prefix = account.data.subarray(0, 4).readInt8();
     const tag = account.data.subarray(4, 4 + prefix).toString();
     return tag;
@@ -239,7 +231,11 @@ export const fetchUsers = async () => {
     return new UserType(user, pubkey, tag, timestamp, 0);
   });
 
-  const users = tweetMap.reduce((acc: UserOriginalType, item: UserType) => {
+  type accType = {
+    [key: string]: UserType;
+  };
+
+  const users = tweetMap.reduce((acc: accType, item: UserType) => {
     if (item.last_tag !== "[deleted]") {
       const userKey = item.user.toBase58();
       if (acc[userKey]) {

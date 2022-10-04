@@ -9,11 +9,14 @@ import { paginateTweets, userFilter } from "../api/tweets";
 export default function Profile() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [pagination, setPagination] = useState<any>();
+  const [hasMore, setHasMore] = useState(false);
 
   const workspace = useWorkspace();
 
-  const onNewPage = (newTweets: Tweet[]) =>
-    setTweets([...tweets, ...newTweets]);
+  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+    setTweets((prev) => [...prev, ...newTweets]);
+    setHasMore(more);
+  }
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
@@ -42,7 +45,7 @@ export default function Profile() {
         <TweetList
           tweets={tweets}
           loading={pagination.loading}
-          hasMore={pagination.hasNextPage}
+          hasMore={hasMore}
           loadMore={pagination.getNextPage}
         />
       )}
