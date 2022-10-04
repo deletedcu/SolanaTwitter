@@ -33,12 +33,12 @@ export default function TweetList(props: TweetListProps) {
       {loading ? (
         <div className="p-8 text-center text-gray-500">Loading...</div>
       ) : (
-        <div className="divide-y">
+        <div className="items">
           {filteredTweets.map((tweet, i) => (
             <TweetCard key={i} tweet={tweet} onDelete={onDelete} />
           ))}
           {hasMore && (
-            <div className="px-8 text-center">
+            <div className="m-4 text-center">
               <button
                 onClick={loadMore}
                 className="px-4 py-2 rounded-full border bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900"
