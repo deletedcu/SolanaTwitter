@@ -182,18 +182,18 @@ export const fetchTags = async () => {
   // Prefetch all tweets with their tags only
   const allTweets = await connection.getProgramAccounts(program.programId, {
     filters: [tweetDiscriminatorFilter],
-    dataSlice: { offset: 8 + 32 + 8, length: 4 + 50 * 4},
+    dataSlice: { offset: 8 + 32 + 8, length: 4 + 50 * 4 },
   });
 
-  const allTags = allTweets.map(({ pubkey, account}) => {
+  const allTags = allTweets.map(({ pubkey, account }) => {
     const prefix = account.data.subarray(0, 4).readInt8();
     const tag = account.data.subarray(4, 4 + prefix).toString();
     return tag;
   });
 
   type tagProps = {
-    [key: string]: number
-  }
+    [key: string]: number;
+  };
 
   const tags = allTags.reduce((acc: tagProps, tag: string) => {
     if (tag !== "[deleted]") {
@@ -216,32 +216,56 @@ export const fetchTags = async () => {
 export const fetchUsers = async () => {
   const workspace = useWorkspace();
   if (!workspace) return [];
-  const { program } = workspace;
-  const tweets = await program.account.tweet.all();
+  const { program, connection } = workspace;
 
-  let users: UserOriginalType = {};
-  tweets.forEach((data) => {
-    const tweet = new Tweet(data.publicKey, data.account);
-    if (tweet.tag !== "[deleted]") {
-      if (Object.keys(users).includes(tweet.user.toBase58())) {
-        users[tweet.user.toBase58()].total_posts += 1;
-        if (tweet.timestamp > users[tweet.user.toBase58()].last_timestamp) {
-          users[tweet.user.toBase58()].last_timestamp = tweet.timestamp;
-          users[tweet.user.toBase58()].last_tag = tweet.tag;
+  // Prepare the discriminator filter
+  const tweetClient = program.account.tweet;
+  const tweetAccountName = "Tweet";
+  const tweetDiscriminatorFilter = {
+    memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
+  };
+
+  // Prefetch all tweets with their user + timestamp + tag only
+  const allTweets = await connection.getProgramAccounts(program.programId, {
+    filters: [tweetDiscriminatorFilter],
+    dataSlice: { offset: 8, length: 32 + 8 + 4 + 50 * 4 },
+  });
+
+  const tweetMap = allTweets.map(({ pubkey, account }) => {
+    const user = new PublicKey(account.data.subarray(0, 32));
+    const timestamp = account.data.subarray(32, 32 + 8).readInt32LE();
+    const prefix = account.data.subarray(40, 40 + 4).readInt8();
+    const tag = account.data.subarray(44, 44 + prefix).toString();
+    return new UserType(user, pubkey, tag, timestamp, 0);
+  });
+
+  const users = tweetMap.reduce((acc: UserOriginalType, item: UserType) => {
+    if (item.last_tag !== "[deleted]") {
+      const userKey = item.user.toBase58();
+      if (acc[userKey]) {
+        acc[userKey].total_posts += 1;
+        if (item.last_timestamp > acc[userKey].last_timestamp) {
+          acc[userKey].tweet = item.tweet;
+          acc[userKey].last_timestamp = item.last_timestamp;
+          acc[userKey].last_tag = item.last_tag;
         }
       } else {
-        users[tweet.user.toBase58()] = new UserType(
-          tweet.user,
-          tweet.publickey,
-          tweet.tag,
-          tweet.timestamp,
+        acc[userKey] = new UserType(
+          item.user,
+          item.tweet,
+          item.last_tag,
+          item.last_timestamp,
           1
         );
       }
     }
-  });
+    return acc;
+  }, {});
 
-  return Object.values(users);
+  const orderedUsers = Object.values(users).sort(
+    (a, b) => b.total_posts - a.total_posts
+  );
+  return orderedUsers;
 };
 
 export const userFilter = (userBase58PublicKey: string) => ({
