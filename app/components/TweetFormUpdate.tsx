@@ -40,7 +40,10 @@ export default function TweetFormUpdate({
 
   // Permissions
   const { connected } = useWallet();
-  const canTweet = watch("content") && (LIMIT - characterLimit) > 0 && (tweet.tag !== slugTag || tweet.content !== watch("content")) ;
+  const canTweet =
+    watch("content") &&
+    LIMIT - characterLimit > 0 &&
+    (tweet.tag !== slugTag || tweet.content !== watch("content"));
 
   // Actions
   const update = async (data: FormValues) => {
@@ -66,10 +69,7 @@ export default function TweetFormUpdate({
               </Link>
             </time>
           </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="pt-2"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="pt-2">
             {/* <!-- Content field. --> */}
             <TextareaAutosize
               {...register("content", {

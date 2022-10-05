@@ -1,7 +1,7 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { sleep, useWorkspace } from "../../utils";
+import { notify, sleep, useWorkspace } from "../../utils";
 import { web3 } from "@project-serum/anchor";
 import { usePagination } from "../../utils/usePagination";
 
@@ -104,11 +104,14 @@ export const sendTweet = async (tag: string, content: string) => {
       .signers([tweet])
       .rpc();
 
-    sleep(1000);
+    notify("Your tweet was sent successfully!", "success");
+    sleep(2000);
     const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
     return new Tweet(tweet.publicKey, tweetAccount);
   } catch (err) {
     console.error(err);
+    // @ts-ignore
+    notify(err.toString(), "error");
     return;
   }
 };
@@ -133,8 +136,11 @@ export const updateTweet = async (
 
     tweet.tag = tag;
     tweet.content = content;
+    notify("Your tweet was updated successfully!", "success");
   } catch (err) {
     console.error(err);
+    // @ts-ignore
+    notify(err.toString(), "error");
     return;
   }
 };
@@ -152,9 +158,12 @@ export const deleteTweet = async (tweet: Tweet) => {
         user: wallet.publicKey,
       })
       .rpc();
+    notify("Your tweet was deleted successfully!", "success");
     return true;
   } catch (err) {
     console.error(err);
+    // @ts-ignore
+    notify(err.toString(), "error");
     return false;
   }
 };

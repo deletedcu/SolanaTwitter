@@ -35,7 +35,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (pagination) {
       setTweets([]);
-      pagination?.prefetch().then(pagination.getNextPage);
+      pagination.prefetch().then(pagination.getNextPage);
     }
   }, [pagination]);
 

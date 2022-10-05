@@ -18,7 +18,7 @@ export default function Base({ children }: Props) {
   }, [router.pathname]);
 
   return (
-    <div className="mx-auto w-full max-w-5xl lg:max-w-6xl">
+    <div className="mx-auto w-full max-w-4xl lg:max-w-5xl">
       <Sidebar />
       <main className="ml-20 min-h-screen flex-1 border-r border-l md:ml-64">
         <header className="flex items-center justify-between space-x-6 border-b px-8 py-4">
