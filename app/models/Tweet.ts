@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
+import { toCollapse } from "../utils";
 
 export type TweetAccount = {
   readonly user: PublicKey;
@@ -36,8 +37,7 @@ export class Tweet {
   }
 
   get user_display(): string {
-    const userkey = this.user.toBase58();
-    return userkey.slice(0, 4) + ".." + userkey.slice(-4);
+    return toCollapse(this.user);
   }
 
   get created_at(): string {

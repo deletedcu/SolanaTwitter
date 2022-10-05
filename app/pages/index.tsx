@@ -32,6 +32,7 @@ const Home: NextPage = () => {
       setPagination(newPagination);
     } else {
       setPagination(null);
+      setTweets([]);
     }
   }, [wallet, connected]);
 
