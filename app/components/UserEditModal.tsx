@@ -1,5 +1,8 @@
+import { PublicKey } from "@solana/web3.js";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { createUserAlias, updateUserAlias } from "../pages/api/alias";
+import { toCollapse } from "../utils";
 
 type FormValues = {
   name: string;
@@ -7,23 +10,28 @@ type FormValues = {
 
 export default function UserEditModal({
   visible,
-  publicKey,
-  placeholder,
   setVisible,
+  publicKey,
+  alias,
 }: {
   visible: boolean;
-  publicKey: string;
-  placeholder: string;
   setVisible: (a: boolean) => void;
+  publicKey: PublicKey;
+  alias: string;
 }) {
   const LIMIT = 50;
   const { register, handleSubmit, watch, resetField } = useForm<FormValues>();
 
-  const canSend = watch("name") && watch("name") !== placeholder;
+  const canSend = watch("name") && watch("name") !== alias;
 
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
-  const send = (data: FormValues) => {
+  const send = async (data: FormValues) => {
+    if (alias === toCollapse(publicKey)) {
+      await createUserAlias(data.name);
+    } else {
+      await updateUserAlias(data.name);
+    }
     onClose();
   };
 
@@ -63,7 +71,7 @@ export default function UserEditModal({
                 </button>
                 <div className="flex items-center justify-center">
                   <Image
-                    src={`https://avatars.dicebear.com/api/jdenticon/${publicKey}.svg`}
+                    src={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
                     width={40}
                     height={40}
                     alt="profile"
@@ -109,7 +117,7 @@ export default function UserEditModal({
                           id="name"
                           type="text"
                           className="block w-full h-12 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          placeholder={placeholder || "User name"}
+                          placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
                         />

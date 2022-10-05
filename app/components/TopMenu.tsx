@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Menu, MenuButton, MenuDivider, MenuItem } from "@szhsin/react-menu";
-
-import "@szhsin/react-menu/dist/index.css";
-import "@szhsin/react-menu/dist/transitions/slide.css";
 import Image from "next/image";
 import { PublicKey } from "@solana/web3.js";
 import { toCollapse } from "../utils";
 
+import "@szhsin/react-menu/dist/index.css";
+import "@szhsin/react-menu/dist/transitions/slide.css";
+
 export default function TopMenu({
   publicKey,
+  alias,
   showModal,
   disconnect,
 }: {
   publicKey: PublicKey;
+  alias: string;
   showModal: () => void;
   disconnect: () => Promise<void>;
 }) {
@@ -141,7 +143,7 @@ export default function TopMenu({
               </div>
               <div>
                 <p className="text-sm">{hover ? "Edit Alias" : "User Alias"}</p>
-                <p className="font-medium">{toCollapse(publicKey)}</p>
+                <p className="font-medium">{alias}</p>
               </div>
             </button>
           </div>
