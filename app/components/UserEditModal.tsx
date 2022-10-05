@@ -38,7 +38,7 @@ export default function UserEditModal({
   const onClose = () => {
     resetField("name");
     setVisible(false);
-  }
+  };
 
   return (
     <>
@@ -116,7 +116,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="block w-full h-12 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}

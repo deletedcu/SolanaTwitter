@@ -1,8 +1,10 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
+import { toCollapse } from "../utils";
 
 export class UserType {
   user: PublicKey;
+  user_display: string;
   tweet: PublicKey;
   last_tag: string;
   last_timestamp: number;
@@ -13,18 +15,15 @@ export class UserType {
     tweet: PublicKey,
     last_tag: string,
     last_timestamp: number,
-    total_posts: number
+    total_posts: number,
+    user_display?: string,
   ) {
     this.user = user;
+    this.user_display = user_display ? user_display : toCollapse(user);
     this.tweet = tweet;
     this.last_tag = last_tag;
     this.last_timestamp = last_timestamp;
     this.total_posts = total_posts;
-  }
-
-  get user_display(): string {
-    const userkey = this.user.toBase58();
-    return userkey.slice(0, 4) + ".." + userkey.slice(-4);
   }
 
   get created_ago(): string {

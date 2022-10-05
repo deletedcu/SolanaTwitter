@@ -2,8 +2,9 @@ import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
 import { notify, sleep, useWorkspace } from "../../utils";
-import { web3 } from "@project-serum/anchor";
+import { web3, utils } from "@project-serum/anchor";
 import { usePagination } from "../../utils/usePagination";
+import { fetchUsersAlias } from "./alias";
 
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = useWorkspace();
@@ -244,6 +245,8 @@ export const fetchUsers = async () => {
     [key: string]: UserType;
   };
 
+  const aliasData = await fetchUsersAlias();
+
   const users = tweetMap.reduce((acc: accType, item: UserType) => {
     if (item.last_tag !== "[deleted]") {
       const userKey = item.user.toBase58();
@@ -255,12 +258,17 @@ export const fetchUsers = async () => {
           acc[userKey].last_tag = item.last_tag;
         }
       } else {
+        const [aliasPDA, _] = PublicKey.findProgramAddressSync(
+          [utils.bytes.utf8.encode("user-alias"), item.user.toBuffer()],
+          program.programId
+        );
         acc[userKey] = new UserType(
           item.user,
           item.tweet,
           item.last_tag,
           item.last_timestamp,
-          1
+          1,
+          aliasData[aliasPDA.toBase58()]
         );
       }
     }

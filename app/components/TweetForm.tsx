@@ -9,7 +9,7 @@ import { useCountCharacterLimit, useSlug } from "../utils";
 type FormValues = {
   content: string;
   tag: string;
-}
+};
 
 const LIMIT = 280;
 
@@ -36,7 +36,7 @@ export default function TweetForm({
 
   // Permissions
   const { connected } = useWallet();
-  const canTweet = watch("content") && (LIMIT - characterLimit) > 0;
+  const canTweet = watch("content") && LIMIT - characterLimit > 0;
 
   // Actions
   const send = async (data: FormValues) => {
@@ -74,6 +74,7 @@ export default function TweetForm({
                 placeholder="tag"
                 className="text-primary-500 rounded-full bg-gray-100 py-2 pl-10 pr-4"
                 disabled={!!forceTag}
+                autoComplete="off"
               />
               <div className="absolute inset-y-0 left-0 flex pl-3 pr-2">
                 <svg

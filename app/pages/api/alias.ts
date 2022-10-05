@@ -103,7 +103,7 @@ export const getUserAlias = async (publicKey: PublicKey): Promise<string> => {
 
 export const fetchUsersAlias = async () => {
   const workspace = useWorkspace();
-  if (!workspace) return [];
+  if (!workspace) return {};
   const { program, connection } = workspace;
 
   // Prepare the discriminator filter
@@ -125,5 +125,13 @@ export const fetchUsersAlias = async () => {
     return { pubkey, alias };
   });
 
-  return allAliases;
+  type aliasProps = {
+    [key: string]: string;
+  };
+  let result: aliasProps = {};
+  allAliases.forEach((item) => {
+    result[item.pubkey.toBase58()] = item.alias;
+  });
+
+  return result;
 };
