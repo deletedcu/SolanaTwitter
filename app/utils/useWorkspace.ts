@@ -7,7 +7,7 @@ import {
 import idl from "../idl/solana_twitter.json";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 
-interface Workspace {
+export interface Workspace {
   wallet: AnchorWallet;
   connection: Connection;
   provider: Provider;
