@@ -16,10 +16,10 @@ export default function Base({ children }: Props) {
   const [routeName, setRouteName] = useState<string>();
   const [showEditModal, setShowEditModal] = useState(false);
   const [alias, setAlias] = useState("");
-  
+
   const workspace = useWorkspace();
   const { disconnect, connected } = useWallet();
-  
+
   useEffect(() => {
     if (workspace && !showEditModal) {
       getUserAlias(workspace.wallet.publicKey).then((value) => setAlias(value));

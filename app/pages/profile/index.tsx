@@ -1,9 +1,14 @@
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { useWorkspace } from "../../utils";
+import { initWorkspace, useWorkspace } from "../../utils";
 import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {
@@ -11,27 +16,39 @@ export default function Profile() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
-  const workspace = useWorkspace();
+  let workspace = useWorkspace();
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
+  const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
-  }
+  };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
-    if (workspace) {
+    if (wallet && connected) {
+      if (!workspace) {
+        initWorkspace(wallet, connection);
+        workspace = useWorkspace();
+      }
+      const filters = [userFilter(wallet.publicKey.toBase58())];
+      const newPagination = paginateTweets(filters, 10, onNewPage);
       setTweets([]);
-      const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
-
-      setPagination(() => {
-        const newPagination = paginateTweets(filters, 10, onNewPage);
-        newPagination?.prefetch().then(newPagination.getNextPage);
-        return newPagination;
-      });
+      setPagination(newPagination);
+    } else {
+      setPagination(null);
+      setTweets([]);
     }
-  }, [workspace]);
+  }, [wallet, connected]);
+
+  useEffect(() => {
+    if (pagination) {
+      pagination.prefetch().then(pagination.getNextPage);
+    }
+  }, [pagination]);
 
   return (
     <Base>

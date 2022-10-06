@@ -1,13 +1,17 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Tweet } from "../../models";
-import { useSlug } from "../../utils";
+import { initWorkspace, useSlug, useWorkspace } from "../../utils";
 import { tagIcon } from "../../public/assets/icons";
 import Search from "../../templates/Search";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { paginateTweets, tagFilter } from "../api/tweets";
-import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 
 export default function tags() {
   const router = useRouter();
@@ -17,12 +21,17 @@ export default function tags() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
+  let workspace = useWorkspace();
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
+  const { connected } = useWallet();
+
   const slugTag = useSlug(tag);
 
   const onNewPage = (newTweets: Tweet[], more: boolean) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
-  }
+  };
 
   const search = () => {
     router.push(`/tags/${slugTag}`);
@@ -31,22 +40,29 @@ export default function tags() {
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
-    if (tag) {
+    if (wallet && connected && slugTag) {
+      if (!workspace) {
+        initWorkspace(wallet, connection);
+        workspace = useWorkspace();
+      }
       if (slugTag === viewedTag) return;
       setTweets([]);
       setViewedTag(slugTag);
       const filters = [tagFilter(slugTag)];
-
-      setPagination(() => {
-        const newPagination = paginateTweets(filters, 10, onNewPage);
-        newPagination?.prefetch().then(newPagination.getNextPage);
-        return newPagination;
-      });
+      const newPagination = paginateTweets(filters, 10, onNewPage);
+      setPagination(newPagination);
     } else {
+      setPagination(null);
       setTweets([]);
       setViewedTag("");
     }
-  }, [tag]);
+  }, [wallet, connected, slugTag]);
+
+  useEffect(() => {
+    if (pagination) {
+      pagination.prefetch().then(pagination.getNextPage);
+    }
+  }, [pagination]);
 
   return (
     <Search

@@ -5,6 +5,12 @@ import Search from "../../templates/Search";
 import { paginateTweets, userFilter } from "../api/tweets";
 import { userIcon } from "../../public/assets/icons";
 import TweetList from "../../components/TweetList";
+import { initWorkspace, useWorkspace } from "../../utils";
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 
 export default function User() {
   const router = useRouter();
@@ -14,31 +20,44 @@ export default function User() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
+  let workspace = useWorkspace();
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
+  const { connected } = useWallet();
+
   const onNewPage = (newTweets: Tweet[], more: boolean) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
-  }
-  
+  };
+
   const search = () => {
     router.push(`/users/${user}`);
   };
 
   useEffect(() => {
-    if (user) {
+    if (wallet && connected && user) {
       if (user === viewedUser) return;
+      if (!workspace) {
+        initWorkspace(wallet, connection);
+        workspace = useWorkspace();
+      }
       setTweets([]);
       setViewedUser(user);
       const filters = [userFilter(user)];
-      setPagination(() => {
-        const newPagination = paginateTweets(filters, 10, onNewPage);
-        newPagination?.prefetch().then(newPagination.getNextPage);
-        return newPagination;
-      });
+      const newPagination = paginateTweets(filters, 10, onNewPage);
+      setPagination(newPagination);
     } else {
+      setPagination(null);
       setTweets([]);
       setViewedUser("");
     }
-  }, [user]);
+  }, [wallet, connected, user]);
+
+  useEffect(() => {
+    if (pagination) {
+      pagination.prefetch().then(pagination.getNextPage);
+    }
+  }, [pagination]);
 
   return (
     <Search

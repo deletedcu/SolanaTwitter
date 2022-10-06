@@ -1,4 +1,8 @@
-import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -6,7 +10,7 @@ import TweetForm from "../components/TweetForm";
 import TweetList from "../components/TweetList";
 import { Tweet } from "../models";
 import Base from "../templates/Base";
-import { initWorkspace, useWorkspace, Workspace } from "../utils";
+import { initWorkspace, useWorkspace } from "../utils";
 import { paginateTweets } from "./api/tweets";
 
 const Home: NextPage = () => {
@@ -14,20 +18,23 @@ const Home: NextPage = () => {
   const [hasMore, setHasMore] = useState(false);
   const [pagination, setPagination] = useState<any>(null);
 
+  let workspace = useWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
-  let workspace: Workspace | null = null;
-  
+
   const onNewPage = (newTweets: Tweet[], more: boolean) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
-  }; 
+  };
 
   useEffect(() => {
     if (wallet && connected) {
-      initWorkspace(wallet, connection);
-      workspace = useWorkspace();
+      if (!workspace) {
+        initWorkspace(wallet, connection);
+        workspace = useWorkspace();
+      }
+      setTweets([]);
       const newPagination = paginateTweets([], 10, onNewPage);
       setPagination(newPagination);
     } else {
@@ -38,7 +45,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (pagination) {
-      setTweets([]);
       pagination.prefetch().then(pagination.getNextPage);
     }
   }, [pagination]);
