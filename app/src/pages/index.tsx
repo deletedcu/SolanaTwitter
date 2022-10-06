@@ -17,7 +17,8 @@ const Home: NextPage = () => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [pagination, setPagination] = useState<any>(null);
-
+  const [initialLoading, setInitialLoading] = useState(false);
+  
   let workspace = getWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
@@ -39,14 +40,16 @@ const Home: NextPage = () => {
     } else {
       setPagination(null);
       setTweets([]);
+      setInitialLoading(false);
     }
   }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
-    if (pagination) {
+    if (pagination && !initialLoading) {
       pagination.prefetch().then(pagination.getNextPage);
+      setInitialLoading(true);
     }
-  }, [pagination]);
+  }, [initialLoading, pagination]);
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
