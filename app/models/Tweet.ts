@@ -22,22 +22,20 @@ export class Tweet {
   tag: string;
   content: string;
   state: TweetState | undefined;
+  user_display: string;
 
-  constructor(publickey: PublicKey, account: any) {
+  constructor(publickey: PublicKey, account: any, alias: string) {
     this.publickey = publickey;
     this.user = account.user;
     this.timestamp = account.timestamp;
     this.tag = account.tag;
     this.content = account.content;
     this.state = account.state;
+    this.user_display = alias;
   }
 
   get key(): string {
     return this.publickey.toBase58();
-  }
-
-  get user_display(): string {
-    return toCollapse(this.user);
   }
 
   get created_at(): string {

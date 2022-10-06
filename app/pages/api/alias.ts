@@ -101,6 +101,10 @@ export const getUserAlias = async (publicKey: PublicKey): Promise<string> => {
   }
 };
 
+export type AliasProps = {
+  [key: string]: string;
+};
+
 export const fetchUsersAlias = async () => {
   const workspace = useWorkspace();
   if (!workspace) return {};
@@ -125,10 +129,7 @@ export const fetchUsersAlias = async () => {
     return { pubkey, alias };
   });
 
-  type aliasProps = {
-    [key: string]: string;
-  };
-  let result: aliasProps = {};
+  let result: AliasProps = {};
   allAliases.forEach((item) => {
     result[item.pubkey.toBase58()] = item.alias;
   });
