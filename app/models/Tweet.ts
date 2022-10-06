@@ -1,12 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
+import { toCollapse } from "../utils";
 
-export interface TweetAccount {
-  user: PublicKey;
-  timestamp: number;
-  tag: string;
-  content: string;
-  state: TweetState | undefined;
+export type TweetAccount = {
+  readonly user: PublicKey;
+  readonly timestamp: number;
+  readonly tag: string;
+  readonly content: string;
+  readonly state: TweetState | undefined;
 }
 
 export enum TweetState {
@@ -21,23 +22,20 @@ export class Tweet {
   tag: string;
   content: string;
   state: TweetState | undefined;
+  user_display: string;
 
-  constructor(publickey: PublicKey, account: TweetAccount) {
+  constructor(publickey: PublicKey, account: any, alias: string) {
     this.publickey = publickey;
     this.user = account.user;
     this.timestamp = account.timestamp;
     this.tag = account.tag;
     this.content = account.content;
     this.state = account.state;
+    this.user_display = alias;
   }
 
   get key(): string {
     return this.publickey.toBase58();
-  }
-
-  get user_display(): string {
-    const userkey = this.user.toBase58();
-    return userkey.slice(0, 4) + ".." + userkey.slice(-4);
   }
 
   get created_at(): string {

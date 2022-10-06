@@ -25,6 +25,7 @@ export default function TweetSearch({
         className="w-full bg-gray-50 py-4 pl-16 pr-32 text-gray-700"
         placeholder={placeholder}
         onChange={(e) => setModelValue(e.target.value)}
+        autoComplete="off"
       />
       <div
         className={
