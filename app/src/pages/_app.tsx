@@ -1,14 +1,9 @@
 import type { AppProps } from "next/app";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { Adapter, WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { useMemo } from "react";
 import { clusterApiUrl } from "@solana/web3.js";
 import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
-import {
-  ConnectionProvider,
-  WalletProvider,
+  ConnectionProvider, WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { ToastContainer } from "react-toastify";
@@ -22,6 +17,12 @@ import "../styles/globals.css";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { TorusWalletAdapter } from "@solana/wallet-adapter-torus";
+import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
+import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
+import { SlopeWalletAdapter } from "@solana/wallet-adapter-slope";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -31,8 +32,16 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-  const wallets = useMemo(() => {
-    return [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })];
+  // @ts-ignore
+  const wallets: Adapter[] = useMemo(() => {
+    return [
+      new PhantomWalletAdapter(),
+      new TorusWalletAdapter(),
+      new LedgerWalletAdapter(),
+      new SolletWalletAdapter(),
+      new SlopeWalletAdapter(),
+      new SolflareWalletAdapter({ network }),
+    ];
   }, [network]);
 
   return (
