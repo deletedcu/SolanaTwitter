@@ -33,6 +33,7 @@ export default function TopMenu({
             src={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
             width="35"
             height="35"
+            alt="user icon"
           />
         </MenuButton>
       }

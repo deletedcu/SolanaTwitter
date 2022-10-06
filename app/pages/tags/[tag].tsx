@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Tweet } from "../../models";
-import { initWorkspace, useSlug, useWorkspace } from "../../utils";
+import { getWorkspace, initWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../public/assets/icons";
 import Search from "../../templates/Search";
 import TweetForm from "../../components/TweetForm";
@@ -13,7 +13,7 @@ import {
   useWallet,
 } from "@solana/wallet-adapter-react";
 
-export default function tags() {
+export default function Tags() {
   const router = useRouter();
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [tag, setTag] = useState<string>(router.query.tag as string);
@@ -21,7 +21,7 @@ export default function tags() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
-  let workspace = useWorkspace();
+  let workspace = getWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -43,7 +43,6 @@ export default function tags() {
     if (wallet && connected && slugTag) {
       if (!workspace) {
         initWorkspace(wallet, connection);
-        workspace = useWorkspace();
       }
       if (slugTag === viewedTag) return;
       setTweets([]);
@@ -56,7 +55,7 @@ export default function tags() {
       setTweets([]);
       setViewedTag("");
     }
-  }, [wallet, connected, slugTag]);
+  }, [wallet, connected, slugTag, workspace, viewedTag, connection]);
 
   useEffect(() => {
     if (pagination) {

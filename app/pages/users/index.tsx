@@ -17,15 +17,6 @@ export default function Users() {
     router.push(`/users/${user}`);
   };
 
-  const fetchTweetUsers = () => {
-    fetchUsers()
-      .then((fetchedUsers) => {
-        setAllUsers(fetchedUsers);
-        setFilterUsers(fetchedUsers);
-      })
-      .finally(() => setLoading(false));
-  };
-
   const onTextChange = (text: string) => {
     const fUsers = allUsers.filter((k) => k.user.toBase58().includes(text));
     setUser(text);
@@ -33,7 +24,12 @@ export default function Users() {
   };
 
   useEffect(() => {
-    fetchTweetUsers();
+    fetchUsers()
+      .then((fetchedUsers) => {
+        setAllUsers(fetchedUsers);
+        setFilterUsers(fetchedUsers);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (

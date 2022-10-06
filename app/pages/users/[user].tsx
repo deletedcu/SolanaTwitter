@@ -5,7 +5,7 @@ import Search from "../../templates/Search";
 import { paginateTweets, userFilter } from "../api/tweets";
 import { userIcon } from "../../public/assets/icons";
 import TweetList from "../../components/TweetList";
-import { initWorkspace, useWorkspace } from "../../utils";
+import { getWorkspace, initWorkspace } from "../../utils";
 import {
   useAnchorWallet,
   useConnection,
@@ -20,7 +20,7 @@ export default function User() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
-  let workspace = useWorkspace();
+  let workspace = getWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -39,7 +39,6 @@ export default function User() {
       if (user === viewedUser) return;
       if (!workspace) {
         initWorkspace(wallet, connection);
-        workspace = useWorkspace();
       }
       setTweets([]);
       setViewedUser(user);
@@ -51,7 +50,7 @@ export default function User() {
       setTweets([]);
       setViewedUser("");
     }
-  }, [wallet, connected, user]);
+  }, [wallet, connected, user, viewedUser, workspace, connection]);
 
   useEffect(() => {
     if (pagination) {

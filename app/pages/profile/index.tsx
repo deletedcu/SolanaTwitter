@@ -8,7 +8,7 @@ import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { initWorkspace, useWorkspace } from "../../utils";
+import { getWorkspace, initWorkspace } from "../../utils";
 import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {
@@ -16,7 +16,7 @@ export default function Profile() {
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
 
-  let workspace = useWorkspace();
+  let workspace = getWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -32,7 +32,6 @@ export default function Profile() {
     if (wallet && connected) {
       if (!workspace) {
         initWorkspace(wallet, connection);
-        workspace = useWorkspace();
       }
       const filters = [userFilter(wallet.publicKey.toBase58())];
       const newPagination = paginateTweets(filters, 10, onNewPage);
@@ -42,7 +41,7 @@ export default function Profile() {
       setPagination(null);
       setTweets([]);
     }
-  }, [wallet, connected]);
+  }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
     if (pagination) {

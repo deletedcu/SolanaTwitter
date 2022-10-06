@@ -19,6 +19,8 @@ const commitment = "processed";
 const programId = new PublicKey(idl.metadata.address);
 let workspace: Workspace | null = null;
 
+export const getWorkspace = () => workspace;
+
 export const useWorkspace = () => workspace;
 
 export const initWorkspace = (wallet: AnchorWallet, connection: Connection) => {

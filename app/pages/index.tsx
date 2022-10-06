@@ -10,7 +10,7 @@ import TweetForm from "../components/TweetForm";
 import TweetList from "../components/TweetList";
 import { Tweet } from "../models";
 import Base from "../templates/Base";
-import { initWorkspace, useWorkspace } from "../utils";
+import { getWorkspace, initWorkspace } from "../utils";
 import { paginateTweets } from "./api/tweets";
 
 const Home: NextPage = () => {
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
   const [hasMore, setHasMore] = useState(false);
   const [pagination, setPagination] = useState<any>(null);
 
-  let workspace = useWorkspace();
+  let workspace = getWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -32,7 +32,6 @@ const Home: NextPage = () => {
     if (wallet && connected) {
       if (!workspace) {
         initWorkspace(wallet, connection);
-        workspace = useWorkspace();
       }
       setTweets([]);
       const newPagination = paginateTweets([], 10, onNewPage);
@@ -41,7 +40,7 @@ const Home: NextPage = () => {
       setPagination(null);
       setTweets([]);
     }
-  }, [wallet, connected]);
+  }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
     if (pagination) {

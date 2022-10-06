@@ -12,15 +12,11 @@ export default function Tweet() {
   const [loading, setLoading] = useState(true);
   const tweetAddress = router.query.tweet as string;
 
-  const fetchTweet = () => {
+  useEffect(() => {
     getTweet(new PublicKey(tweetAddress))
       .then((fetchedTweet) => setTweet(fetchedTweet))
       .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    fetchTweet();
-  }, []);
+  }, [tweetAddress]);
 
   const onDelete = async (tweet: TweetModel) => {
     const result = await deleteTweet(tweet);

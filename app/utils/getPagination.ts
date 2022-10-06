@@ -2,7 +2,7 @@ import { PublicKey } from "@solana/web3.js";
 import { Tweet } from "../models";
 import { AliasProps } from "../pages/api/alias";
 
-export const usePagination = (
+export const getPagination = (
   perPage: number,
   prefetchCb: () => Promise<PublicKey[]>,
   prefetchAlias: () => Promise<AliasProps>,

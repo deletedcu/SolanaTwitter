@@ -12,7 +12,7 @@ export default function Sidebar() {
     <aside className="fixed flex w-20 flex-col items-center space-y-2 py-4 md:w-64 md:items-stretch md:space-y-4 md:py-8 md:pl-4 md:pr-8">
       <Link href="/">
         <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start rounded-full">
-          <Image src="/chat.png" width={50} height={50}/>
+          <Image src="/chat.png" width={50} height={50} alt="logo"/>
         </a>
       </Link>
       <div className="flex flex-col items-center space-y-2 md:items-stretch">

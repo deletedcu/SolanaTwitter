@@ -1,13 +1,13 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { notify, sleep, toCollapse, useWorkspace } from "../../utils";
+import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
 import { web3, utils } from "@project-serum/anchor";
-import { usePagination } from "../../utils/usePagination";
+import { getPagination } from "../../utils";
 import { AliasProps, fetchUsersAlias, getUserAlias } from "./alias";
 
 export const fetchTweets = async (filters: any[] = []) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return [];
   const { program } = workspace;
   const tweets = await program.account.tweet.all(filters);
@@ -33,7 +33,7 @@ export const paginateTweets = (
   perPage = 10,
   onNewPage = (a: Tweet[], b: boolean) => {}
 ) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
   const { program, connection } = workspace;
   let page = 0;
@@ -89,7 +89,7 @@ export const paginateTweets = (
       .filter((tweet) => tweet.tag !== "[deleted]");
   };
 
-  const pagination = usePagination(
+  const pagination = getPagination(
     perPage,
     prefetchCb,
     fetchUsersAlias,
@@ -108,7 +108,7 @@ export const paginateTweets = (
 };
 
 export const getTweet = async (publicKey: PublicKey) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return null;
   const { program } = workspace;
   const account = await program.account.tweet.fetch(publicKey);
@@ -119,7 +119,7 @@ export const getTweet = async (publicKey: PublicKey) => {
 };
 
 export const sendTweet = async (tag: string, content: string) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
 
   const { wallet, program } = workspace;
@@ -156,7 +156,7 @@ export const updateTweet = async (
   tag: string,
   content: string
 ) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
   const { wallet, program } = workspace;
 
@@ -181,7 +181,7 @@ export const updateTweet = async (
 };
 
 export const deleteTweet = async (tweet: Tweet) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return false;
   const { wallet, program } = workspace;
 
@@ -204,7 +204,7 @@ export const deleteTweet = async (tweet: Tweet) => {
 };
 
 export const fetchTags = async () => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return [];
   const { program, connection } = workspace;
 
@@ -250,7 +250,7 @@ export const fetchTags = async () => {
 };
 
 export const fetchUsers = async () => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return [];
   const { program, connection } = workspace;
 

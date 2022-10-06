@@ -1,9 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { notify, toCollapse, useWorkspace } from "../../utils";
+import { getWorkspace, notify, toCollapse } from "../../utils";
 
 export const createUserAlias = async (alias: string) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
   const { program, wallet } = workspace;
 
@@ -30,7 +30,7 @@ export const createUserAlias = async (alias: string) => {
 };
 
 export const updateUserAlias = async (alias: string) => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
   const { program, wallet } = workspace;
 
@@ -57,7 +57,7 @@ export const updateUserAlias = async (alias: string) => {
 };
 
 export const deleteUserAlias = async () => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return;
   const { program, wallet } = workspace;
 
@@ -84,7 +84,7 @@ export const deleteUserAlias = async () => {
 };
 
 export const getUserAlias = async (publicKey: PublicKey): Promise<string> => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return toCollapse(publicKey);
   const { program } = workspace;
 
@@ -106,7 +106,7 @@ export type AliasProps = {
 };
 
 export const fetchUsersAlias = async () => {
-  const workspace = useWorkspace();
+  const workspace = getWorkspace();
   if (!workspace) return {};
   const { program, connection } = workspace;
 
