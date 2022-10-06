@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Search from "../../templates/Search";
 import { useSlug } from "../../utils";
-import { tagIcon } from "../../public/assets/icons";
+import { tagIcon } from "../../assets/icons";
 import { fetchTags } from "../api/tweets";
 import TagList from "../../components/TagList";
 import { TagType } from "../../models";

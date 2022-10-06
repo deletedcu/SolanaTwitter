@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Tweet } from "../../models";
 import { getWorkspace, initWorkspace, useSlug } from "../../utils";
-import { tagIcon } from "../../public/assets/icons";
+import { tagIcon } from "../../assets/icons";
 import Search from "../../templates/Search";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Tweet } from "../../models";
 import Search from "../../templates/Search";
 import { paginateTweets, userFilter } from "../api/tweets";
-import { userIcon } from "../../public/assets/icons";
+import { userIcon } from "../../assets/icons";
 import TweetList from "../../components/TweetList";
 import { getWorkspace, initWorkspace } from "../../utils";
 import {

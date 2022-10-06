@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Search from "../../templates/Search";
-import { userIcon } from "../../public/assets/icons";
+import { userIcon } from "../../assets/icons";
 import { UserType } from "../../models";
 import { fetchUsers } from "../api/tweets";
 import UserList from "../../components/UserList";
