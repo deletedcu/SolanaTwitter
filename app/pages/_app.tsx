@@ -11,15 +11,18 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { ToastContainer } from "react-toastify";
 
 // Default styles that can be overridden by your app
 import "@solana/wallet-adapter-react-ui/styles.css";
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
 // Day.js
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
@@ -37,6 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
           <Component {...pageProps} />
+          <ToastContainer />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

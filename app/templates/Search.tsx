@@ -6,10 +6,10 @@ export interface SearchProps {
   icon?: ReactNode;
   children?: ReactNode;
   modelValue?: string;
-  setModelValue: (a: string) => {};
+  setModelValue: (a: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  search: () => {};
+  search: () => void;
 }
 
 export default function Search({

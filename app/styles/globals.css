@@ -21,3 +21,7 @@
 .wallet-adapter-dropdown-list-active {
   @apply -translate-y-3 transform md:translate-y-3;
 }
+
+.toast-message {
+  font-size: 14px;
+}

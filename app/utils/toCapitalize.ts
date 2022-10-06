@@ -1,2 +1,4 @@
-export const toCapitalize = (text: string) =>
-  text.length > 0 && text[0].toUpperCase() + text[1].toLowerCase();
+export const toCapitalize = (text: string) => {
+  if (text.length > 0) return text[0].toUpperCase() + text.slice(1).toLowerCase();
+  return "";
+};
