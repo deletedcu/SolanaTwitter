@@ -64,7 +64,7 @@ export default function TweetFormUpdate({
             </h3>
             <span className="text-gray-500">•</span>
             <time className="text-sm text-gray-500" title={tweet.created_at}>
-              <Link href={`/tweet/${tweet.key}`}>
+              <Link href={`/tweets/${tweet.key}`}>
                 <a className="hover:underline">{tweet.created_ago}</a>
               </Link>
             </time>

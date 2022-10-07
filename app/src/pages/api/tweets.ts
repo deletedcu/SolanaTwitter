@@ -218,14 +218,14 @@ export const fetchTags = async () => {
   // Prefetch all tweets with their timestamp + tags only
   const allTweets = await connection.getProgramAccounts(program.programId, {
     filters: [tweetDiscriminatorFilter],
-    dataSlice: { offset: 8 + 32 + 8, length: 8 + 4 + 50 * 4 },
+    dataSlice: { offset: 8 + 32, length: 8 + 4 + 50 * 4 },
   });
 
-  const allTags = allTweets.map(({ account }) => {
+  const allTags = allTweets.map(({ pubkey, account }) => {
     const timestamp = account.data.subarray(0, 8).readInt32LE();
     const prefix = account.data.subarray(8, 8 + 4).readInt8();
     const tag = account.data.subarray(12, 12 + prefix).toString();
-    return new TagType(tag, 1, timestamp);
+    return new TagType(tag, 1, pubkey, timestamp);
   });
 
   type tagProps = {
@@ -238,6 +238,7 @@ export const fetchTags = async () => {
         acc[item.tag].count += 1;
         if (item.timestamp > acc[item.tag].timestamp) {
           acc[item.tag].timestamp = item.timestamp;
+          acc[item.tag].tweet = item.tweet;
         }
       } else {
         acc[item.tag] = item;

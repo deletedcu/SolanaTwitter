@@ -68,7 +68,7 @@ export default function UserList(props: UserListProps) {
                       <span className="text-gray-400">{user.user_display}</span>
                     </td>
                     <td className="py-4 px-3">
-                      <Link href={`/tweet/${user.tweet.toBase58()}`}>
+                      <Link href={`/tweets/${user.tweet.toBase58()}`}>
                         <a className="hover:underline">
                           <span>{user.created_ago}</span>
                         </a>

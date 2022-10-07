@@ -7,6 +7,7 @@ import TagList from "../../components/TagList";
 import { TagType } from "../../models";
 import TweetSearch from "../../components/TweetSearch";
 import Base from "../../templates/Base";
+import RecentTags from "../../components/RecentTags";
 
 export default function Tags() {
   const router = useRouter();
@@ -26,7 +27,9 @@ export default function Tags() {
     fetchTags()
       .then((fetchedTags) => {
         const countOrdered = fetchedTags.sort((a, b) => b.count - a.count);
-        const recentOrdered = fetchedTags.slice(0, 5).sort((a, b) => b.timestamp - a.timestamp);
+        const recentOrdered = fetchedTags
+          .slice(0, 5)
+          .sort((a, b) => b.timestamp - a.timestamp);
         setAllTags(countOrdered);
         setFilterTags(countOrdered);
         setRecentTags(recentOrdered);
@@ -49,7 +52,7 @@ export default function Tags() {
       <div className="flex w-full">
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
-            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-gray-700">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
               Tags
             </h2>
           </div>
@@ -64,7 +67,12 @@ export default function Tags() {
           </TweetSearch>
           <TagList tags={filterTags} loading={loading} />
         </div>
-        <div className="relative mb-8 w-72"></div>
+        <div className="relative mb-8 w-72">
+          <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6">Recent Tags</h3>
+            <RecentTags tags={recentTags} />
+          </div>
+        </div>
       </div>
     </Base>
   );

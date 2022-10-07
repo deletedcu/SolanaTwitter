@@ -89,7 +89,9 @@ export default function Tweets() {
               <h3 className="mb-4 pb-2.5 font-semibold leading-6">
                 Recent Activities
               </h3>
-              <RecentTweets tweets={recentTweets} />
+              {wallet && (
+                <RecentTweets tweets={recentTweets} owner={wallet.publicKey.toBase58()}/>
+              )}
             </div>
           </div>
         </div>

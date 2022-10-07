@@ -100,7 +100,7 @@ function Path() {
         data.push({ path: "/users", name: "Users" });
         data.push({ path: "", name: router.query.user as string });
         break;
-      case "/tweet/[tweet]":
+      case "/tweets/[tweet]":
         data.push({ path: "/tweets", name: "Tweets" });
         data.push({ path: "", name: router.query.tweet as string });
         break;
