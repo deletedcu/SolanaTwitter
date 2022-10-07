@@ -6,13 +6,18 @@ import { fetchUsers } from "../api/tweets";
 import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import RecentUsers from "../../components/RecentUsers";
 
 export default function Users() {
   const router = useRouter();
   const [user, setUser] = useState("");
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
   const [filterUsers, setFilterUsers] = useState<UserType[]>([]);
+  const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const wallet = useAnchorWallet();
 
   const search = () => {
     router.push(`/users/${user}`);
@@ -29,6 +34,7 @@ export default function Users() {
       .then((fetchedUsers) => {
         setAllUsers(fetchedUsers);
         setFilterUsers(fetchedUsers);
+        setRecentUsers(fetchedUsers.slice(0, 5));
       })
       .finally(() => setLoading(false));
   }, []);
@@ -53,7 +59,19 @@ export default function Users() {
           </TweetSearch>
           <UserList users={filterUsers} loading={loading} />
         </div>
-        <div className="relative mb-8 w-72"></div>
+        <div className="relative mb-8 w-72">
+          <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6">
+              Recent Users
+            </h3>
+            {wallet && (
+              <RecentUsers
+                users={recentUsers}
+                owner={wallet.publicKey.toBase58()}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </Base>
   );

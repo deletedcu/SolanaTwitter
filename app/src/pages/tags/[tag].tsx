@@ -82,7 +82,7 @@ export default function Tags() {
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
             <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
-              {slugTag}
+              Tweets with Tag
             </h2>
           </div>
           <TweetSearch
