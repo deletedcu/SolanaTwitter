@@ -31,7 +31,7 @@ export default function Tweet() {
         <div className="mr-16 grow">
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
             <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-gray-700">
-              Latest Posts
+              Tweet Details
             </h2>
           </div>
           <div className="pt-4">
