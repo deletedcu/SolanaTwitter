@@ -27,7 +27,7 @@ export default function User() {
   const { connection } = useConnection();
   const { connected } = useWallet();
 
-  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
   };

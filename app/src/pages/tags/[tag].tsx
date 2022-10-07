@@ -29,7 +29,7 @@ export default function Tags() {
 
   const slugTag = useSlug(tag);
 
-  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
   };

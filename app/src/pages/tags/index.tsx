@@ -13,6 +13,7 @@ export default function Tags() {
   const [tag, setTag] = useState("");
   const [allTags, setAllTags] = useState<TagType[]>([]);
   const [filterTags, setFilterTags] = useState<TagType[]>([]);
+  const [recentTags, setRecentTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState(true);
 
   const slugTag = useSlug(tag);
@@ -24,8 +25,11 @@ export default function Tags() {
   const fetchTweetTags = () => {
     fetchTags()
       .then((fetchedTags) => {
-        setAllTags(fetchedTags);
-        setFilterTags(fetchedTags);
+        const countOrdered = fetchedTags.sort((a, b) => b.count - a.count);
+        const recentOrdered = fetchedTags.slice(0, 5).sort((a, b) => b.timestamp - a.timestamp);
+        setAllTags(countOrdered);
+        setFilterTags(countOrdered);
+        setRecentTags(recentOrdered);
       })
       .finally(() => setLoading(false));
   };
