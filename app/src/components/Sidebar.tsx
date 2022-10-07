@@ -11,12 +11,34 @@ export default function Sidebar() {
   return (
     <aside className="fixed h-full w-72">
       <div className="h-full overflow-y-auto border-r border-gray-300/50">
-        <Link href="/">
-          <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start rounded-full">
-            <Image src="/chat.png" width={50} height={50} alt="logo" />
-          </a>
-        </Link>
-        <div className="flex flex-col items-center space-y-2 md:items-stretch">
+        <div className="relative mb-8">
+          <div className="relative overflow-hidden">
+            <div className="glass absolute left-[2.5%] z-0 h-72 w-full scale-x-105 opacity-30"></div>
+            <div className="flex h-72 items-center justify-center">
+              <div className="mb-6 select-none text-center text-gray-800">
+                <div className="mx-auto mb-4 text-4xl">
+                  <Link href="/">
+                    <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start rounded-full">
+                      <Image
+                        src="/chat.png"
+                        width={50}
+                        height={50}
+                        alt="logo"
+                      />
+                    </a>
+                  </Link>
+                </div>
+                <h1 className="mb-0 text-2xl font-semibold">Solana Twitter</h1>
+                <p className="text-xs italic">Solana communication platform</p>
+                <p className="text-xs italic">Created using Anchor, Solana, and Next.js</p>
+              </div>
+            </div>
+          </div>
+          <div className="relative z-10 mx-auto -mt-[25px] w-48">
+            <WalletMultiButton />
+          </div>
+        </div>
+        <div className="mx-12 flex flex-col items-center space-y-2 md:items-stretch">
           <Link href="/">
             <a
               className={
@@ -27,7 +49,7 @@ export default function Sidebar() {
               {router.pathname === "/" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -36,7 +58,7 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -62,7 +84,7 @@ export default function Sidebar() {
               {router.pathname == "/tags" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -71,7 +93,7 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
@@ -91,7 +113,7 @@ export default function Sidebar() {
               {router.pathname == "/users" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -100,7 +122,7 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-700"
+                  className="h-6 w-6 text-gray-700"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -128,7 +150,7 @@ export default function Sidebar() {
                   <svg
                     v-if="isActive"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-gray-700"
+                    className="h-6 w-6 text-gray-700"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -141,7 +163,7 @@ export default function Sidebar() {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-gray-700"
+                    className="h-6 w-6 text-gray-700"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -158,9 +180,6 @@ export default function Sidebar() {
               </a>
             </Link>
           )}
-        </div>
-        <div className="fixed bottom-8 right-8 w-48 md:static md:w-full">
-          <WalletMultiButton />
         </div>
       </div>
     </aside>
