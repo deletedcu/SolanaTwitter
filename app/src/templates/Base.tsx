@@ -1,23 +1,12 @@
-import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode} from "react";
 import Menubar from "../components/Menubar";
 import Sidebar from "../components/Sidebar";
-import { toCapitalize } from "../utils";
 
 interface Props {
   children?: ReactNode;
 }
 
 export default function Base({ children }: Props) {
-  const router = useRouter();
-  const [routeName, setRouteName] = useState<string>();
-
-  useEffect(() => {
-    if (router.pathname === "/") setRouteName("Home");
-    else if (router.pathname === "/404") setRouteName("NotFound");
-    else setRouteName(toCapitalize(router.pathname.split("/")[1]));
-  }, [router.pathname]);
-
   return (
     <div>
       <Menubar />

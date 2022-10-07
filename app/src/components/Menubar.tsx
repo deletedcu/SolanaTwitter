@@ -75,18 +75,22 @@ function Path() {
     let data: PathType[] = [];
     switch (pathName) {
       case "/":
+        data.push({ path: "", name: "Tweets" });
         break;
       case "/404":
         data.push({ path: "", name: "NotFound" });
         break;
+      case "/tweets":
+        data.push({ path: "", name: "Tweets" });
+        break;
       case "/tags":
-        data.push({ path: "/tags", name: "Tags" });
+        data.push({ path: "", name: "Tags" });
         break;
       case "/users":
-        data.push({ path: "/users", name: "Users" });
+        data.push({ path: "", name: "Users" });
         break;
       case "/profile":
-        data.push({ path: "/profile", name: "Profile" });
+        data.push({ path: "", name: "Profile" });
         break;
       case "/tags/[tag]":
         data.push({ path: "/tags", name: "Tags" });
@@ -97,7 +101,7 @@ function Path() {
         data.push({ path: "", name: router.query.user as string });
         break;
       case "/tweet/[tweet]":
-        data.push({ path: "/", name: "Tweets" });
+        data.push({ path: "/tweets", name: "Tweets" });
         data.push({ path: "", name: router.query.tweet as string });
         break;
     }
