@@ -100,8 +100,8 @@ export const paginateTweets = (
   const getNextPage = async () => {
     const newPageTweets = await getPage(page + 1);
     const hasNextPage = hasPage(page + 1);
-    onNewPage(newPageTweets, hasNextPage, page);
     page += 1;
+    onNewPage(newPageTweets, hasNextPage, page - 1);
   };
 
   return { page, getNextPage, ...pagination };

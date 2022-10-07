@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Tweet } from "../../models";
+import { TagType, Tweet } from "../../models";
 import { getWorkspace, initWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
-import { paginateTweets, tagFilter } from "../api/tweets";
+import { fetchTags, paginateTweets, tagFilter } from "../api/tweets";
 import {
   useAnchorWallet,
   useConnection,
@@ -13,6 +13,7 @@ import {
 } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
+import RecentTags from "../../components/RecentTags";
 
 export default function Tags() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function Tags() {
   const [viewedTag, setViewedTag] = useState<string>();
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [recentTags, setRecentTags] = useState<TagType[]>([]);
 
   let workspace = getWorkspace();
   const wallet = useAnchorWallet();
@@ -39,6 +41,10 @@ export default function Tags() {
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
+
+  useEffect(() => {
+    setTag((router.query.tag as string));
+  }, [router.query]);
 
   useEffect(() => {
     if (wallet && connected && slugTag) {
@@ -61,6 +67,12 @@ export default function Tags() {
   useEffect(() => {
     if (pagination) {
       pagination.prefetch().then(pagination.getNextPage);
+      fetchTags().then((fetchedTags) => {
+        const recentOrdered = fetchedTags
+          .slice(0, 5)
+          .sort((a, b) => b.timestamp - a.timestamp);
+        setRecentTags(recentOrdered);
+      })
     }
   }, [pagination]);
 
@@ -69,8 +81,8 @@ export default function Tags() {
       <div className="flex w-full">
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
-            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-gray-700">
-              slugTag
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
+              {slugTag}
             </h2>
           </div>
           <TweetSearch
@@ -97,7 +109,12 @@ export default function Tags() {
             </div>
           )}
         </div>
-        <div className="relative mb-8 w-72"></div>
+        <div className="relative mb-8 w-72">
+          <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6">Recent Tags</h3>
+            <RecentTags tags={recentTags} />
+          </div>
+        </div>
       </div>
     </Base>
   );
