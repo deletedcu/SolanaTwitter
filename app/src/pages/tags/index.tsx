@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Search from "../../templates/Search";
 import { useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import { fetchTags } from "../api/tweets";
 import TagList from "../../components/TagList";
 import { TagType } from "../../models";
+import TweetSearch from "../../components/TweetSearch";
+import Base from "../../templates/Base";
 
 export default function Tags() {
   const router = useRouter();
@@ -40,15 +41,27 @@ export default function Tags() {
   }, []);
 
   return (
-    <Search
-      icon={tagIcon}
-      placeholder="tag"
-      disabled={!slugTag}
-      modelValue={slugTag}
-      setModelValue={onTextChange}
-      search={search}
-    >
-      <TagList tags={filterTags} loading={loading} />
-    </Search>
+    <Base>
+      <div className="flex w-full">
+        <div className="mr-16 grow" style={{ position: "relative" }}>
+          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-gray-700">
+              Tags
+            </h2>
+          </div>
+          <TweetSearch
+            placeholder="tag"
+            disabled={!slugTag}
+            modelValue={slugTag}
+            setModelValue={onTextChange}
+            search={search}
+          >
+            {tagIcon}
+          </TweetSearch>
+          <TagList tags={filterTags} loading={loading} />
+        </div>
+        <div className="relative mb-8 w-72"></div>
+      </div>
+    </Base>
   );
 }

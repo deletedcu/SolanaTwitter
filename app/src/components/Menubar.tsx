@@ -24,7 +24,7 @@ export default function Menubar() {
     <div className="fixed top-0 w-full z-40">
       <div className="ml-72">
         <div className="duration-400 sticky top-0 z-20 ml-px">
-          <div className="sticky top-0 z-40 transition-colors">
+          <div className="sticky top-0 z-40 transition-colors bg-gray-200/50 backdrop-blur">
             <div className="h-16 flex items-center justify-between border-b border-gray-300/50 px-6 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
@@ -114,7 +114,7 @@ function Path() {
       <ul className="relative z-40 flex items-center py-0.5 px-6 text-gray-600">
         <li>
           <Link href="/">
-            <a href="/" className="flex items-center hover:underline">
+            <a className="flex items-center hover:underline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mr-2 iconify iconify--heroicons-outline"

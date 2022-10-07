@@ -42,11 +42,11 @@ export default function Sidebar() {
           <Link href="/">
             <a
               className={
-                (router.pathname === "/" ? "font-bold " : "") +
+                (router.pathname.startsWith("/tweets") ? "font-bold " : "") +
                 "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
               }
             >
-              {router.pathname === "/" ? (
+              {router.pathname.startsWith("/tweets") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-gray-700"
@@ -71,17 +71,17 @@ export default function Sidebar() {
                   />
                 </svg>
               )}
-              <div className="hidden text-xl md:block">Home</div>
+              <div className="hidden text-xl md:block">Tweets</div>
             </a>
           </Link>
           <Link href="/tags">
             <a
               className={
-                (router.pathname == "/tags" ? "font-bold " : "") +
+                (router.pathname.startsWith("/tags") ? "font-bold " : "") +
                 "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
               }
             >
-              {router.pathname == "/tags" ? (
+              {router.pathname.startsWith("/tags") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-gray-700"
@@ -106,11 +106,11 @@ export default function Sidebar() {
           <Link href="/users">
             <a
               className={
-                (router.pathname == "/users" ? "font-bold " : "") +
+                (router.pathname.startsWith("/users") ? "font-bold " : "") +
                 "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
               }
             >
-              {router.pathname == "/users" ? (
+              {router.pathname.startsWith("/users") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-gray-700"
@@ -142,11 +142,11 @@ export default function Sidebar() {
             <Link href="/profile">
               <a
                 className={
-                  (router.pathname == "/profile" ? "font-bold " : "") +
+                  (router.pathname.startsWith("/profile") ? "font-bold " : "") +
                   "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
                 }
               >
-                {router.pathname == "/profile" ? (
+                {router.pathname.startsWith("/profile") ? (
                   <svg
                     v-if="isActive"
                     xmlns="http://www.w3.org/2000/svg"

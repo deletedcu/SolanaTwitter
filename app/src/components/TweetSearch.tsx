@@ -1,5 +1,14 @@
+import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
-import { SearchProps } from "../templates/Search";
+
+type SearchProps = {
+  children?: ReactNode;
+  modelValue?: string;
+  setModelValue: (a: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  search: () => void;
+}
 
 export default function TweetSearch({
   children,
