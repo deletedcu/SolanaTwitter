@@ -15,7 +15,7 @@ export default function Sidebar() {
           <div className="relative overflow-hidden">
             <div className="glass absolute left-[2.5%] z-0 h-72 w-full scale-x-105 opacity-30"></div>
             <div className="flex h-72 items-center justify-center">
-              <div className="mb-6 select-none text-center text-gray-800">
+              <div className="mb-6 select-none text-center">
                 <div className="mx-auto mb-4 text-4xl">
                   <Link href="/">
                     <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start rounded-full">
@@ -29,8 +29,12 @@ export default function Sidebar() {
                   </Link>
                 </div>
                 <h1 className="mb-0 text-2xl font-semibold">Solana Twitter</h1>
-                <p className="text-xs italic">Solana communication platform</p>
-                <p className="text-xs italic">Created using Anchor, Solana, and Next.js</p>
+                <p className="text-xs italic text-gray-700">
+                  Solana communication platform
+                </p>
+                <p className="text-xs italic text-gray-700">
+                  Created using Anchor, Solana, and Next.js
+                </p>
               </div>
             </div>
           </div>

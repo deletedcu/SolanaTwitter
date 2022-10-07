@@ -11,7 +11,7 @@ export default function RecentUsers({
 }) {
   return (
     <div className="h-full overflow-y-auto">
-      <div className="card bg-gray-200/50 py-3 px-6">
+      <div className="card bg-gray-100 py-3 px-6">
         {users.map((user, i) => {
           const userRoute =
             user.user.toBase58() === owner

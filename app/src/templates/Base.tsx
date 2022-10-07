@@ -1,4 +1,4 @@
-import { ReactNode} from "react";
+import { ReactNode } from "react";
 import Menubar from "../components/Menubar";
 import Sidebar from "../components/Sidebar";
 

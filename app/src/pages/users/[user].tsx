@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Tweet } from "../../models";
-import { paginateTweets, userFilter } from "../api/tweets";
+import { Tweet, UserType } from "../../models";
+import { fetchUsers, paginateTweets, userFilter } from "../api/tweets";
 import TweetList from "../../components/TweetList";
 import { getWorkspace, initWorkspace } from "../../utils";
 import {
@@ -12,6 +12,7 @@ import {
 import Base from "../../templates/Base";
 import { getUserAlias } from "../api/alias";
 import { PublicKey } from "@solana/web3.js";
+import RecentUsers from "../../components/RecentUsers";
 
 export default function User() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function User() {
   const [viewedUser, setViewedUser] = useState("");
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
 
   let workspace = getWorkspace();
   const wallet = useAnchorWallet();
@@ -54,6 +56,7 @@ export default function User() {
   useEffect(() => {
     if (pagination) {
       pagination.prefetch().then(pagination.getNextPage);
+      fetchUsers().then((value) => setRecentUsers(value.slice(0, 5)));
     }
   }, [pagination]);
 
@@ -62,7 +65,7 @@ export default function User() {
       <div className="flex w-full">
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
-            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-gray-700">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
               {wallet && user && wallet.publicKey.toBase58() === user
                 ? "Your Tweets"
                 : `${userAlias}'s Tweets`}
@@ -82,7 +85,19 @@ export default function User() {
             </div>
           )}
         </div>
-        <div className="relative mb-8 w-72"></div>
+        <div className="relative mb-8 w-72">
+          <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6">
+              Recent Users
+            </h3>
+            {wallet && (
+              <RecentUsers
+                users={recentUsers}
+                owner={wallet.publicKey.toBase58()}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </Base>
   );
