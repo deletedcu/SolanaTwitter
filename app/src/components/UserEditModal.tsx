@@ -43,8 +43,8 @@ export default function UserEditModal({
   return (
     <>
       {visible && (
-        <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+        <div>
+          <div className="fixed flex justify-center items-center overflow-x-hidden overflow-y-auto inset-0 z-50 outline-none focus:outline-none">
             <div className="fixed top-0 my-[10vh] ">
               <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-sky-50/5 bg-white py-6 px-8 text-center align-middle shadow-xl transition-all">
                 <button
@@ -77,10 +77,10 @@ export default function UserEditModal({
                     alt="profile"
                   />
                 </div>
-                <h2 className="mt-4 text-lg font-medium leading-6 text-gray-700">
+                <h2 className="mt-4 text-lg font-medium leading-6">
                   Edit Your Alias
                 </h2>
-                <div className="mt-2 text-gray-500">
+                <div className="mt-2 text-gray-700">
                   <p className="text-sm">
                     Change the alias that is displayed for your connected
                     wallets publickey.
@@ -116,7 +116,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
@@ -141,7 +141,7 @@ export default function UserEditModal({
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
+        </div>
       )}
     </>
   );

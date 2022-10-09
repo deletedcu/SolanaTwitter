@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Tweet } from "../models";
+import { Tweet, TweetState } from "../models";
 import { useWorkspace } from "../utils";
 import TweetFormUpdate from "./TweetFormUpdate";
 
@@ -48,10 +48,31 @@ export default function TweetCard({
             </h3>
             <span className="text-gray-500">•</span>
             <time className="text-sm text-gray-500" title={tweet.created_at}>
-              <Link href={`/tweet/${tweet.key}`}>
+              <Link href={`/tweets/${tweet.key}`}>
                 <a className="hover:underline">{tweet.created_ago}</a>
               </Link>
             </time>
+            {tweet.state && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="h-4 w-4 p-0.5 text-gray-500 iconify iconify--heroicons-outline"
+                width="1em"
+                height="1em"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"
+                ></path>
+              </svg>
+            )}
           </div>
           <div className="ml-12 border-b border-primary pb-4">
             <div className="flex flex-col p-4 border border-primary rounded-lg bg-gray-100">
@@ -66,12 +87,15 @@ export default function TweetCard({
                 )}
                 <div className="flex items-center space-x-1 ml-auto">
                   {isOwner && (
-                    <button onClick={() => onDelete(tweet)} title="Delete tweet">
+                    <button
+                      onClick={() => onDelete(tweet)}
+                      title="Delete tweet"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
                         role="img"
-                        className="h-6 w-6 p-1 text-slate-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                        className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
                         width="1em"
                         height="1em"
                         preserveAspectRatio="xMidYMid meet"
@@ -97,7 +121,7 @@ export default function TweetCard({
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
                         role="img"
-                        className="h-6 w-6 p-1 text-slate-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                        className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
                         width="1em"
                         height="1em"
                         preserveAspectRatio="xMidYMid meet"
