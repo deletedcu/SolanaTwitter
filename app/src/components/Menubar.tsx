@@ -36,12 +36,6 @@ export default function Menubar() {
                       showModal={() => setShowEditModal(true)}
                       disconnect={disconnect}
                     />
-                    <UserEditModal
-                      visible={showEditModal}
-                      setVisible={setShowEditModal}
-                      publicKey={workspace.wallet.publicKey}
-                      alias={alias}
-                    />
                   </>
                 )}
               </div>
@@ -54,6 +48,14 @@ export default function Menubar() {
           </div>
         </div>
       </div>
+      {workspace && (
+        <UserEditModal
+          visible={showEditModal}
+          setVisible={setShowEditModal}
+          publicKey={workspace.wallet.publicKey}
+          alias={alias}
+        />
+      )}
     </div>
   );
 }
