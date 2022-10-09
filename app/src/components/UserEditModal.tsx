@@ -44,7 +44,7 @@ export default function UserEditModal({
     <>
       {visible && (
         <div>
-          <div className="fixed flex justify-center items-center overflow-x-hidden overflow-y-auto inset-0 outline-none focus:outline-none">
+          <div className="fixed flex justify-center items-center overflow-x-hidden overflow-y-auto inset-0 z-50 outline-none focus:outline-none">
             <div className="fixed top-0 my-[10vh] ">
               <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-sky-50/5 bg-white py-6 px-8 text-center align-middle shadow-xl transition-all">
                 <button
