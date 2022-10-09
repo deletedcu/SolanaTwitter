@@ -31,7 +31,7 @@ export const fetchTweets = async (filters: any[] = []) => {
 export const paginateTweets = (
   filters: any[] = [],
   perPage = 10,
-  onNewPage = (a: Tweet[], b: boolean) => {}
+  onNewPage = (a: Tweet[], b: boolean, c: number) => {}
 ) => {
   const workspace = getWorkspace();
   if (!workspace) return;
@@ -99,9 +99,9 @@ export const paginateTweets = (
 
   const getNextPage = async () => {
     const newPageTweets = await getPage(page + 1);
-    page += 1;
     const hasNextPage = hasPage(page + 1);
-    onNewPage(newPageTweets, hasNextPage);
+    page += 1;
+    onNewPage(newPageTweets, hasNextPage, page - 1);
   };
 
   return { page, getNextPage, ...pagination };
@@ -215,38 +215,39 @@ export const fetchTags = async () => {
     memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
   };
 
-  // Prefetch all tweets with their tags only
+  // Prefetch all tweets with their timestamp + tags only
   const allTweets = await connection.getProgramAccounts(program.programId, {
     filters: [tweetDiscriminatorFilter],
-    dataSlice: { offset: 8 + 32 + 8, length: 4 + 50 * 4 },
+    dataSlice: { offset: 8 + 32, length: 8 + 4 + 50 * 4 },
   });
 
-  const allTags = allTweets.map(({ account }) => {
-    const prefix = account.data.subarray(0, 4).readInt8();
-    const tag = account.data.subarray(4, 4 + prefix).toString();
-    return tag;
+  const allTags = allTweets.map(({ pubkey, account }) => {
+    const timestamp = account.data.subarray(0, 8).readInt32LE();
+    const prefix = account.data.subarray(8, 8 + 4).readInt8();
+    const tag = account.data.subarray(12, 12 + prefix).toString();
+    return new TagType(tag, 1, pubkey, timestamp);
   });
 
   type tagProps = {
-    [key: string]: number;
+    [key: string]: TagType;
   };
 
-  const tags = allTags.reduce((acc: tagProps, tag: string) => {
-    if (tag !== "[deleted]") {
-      if (acc[tag]) {
-        acc[tag] += 1;
+  const tags = allTags.reduce((acc: tagProps, item: TagType) => {
+    if (item.tag !== "[deleted]") {
+      if (acc[item.tag]) {
+        acc[item.tag].count += 1;
+        if (item.timestamp > acc[item.tag].timestamp) {
+          acc[item.tag].timestamp = item.timestamp;
+          acc[item.tag].tweet = item.tweet;
+        }
       } else {
-        acc[tag] = 1;
+        acc[item.tag] = item;
       }
     }
     return acc;
   }, {});
 
-  const orderedTags: TagType[] = Object.entries(tags)
-    .map((k) => ({ tag: k[0], count: k[1] }))
-    .sort((a, b) => b.count - a.count);
-
-  return orderedTags;
+  return Object.values(tags);
 };
 
 export const fetchUsers = async () => {

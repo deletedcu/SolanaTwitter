@@ -21,7 +21,7 @@ export default function Profile() {
   const { connection } = useConnection();
   const { connected } = useWallet();
 
-  const onNewPage = (newTweets: Tweet[], more: boolean) => {
+  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
   };
@@ -51,20 +51,25 @@ export default function Profile() {
 
   return (
     <Base>
-      {workspace && (
-        <div className="border-b bg-gray-50 px-8 py-4">
-          {workspace.wallet.publicKey.toBase58()}
+      <div className="flex w-full">
+        <div className="mr-16 grow" style={{ position: "relative" }}>
+          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
+              Your tweets
+            </h2>
+          </div>
+          <TweetForm added={addTweet} />
+          {pagination && (
+            <TweetList
+              tweets={tweets}
+              loading={pagination.loading}
+              hasMore={hasMore}
+              loadMore={pagination.getNextPage}
+            />
+          )}
         </div>
-      )}
-      <TweetForm added={addTweet} />
-      {pagination && (
-        <TweetList
-          tweets={tweets}
-          loading={pagination.loading}
-          hasMore={hasMore}
-          loadMore={pagination.getNextPage}
-        />
-      )}
+        <div className="relative mb-8 w-72"></div>
+      </div>
     </Base>
   );
 }

@@ -1,5 +1,14 @@
+import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
-import { SearchProps } from "../templates/Search";
+
+type SearchProps = {
+  children?: ReactNode;
+  modelValue?: string;
+  setModelValue: (a: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  search: () => void;
+};
 
 export default function TweetSearch({
   children,
@@ -22,7 +31,7 @@ export default function TweetSearch({
         {...register("search")}
         type="text"
         value={modelValue}
-        className="w-full bg-gray-50 py-4 pl-16 pr-32 text-gray-700"
+        className="w-full bg-gray-100 py-4 pl-16 pr-32 text-gray-700"
         placeholder={placeholder}
         onChange={(e) => setModelValue(e.target.value)}
         autoComplete="off"

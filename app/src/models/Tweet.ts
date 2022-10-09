@@ -1,6 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
-import { toCollapse } from "../utils";
 
 export type TweetAccount = {
   readonly user: PublicKey;

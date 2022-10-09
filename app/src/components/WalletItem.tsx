@@ -7,7 +7,7 @@ import { toCollapse } from "../utils";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
-export default function TopMenu({
+export default function WalletItem({
   publicKey,
   alias,
   showModal,
