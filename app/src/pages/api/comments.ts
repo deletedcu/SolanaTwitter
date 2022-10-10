@@ -1,6 +1,8 @@
 import { web3 } from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
-import { getWorkspace, notify } from "../../utils";
+import { Comment } from "../../models/Comment";
+import { getWorkspace, notify, sleep } from "../../utils";
+import { getUserAlias } from "./alias";
 
 export const sendComment = async (tweet: PublicKey, content: string) => {
   const workspace = getWorkspace();
@@ -20,6 +22,10 @@ export const sendComment = async (tweet: PublicKey, content: string) => {
       .rpc();
 
     notify("Your comment was sent successfully!", "success");
+    sleep(2000);
+    const commentAccount = await program.account.comment.fetch(comment.publicKey);
+    const alias = await getUserAlias((commentAccount.user as PublicKey));
+    return new Comment(comment.publicKey, commentAccount, alias);
   } catch (err) {
     console.error(err);
     // @ts-ignore
