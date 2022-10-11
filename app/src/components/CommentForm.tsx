@@ -1,5 +1,4 @@
 import { PublicKey } from "@solana/web3.js";
-import { send } from "process";
 import TextareaAutosize from "react-autosize-textarea/lib";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Comment } from "../models/Comment";
@@ -41,7 +40,10 @@ export default function CommentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="border-b px-8 py-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="border-t mt-4 mx-4 px-4 pt-4"
+    >
       <TextareaAutosize
         {...register("content", {
           required: true,
@@ -49,11 +51,11 @@ export default function CommentForm({
         })}
         id="content"
         rows={1}
-        className="mb-3 w-full resize-none text-xl focus:outline-none"
+        className="mb-3 w-full resize-none text-lg focus:outline-none bg-transparent"
         placeholder="Add Comment..."
       />
       <div className="-m-2 flex flex-wrap items-center justify-between">
-        <div className="m-2 ml-auto flex items-center space-x-6">
+        <div className="m-1 ml-auto flex items-center space-x-4">
           {/* <!-- Character limit. --> */}
           <div className="text-sm">
             <span className={characterLimitColor}>{characterLimit}</span>
@@ -61,7 +63,7 @@ export default function CommentForm({
           </div>
           {/* <!-- Cancel button. --> */}
           <button
-            className="rounded-full px-4 py-2 font-semibold bg-gray-100 text-gray-700"
+            className="rounded-full px-4 py-2 font-semibold bg-gray-300 text-gray-700"
             onClick={onClose}
           >
             Cancel
