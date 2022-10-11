@@ -21,8 +21,6 @@ let workspace: Workspace | null = null;
 
 export const getWorkspace = () => workspace;
 
-export const useWorkspace = () => workspace;
-
 export const initWorkspace = (wallet: AnchorWallet, connection: Connection) => {
   if (workspace) return;
   const provider: Provider = new AnchorProvider(connection, wallet, {

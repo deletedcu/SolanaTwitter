@@ -1,17 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Comment } from "../models/Comment";
+import { getWorkspace } from "../utils";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
   // @ts-ignore
-  const { wallet } = useWorkspace();
+  const { wallet } = getWorkspace();
   const userRoute =
     wallet && wallet.publicKey.toBase58() === comment.user.toBase58()
       ? "/profile"
       : `/users/${comment.user.toBase58()}`;
 
   return (
-    <div className="px-8 py-4 border-t border-primary">
+    <div className="mt-4 pt-4 border-t border-primary">
       <div className="flex items-center gap-2">
         <div className="mr-2">
           <Link href={userRoute}>
@@ -19,8 +20,8 @@ export default function CommentCard({ comment }: { comment: Comment }) {
               <Image
                 src={`https://avatars.dicebear.com/api/jdenticon/${comment.user.toBase58()}.svg`}
                 alt={comment.user.toBase58()}
-                width="35"
-                height="35"
+                width="25"
+                height="25"
               />
             </a>
           </Link>
@@ -37,7 +38,7 @@ export default function CommentCard({ comment }: { comment: Comment }) {
           </Link>
         </time>
       </div>
-      <p className="whitespace-pre-wrap">{comment.content}</p>
+      <p className="whitespace-pre-wrap ml-10">{comment.content}</p>
     </div>
   );
 }

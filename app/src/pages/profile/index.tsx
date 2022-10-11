@@ -34,7 +34,7 @@ export default function Profile() {
         initWorkspace(wallet, connection);
       }
       const filters = [userFilter(wallet.publicKey.toBase58())];
-      const newPagination = paginateTweets(filters, 10, onNewPage);
+      const newPagination = paginateTweets(filters, 5, onNewPage);
       setTweets([]);
       setPagination(newPagination);
     } else {
