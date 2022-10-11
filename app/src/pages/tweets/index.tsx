@@ -39,7 +39,7 @@ export default function Tweets() {
         initWorkspace(wallet, connection);
       }
       setTweets([]);
-      const newPagination = paginateTweets([], 10, onNewPage);
+      const newPagination = paginateTweets([], 5, onNewPage);
       setPagination(newPagination);
     } else {
       setPagination(null);

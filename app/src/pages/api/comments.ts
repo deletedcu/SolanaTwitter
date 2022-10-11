@@ -86,15 +86,8 @@ export const fetchComments = async (filters: any[]) => {
   const { program } = workspace;
 
   const comments = await program.account.comment.all(filters);
-  const aliasObj = await fetchUsersAlias();
   const allComments = comments.map((comment) => {
-    // @ts-ignore
-    const userKey: PublicKey = comment.account.user;
-    const [aliasPDA, _] = PublicKey.findProgramAddressSync(
-      [utils.bytes.utf8.encode("user_alias"), userKey.toBuffer()],
-      program.programId
-    );
-    const alias = aliasObj[aliasPDA.toBase58()] || toCollapse(userKey);
+    const alias = toCollapse((comment.account.user as PublicKey));
     return new Comment(comment.publicKey, comment.account, alias);
   });
 

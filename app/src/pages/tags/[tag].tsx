@@ -55,7 +55,7 @@ export default function Tags() {
       setTweets([]);
       setViewedTag(slugTag);
       const filters = [tagFilter(slugTag)];
-      const newPagination = paginateTweets(filters, 10, onNewPage);
+      const newPagination = paginateTweets(filters, 5, onNewPage);
       setPagination(newPagination);
     } else {
       setPagination(null);

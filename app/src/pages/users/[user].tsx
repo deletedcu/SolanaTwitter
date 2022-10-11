@@ -43,7 +43,7 @@ export default function User() {
       setTweets([]);
       setViewedUser(user);
       const filters = [userFilter(user)];
-      const newPagination = paginateTweets(filters, 10, onNewPage);
+      const newPagination = paginateTweets(filters, 5, onNewPage);
       setPagination(newPagination);
       getUserAlias(new PublicKey(user)).then((value) => setUserAlias(value));
     } else {
