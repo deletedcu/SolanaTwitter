@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Tweet, TweetState } from "../models";
+import { Tweet } from "../models";
+import { Comment } from "../models/Comment";
 import { useWorkspace } from "../utils";
+import CommentCard from "./CommentCard";
+import CommentForm from "./CommentForm";
 import TweetFormUpdate from "./TweetFormUpdate";
 
 export default function TweetCard({
@@ -13,6 +16,8 @@ export default function TweetCard({
   onDelete: (t: Tweet) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isCommentEditing, setIsCommentEditing] = useState(false);
+
   // @ts-ignore
   const { wallet } = useWorkspace();
   const userRoute =
@@ -21,6 +26,8 @@ export default function TweetCard({
       : `/users/${tweet.user.toBase58()}`;
   const isOwner: boolean =
     wallet && wallet.publicKey.toBase58() === tweet.user.toBase58();
+
+  const addComment = (comment: Comment) => {};
 
   return (
     <>
@@ -138,8 +145,41 @@ export default function TweetCard({
                       </svg>
                     </button>
                   )}
+                  <button
+                    title="Add Comment"
+                    onClick={() => setIsCommentEditing(true)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                      width="1em"
+                      height="1em"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a1.994 1.994 0 0 1-1.414-.586m0 0L11 14h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v4l.586-.586Z"
+                      ></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
+              {isCommentEditing && (
+                <CommentForm
+                  tweet={tweet.publickey}
+                  onClose={() => setIsCommentEditing(false)}
+                  added={addComment}
+                />
+              )}
+              {tweet.comments.length > 0 &&
+                tweet.comments.map((comment, i) => (
+                  <CommentCard key={i} comment={comment} />
+                ))}
             </div>
           </div>
         </div>
