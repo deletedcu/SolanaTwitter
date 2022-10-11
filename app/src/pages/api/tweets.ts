@@ -5,6 +5,8 @@ import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
 import { web3, utils } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
 import { AliasProps, fetchUsersAlias, getUserAlias } from "./alias";
+import { commentTweetFilter, fetchComments } from "./comments";
+import { tweets } from ".";
 
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = getWorkspace();
@@ -99,6 +101,12 @@ export const paginateTweets = (
 
   const getNextPage = async () => {
     const newPageTweets = await getPage(page + 1);
+
+    for (let i = 0; i < newPageTweets.length; i++) {
+      const filters = [commentTweetFilter(newPageTweets[i].key)];
+      const comments = await fetchComments(filters);
+      newPageTweets[i].comments = comments || [];
+    }
     const hasNextPage = hasPage(page + 1);
     page += 1;
     onNewPage(newPageTweets, hasNextPage, page - 1);

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Tweet } from "../models";
 import { Comment } from "../models/Comment";
-import { useWorkspace } from "../utils";
+import { getWorkspace } from "../utils";
 import CommentCard from "./CommentCard";
 import CommentForm from "./CommentForm";
 import TweetFormUpdate from "./TweetFormUpdate";
@@ -19,7 +19,7 @@ export default function TweetCard({
   const [isCommentEditing, setIsCommentEditing] = useState(false);
 
   // @ts-ignore
-  const { wallet } = useWorkspace();
+  const { wallet } = getWorkspace();
   const userRoute =
     wallet && wallet.publicKey.toBase58() === tweet.user.toBase58()
       ? "/profile"
@@ -27,7 +27,9 @@ export default function TweetCard({
   const isOwner: boolean =
     wallet && wallet.publicKey.toBase58() === tweet.user.toBase58();
 
-  const addComment = (comment: Comment) => {};
+  const addComment = (comment: Comment) => {
+    tweet.comments = [comment, ...tweet.comments];
+  };
 
   return (
     <>
@@ -82,7 +84,7 @@ export default function TweetCard({
             )}
           </div>
           <div className="ml-12 border-b border-primary pb-4">
-            <div className="flex flex-col p-4 border border-primary rounded-lg bg-gray-100">
+            <div className="flex flex-col py-4 px-8 border border-primary rounded-lg bg-gray-100">
               <p className="whitespace-pre-wrap">{tweet.content}</p>
               <div className="flex">
                 {tweet.tag && tweet.tag !== "[untagged]" && (
@@ -178,8 +180,8 @@ export default function TweetCard({
               )}
               {tweet.comments.length > 0 &&
                 tweet.comments.map((comment, i) => (
-                  <CommentCard key={i} comment={comment} />
-                ))}
+                    <CommentCard key={i} comment={comment} />
+                  ))}
             </div>
           </div>
         </div>
