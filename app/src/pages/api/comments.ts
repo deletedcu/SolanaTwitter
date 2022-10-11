@@ -82,39 +82,34 @@ export const deleteComment = async (commentKey: PublicKey) => {
 
 export const fetchComments = async (filters: any[]) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace) return [];
   const { program } = workspace;
 
   const comments = await program.account.comment.all(filters);
-  const aliasObj = await fetchUsersAlias();
   const allComments = comments.map((comment) => {
-    // @ts-ignore
-    const userKey: PublicKey = comment.account.user;
-    const [aliasPDA, _] = PublicKey.findProgramAddressSync(
-      [utils.bytes.utf8.encode("user_alias"), userKey.toBuffer()],
-      program.programId
-    );
-    const alias = aliasObj[aliasPDA.toBase58()] || toCollapse(userKey);
+    const alias = toCollapse((comment.account.user as PublicKey));
     return new Comment(comment.publicKey, comment.account, alias);
   });
 
-  type commentProps = {
-    [key: string]: [Comment];
-  };
+  return allComments.sort((a, b) => b.timestamp - a.timestamp);
 
-  const result = allComments.reduce((acc: commentProps, item: Comment) => {
-    if (acc[item.key]) {
-      acc[item.key].push(item);
-    } else {
-      acc[item.key] = [item];
-    }
-    return acc;
-  }, {});
+  // type commentProps = {
+  //   [key: string]: [Comment];
+  // };
 
-  return result;
+  // const result = allComments.reduce((acc: commentProps, item: Comment) => {
+  //   if (acc[item.key]) {
+  //     acc[item.key].push(item);
+  //   } else {
+  //     acc[item.key] = [item];
+  //   }
+  //   return acc;
+  // }, {});
+
+  // return result;
 };
 
-export const tweetFilter = (tweetKey: string) => ({
+export const commentTweetFilter = (tweetKey: string) => ({
   memcmp: {
     offset: 8 + 32, // discriminator(8) + user(32),
     bytes: tweetKey,
