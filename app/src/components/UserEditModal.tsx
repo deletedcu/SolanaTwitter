@@ -140,7 +140,7 @@ export default function UserEditModal({
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="fixed inset-0 z-40 bg-gray-400/50 backdrop-blur"></div>
         </div>
       )}
     </>

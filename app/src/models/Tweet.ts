@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
+import { Comment } from "./Comment";
 
 export type TweetAccount = {
   readonly user: PublicKey;
@@ -22,6 +23,7 @@ export class Tweet {
   content: string;
   state: TweetState | undefined;
   user_display: string;
+  comments: Comment[] = [];
 
   constructor(publickey: PublicKey, account: any, alias: string) {
     this.publickey = publickey;
@@ -44,4 +46,9 @@ export class Tweet {
   get created_ago(): string {
     return dayjs.unix(this.timestamp).fromNow();
   }
+
+  set setComments(comments : Comment[]) {
+    this.comments = comments;
+  }
+  
 }
