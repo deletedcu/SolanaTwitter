@@ -4,19 +4,54 @@ import { useEffect, useState } from "react";
 import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
+import { AliasProps } from "../api/alias";
 import { deleteTweet, getTweet } from "../api/tweets";
+import { fetchUsersAlias } from "../api/alias";
+import { utils } from "@project-serum/anchor";
+import { getWorkspace } from "../../utils";
 
 export default function Tweet() {
   const router = useRouter();
+  const [originTweet, setOriginTweet] = useState<TweetModel | null>(null);
   const [tweet, setTweet] = useState<TweetModel | null>(null);
   const [loading, setLoading] = useState(true);
+  const [usersAlias, setUsersAlias] = useState<AliasProps>({});
   const tweetAddress = router.query.tweet as string;
+
+  const workspace = getWorkspace();
+
+  useEffect(() => {
+    fetchUsersAlias().then((value) => setUsersAlias(value));
+  }, []);
 
   useEffect(() => {
     getTweet(new PublicKey(tweetAddress))
-      .then((fetchedTweet) => setTweet(fetchedTweet))
+      .then((fetchedTweet) => setOriginTweet(fetchedTweet))
       .finally(() => setLoading(false));
   }, [tweetAddress]);
+
+  useEffect(() => {
+    if (!workspace || !originTweet) return;
+    let fTweet = originTweet;
+    const [aliasPDA, _] = PublicKey.findProgramAddressSync(
+      [utils.bytes.utf8.encode("user-alias"), fTweet.user.toBuffer()],
+      workspace.program.programId
+    );
+    if (usersAlias[aliasPDA.toBase58()]) {
+      fTweet.user_display = usersAlias[aliasPDA.toBase58()];
+    }
+    fTweet.comments.map((comment) => {
+      const [aPDA, _] = PublicKey.findProgramAddressSync(
+        [utils.bytes.utf8.encode("user-alias"), comment.user.toBuffer()],
+        workspace.program.programId
+      );
+      if (usersAlias[aPDA.toBase58()]) {
+        comment.user_display = usersAlias[aPDA.toBase58()];
+      }
+      return comment;
+    });
+    setTweet(fTweet);
+  }, [originTweet, usersAlias, workspace]);
 
   const onDelete = async (tweet: TweetModel) => {
     const result = await deleteTweet(tweet);

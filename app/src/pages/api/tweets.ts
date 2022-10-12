@@ -4,7 +4,7 @@ import { TagType, Tweet, UserType } from "../../models";
 import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
 import { web3, utils } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
-import { AliasProps, fetchUsersAlias, getUserAlias } from "./alias";
+import { fetchUsersAlias, getUserAlias } from "./alias";
 import { commentTweetFilter, fetchComments } from "./comments";
 
 export const fetchTweets = async (filters: any[] = []) => {
@@ -12,17 +12,10 @@ export const fetchTweets = async (filters: any[] = []) => {
   if (!workspace) return [];
   const { program } = workspace;
   const tweets = await program.account.tweet.all(filters);
-  const aliasObj = await fetchUsersAlias();
+
   const orderedTweets = tweets
     .map((tweet) => {
-      // @ts-ignore
-      const userKey: PublicKey = tweet.account.user;
-      const [aliasPDA, _] = PublicKey.findProgramAddressSync(
-        [utils.bytes.utf8.encode("user-alias"), userKey.toBuffer()],
-        program.programId
-      );
-      const alias = aliasObj[aliasPDA.toBase58()] || toCollapse(userKey);
-      return new Tweet(tweet.publicKey, tweet.account, alias);
+      return new Tweet(tweet.publicKey, tweet.account);
     })
     .filter((tweet) => tweet.tag !== "[deleted]")
     .sort((a, b) => b.timestamp - a.timestamp);
@@ -67,35 +60,19 @@ export const paginateTweets = (
       .map(({ pubkey }) => pubkey);
   };
 
-  const pageCb = async (
-    page: number,
-    paginatedPublicKeys: PublicKey[],
-    userAliasObj: AliasProps
-  ) => {
+  const pageCb = async (page: number, paginatedPublicKeys: PublicKey[]) => {
     const tweets = await program.account.tweet.fetchMultiple(
       paginatedPublicKeys
     );
 
     return tweets
       .map((tweet, index) => {
-        // @ts-ignore
-        const userKey: PublicKey = tweet.user;
-        const [aliasPDA, _] = PublicKey.findProgramAddressSync(
-          [utils.bytes.utf8.encode("user-alias"), userKey.toBuffer()],
-          program.programId
-        );
-        const alias = userAliasObj[aliasPDA.toBase58()] || toCollapse(userKey);
-        return new Tweet(paginatedPublicKeys[index], tweet, alias);
+        return new Tweet(paginatedPublicKeys[index], tweet);
       })
       .filter((tweet) => tweet.tag !== "[deleted]");
   };
 
-  const pagination = getPagination(
-    perPage,
-    prefetchCb,
-    fetchUsersAlias,
-    pageCb
-  );
+  const pagination = getPagination(perPage, prefetchCb, pageCb);
   const { hasPage, getPage } = pagination;
 
   const getNextPage = async () => {
@@ -119,10 +96,7 @@ export const getTweet = async (publicKey: PublicKey) => {
   if (!workspace) return null;
   const { program } = workspace;
   const account = await program.account.tweet.fetch(publicKey);
-  // @ts-ignore
-  const userKey: PublicKey = account.user;
-  const alias = await getUserAlias(userKey);
-  const tweet = new Tweet(publicKey, account, alias);
+  const tweet = new Tweet(publicKey, account);
   const comments = await fetchComments([commentTweetFilter(tweet.key)]);
   tweet.comments = comments || [];
   return tweet;
