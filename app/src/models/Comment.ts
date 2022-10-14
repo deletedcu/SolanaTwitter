@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import dayjs from "dayjs";
+import { toCollapse } from "../utils";
 
 export enum CommentState {
   Edited,
@@ -16,7 +17,7 @@ export class Comment {
   state: CommentState | undefined;
   user_display: string;
 
-  constructor(publicKey: PublicKey, account: any, alias: string) {
+  constructor(publicKey: PublicKey, account: any, alias?: string) {
     this.publicKey = publicKey;
     this.user = account.user;
     this.tweet = account.tweet;
@@ -24,7 +25,7 @@ export class Comment {
     this.timestamp = account.timestamp;
     this.content = account.content;
     this.state = account.state;
-    this.user_display = alias;
+    this.user_display = alias || toCollapse(this.user);
   }
 
   get key(): string {
