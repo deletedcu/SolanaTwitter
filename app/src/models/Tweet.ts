@@ -33,7 +33,7 @@ export class Tweet {
     this.tag = account.tag;
     this.content = account.content;
     this.state = account.state;
-    this.user_display = alias || toCollapse(publickey);
+    this.user_display = alias || toCollapse(this.user);
   }
 
   get key(): string {
