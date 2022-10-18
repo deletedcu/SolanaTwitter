@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type SearchProps = {
   children?: ReactNode;
   modelValue?: string;
-  setModelValue: (a: string) => void;
+  setModelValue?: (a: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  search: () => void;
+  search: (a: string) => void;
 };
 
 export default function TweetSearch({
@@ -18,23 +18,31 @@ export default function TweetSearch({
   disabled,
   search,
 }: SearchProps) {
-  const handleSearchSubmit = () => {
-    search();
-  };
-
+  const [text, setText] = useState(modelValue || "");
   const { handleSubmit, register } = useForm();
-  const onSubmit = () => handleSearchSubmit();
+  const onSubmit = handleSubmit(() => {
+    search(text);
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative border-b border-skin-primary">
+    <form onSubmit={onSubmit} className="relative border-b border-skin-primary">
       <input
         {...register("search")}
         type="text"
-        value={modelValue}
+        value={text}
         className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary focus:focus-input"
         placeholder={placeholder}
-        onChange={(e) => setModelValue(e.target.value)}
+        onChange={(e) => {
+          setText(e.target.value);
+          setModelValue && setModelValue(e.target.value);
+        }}
         autoComplete="off"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            onSubmit();
+          }
+        }}
       />
       <div
         className={

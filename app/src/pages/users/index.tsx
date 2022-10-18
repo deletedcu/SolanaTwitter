@@ -19,8 +19,8 @@ export default function Users() {
 
   const wallet = useAnchorWallet();
 
-  const search = () => {
-    router.push(`/users/${user}`);
+  const search = (str: string) => {
+    router.push(`/users/${str}`);
   };
 
   const onTextChange = (text: string) => {

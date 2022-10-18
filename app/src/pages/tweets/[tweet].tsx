@@ -65,7 +65,7 @@ export default function Tweet() {
       <div className="flex w-full">
         <div className="mr-16 grow">
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-skin-primary">
-            <h2 className="-mb-px flex border-b-2 border-primary-500 pb-2.5 font-semibold leading-6">
+            <h2 className="-mb-px flex border-b-2 border-primary-500 pb-2.5 font-semibold leading-6 text-color-primary">
               Tweet Details
             </h2>
           </div>

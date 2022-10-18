@@ -36,15 +36,16 @@ export default function Tags() {
     setHasMore(more);
   };
 
-  const search = () => {
-    router.push(`/tags/${slugTag}`);
+  const search = (str: string) => {
+    router.push(`/tags/${str}`);
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
+    setTweets([]);
     setTag((router.query.tag as string));
-  }, [router.query]);
+  }, [router.query.tag]);
 
   useEffect(() => {
     if (wallet && connected && slugTag) {
@@ -89,7 +90,6 @@ export default function Tags() {
             placeholder="tag"
             disabled={!slugTag}
             modelValue={slugTag}
-            setModelValue={setTag}
             search={search}
           >
             {tagIcon}

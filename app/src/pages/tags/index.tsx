@@ -19,8 +19,8 @@ export default function Tags() {
 
   const slugTag = useSlug(tag);
 
-  const search = () => {
-    router.push(`/tags/${slugTag}`);
+  const search = (str: string) => {
+    router.push(`/tags/${str}`);
   };
 
   const fetchTweetTags = () => {
