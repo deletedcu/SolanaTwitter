@@ -26,12 +26,12 @@ export default function TweetSearch({
   const onSubmit = () => handleSearchSubmit();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative border-b">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative border-b border-skin-primary">
       <input
         {...register("search")}
         type="text"
         value={modelValue}
-        className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary"
+        className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary focus:focus-input"
         placeholder={placeholder}
         onChange={(e) => setModelValue(e.target.value)}
         autoComplete="off"

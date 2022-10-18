@@ -46,7 +46,7 @@ export default function UserEditModal({
         <div>
           <div className="fixed flex justify-center items-center overflow-x-hidden overflow-y-auto inset-0 z-50 outline-none focus:outline-none">
             <div className="fixed top-0 my-[10vh] ">
-              <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-primary-50/5 bg-fill-primary py-6 px-8 text-center align-middle shadow-xl transition-all">
+              <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-skin-primary bg-fill-primary py-6 px-8 text-center align-middle shadow-xl transition-all">
                 <button
                   className="btn btn-circle btn-sm absolute right-2 top-2 p-2 rounded-full border-transparent bg-transparent text-color-secondary hover:border-skin-primary hover:bg-fill-third hover:text-color-primary"
                   onClick={onClose}
@@ -116,7 +116,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 text-color-secondary rounded-none rounded-r-md border-skin-primary focus:border-focus focus:ring-focus sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:border-focus focus:ring-focus sm:text-sm"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}

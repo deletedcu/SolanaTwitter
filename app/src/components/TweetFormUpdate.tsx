@@ -90,7 +90,7 @@ export default function TweetFormUpdate({
                   value={slugTag}
                   type="text"
                   placeholder="tag"
-                  className="text-primary-500 rounded-full bg-fill-secondary py-2 pl-10 pr-4"
+                  className="text-primary-500 rounded-full bg-fill-secondary focus:focus-input py-2 pl-10 pr-4"
                   disabled={!slugTag}
                 />
                 <div className="absolute inset-y-0 left-0 flex pl-3 pr-2">

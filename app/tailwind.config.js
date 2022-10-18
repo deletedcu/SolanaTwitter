@@ -37,7 +37,7 @@ module.exports = {
           primary: "rgb(var(--fill-color-primary))",
           secondary: "rgb(var(--fill-color-secondary))",
           third: "rgb(var(--fill-color-third))",
-          opacity: "rgba(var(--fill-color-opacity), 0.5)",
+          opacity: "rgba(var(--fill-color-opacity), 0.2)",
         },
       },
       borderColor: {

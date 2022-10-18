@@ -72,7 +72,7 @@ export default function TweetForm({
                 value={effectiveTag}
                 type="text"
                 placeholder="tag"
-                className="text-primary-500 rounded-full bg-fill-secondary py-2 pl-10 pr-4"
+                className="text-primary-500 rounded-full bg-fill-secondary focus:focus-input py-2 pl-10 pr-4"
                 disabled={!!forceTag}
                 autoComplete="off"
               />

@@ -39,7 +39,7 @@ export default function WalletItem({
       }
       transition
     >
-      <MenuItem className="min-w-[15em] bg-fill-primary">
+      <MenuItem className="min-w-[15em]">
         {({ hover }) => (
           <div>
             <button
