@@ -6,6 +6,7 @@ import { getUserAlias } from "../pages/api/alias";
 import { getWorkspace } from "../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -28,6 +29,7 @@ export default function Menubar() {
             <div className="h-16 flex items-center justify-between border-b border-current px-6 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
+                <ThemeSwitcher />
                 {workspace && connected && (
                   <>
                     <WalletItem
@@ -113,7 +115,7 @@ function Path() {
 
   const generatePath = (data: PathType[]) => {
     return (
-      <ul className="relative z-40 flex items-center py-0.5 px-6 text-skin-primary">
+      <ul className="relative z-40 flex items-center py-0.5 px-6 text-skin-secondary">
         <li>
           <Link href="/">
             <a className="flex items-center hover:underline">

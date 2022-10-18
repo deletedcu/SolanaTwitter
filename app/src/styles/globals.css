@@ -12,6 +12,16 @@
     --border-color: 229 231 235;
     --border-focus-color: 107 114 128;
   }
+
+  .theme-dark {
+    --text-color-primary: 17 24 39;
+    --text-color-secondary: 55 65 81;
+    --text-color-third: 107 114 128;
+    --fill-color-primary: 255 255 255;
+    --fill-color-secondary: 243 244 246;
+    --border-color: 229 231 235;
+    --border-focus-color: 107 114 128;
+  }
 }
 
 @layer components {

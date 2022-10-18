@@ -3,7 +3,8 @@ import { Adapter, WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { useMemo } from "react";
 import { clusterApiUrl } from "@solana/web3.js";
 import {
-  ConnectionProvider, WalletProvider,
+  ConnectionProvider,
+  WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { ToastContainer } from "react-toastify";
@@ -23,6 +24,7 @@ import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
 import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
 import { SlopeWalletAdapter } from "@solana/wallet-adapter-slope";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
+import { ThemeProvider } from "../contexts/themeProvider";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -45,14 +47,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [network]);
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <Component {...pageProps} />
-          <ToastContainer />
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <ThemeProvider>
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <Component {...pageProps} />
+            <ToastContainer />
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,14 +1,16 @@
 import { ReactNode } from "react";
 import Menubar from "../components/Menubar";
 import Sidebar from "../components/Sidebar";
+import { useTheme } from "../contexts/themeProvider";
 
 interface Props {
   children?: ReactNode;
 }
 
 export default function Base({ children }: Props) {
+  const { theme } = useTheme();
   return (
-    <div>
+    <div className={theme === "dark" ? "theme-dark" : ""}>
       <Menubar />
       <div className="relative flex overflow-x-hidden bg-skin-primary">
         <Sidebar />
