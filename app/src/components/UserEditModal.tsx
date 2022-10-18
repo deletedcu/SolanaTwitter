@@ -90,7 +90,7 @@ export default function UserEditModal({
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col">
                       <div className="mt-1 flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-skin-primary bg-fill-secondary px-3 text-sm text-color-third">
+                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-skin-primary bg-fill-secondary px-3 text-sm text-color-secondary">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5 iconify iconify--heroicons-outline"

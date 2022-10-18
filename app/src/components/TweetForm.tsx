@@ -117,7 +117,7 @@ export default function TweetForm({
           </div>
         </form>
       ) : (
-        <div className="border-b bg-curent px-8 py-4 text-center text-color-secondary">
+        <div className="border-b border-skin-primary bg-curent px-8 py-4 text-center text-color-secondary">
           Connect your wallet to start tweeting...
         </div>
       )}
