@@ -24,7 +24,7 @@ export default function CommentForm({
 
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
-  let characterLimitColor = "text-gray-400";
+  let characterLimitColor = "text-skin-third";
   if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
   if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
 
@@ -59,11 +59,11 @@ export default function CommentForm({
           {/* <!-- Character limit. --> */}
           <div className="text-sm">
             <span className={characterLimitColor}>{characterLimit}</span>
-            <span>{` / ${LIMIT}`}</span>
+            <span className="text-skin-secondary">{` / ${LIMIT}`}</span>
           </div>
           {/* <!-- Cancel button. --> */}
           <button
-            className="rounded-full px-4 py-2 font-semibold bg-gray-300 text-gray-700"
+            className="rounded-full px-4 py-2 font-semibold bg-current text-skin-secondary"
             onClick={onClose}
           >
             Cancel

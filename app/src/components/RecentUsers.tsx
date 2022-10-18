@@ -11,7 +11,7 @@ export default function RecentUsers({
 }) {
   return (
     <div className="h-full overflow-y-auto">
-      <div className="card bg-gray-100 py-3 px-6">
+      <div className="card bg-skin-secondary py-3 px-6">
         {users.map((user, i) => {
           const userRoute =
             user.user.toBase58() === owner
@@ -20,7 +20,7 @@ export default function RecentUsers({
           return (
             <div
               key={i}
-              className="border-b border-b-gray-300/50 py-3 last:border-b-0"
+              className="border-b border-current py-3 last:border-b-0"
             >
               <div className="flex items-center">
                 <div className="mr-3 p-0.5">
@@ -34,14 +34,14 @@ export default function RecentUsers({
                 <div>
                   <div>
                     <Link href={userRoute}>
-                      <a className="hover:underline font-semibold">
+                      <a className="hover:underline font-semibold text-skin-primary">
                         {user.user_display}
                       </a>
                     </Link>
                   </div>
                   <time>
                     <Link href={`/tweets/${user.tweet.toBase58()}`}>
-                      <a className="text-sm text-gray-500 hover:underline">
+                      <a className="text-sm text-skin-third hover:underline">
                         {user.created_ago}
                       </a>
                     </Link>

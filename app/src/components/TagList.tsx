@@ -15,7 +15,7 @@ export default function TagList(props: TagListProps) {
     <>
       {wallet ? (
         loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <div className="p-8 text-center text-skin-third">Loading...</div>
         ) : (
           <div className="flex flex-wrap m-4">
             {tags.map((tag, i) => (
@@ -24,7 +24,7 @@ export default function TagList(props: TagListProps) {
           </div>
         )
       ) : (
-        <div className="border-b bg-gray-50 px-8 py-4 text-center text-gray-500">
+        <div className="border-b bg-current px-8 py-4 text-center text-skin-third">
           Connect your wallet to start tweeting...
         </div>
       )}
@@ -34,11 +34,11 @@ export default function TagList(props: TagListProps) {
 
 function TagBadge({ tag }: { tag: TagType }) {
   return (
-    <div className="border border-solid border-sky-500 rounded-full mb-2 mr-2">
+    <div className="border border-sky-500 rounded-full mb-2 mr-2">
       <Link href={`/tags/${tag.tag}`}>
         <a className="text-primary-500 text-sm hover:underline px-2 py-0">
           {`#${tag.tag}`}
-          <span className="text-gray-700 ml-2">{tag.count}</span>
+          <span className="text-skin-secondary ml-2">{tag.count}</span>
         </a>
       </Link>
     </div>

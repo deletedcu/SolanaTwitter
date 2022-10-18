@@ -24,6 +24,7 @@ module.exports = {
           900: mainColor[900],
         },
         current: "rgb(var(--border-color))",
+        focus: "rgb(var(--border-focus-color))"
       },
       textColor: {
         skin: {

@@ -31,14 +31,14 @@ export default function TweetSearch({
         {...register("search")}
         type="text"
         value={modelValue}
-        className="w-full bg-gray-100 py-4 pl-16 pr-32 text-gray-700"
+        className="w-full bg-skin-secondary py-4 pl-16 pr-32 text-skin-secondary"
         placeholder={placeholder}
         onChange={(e) => setModelValue(e.target.value)}
         autoComplete="off"
       />
       <div
         className={
-          (modelValue ? "text-gray-700 " : "text-gray-400 ") +
+          (modelValue ? "text-skin-secondary " : "text-skin-third ") +
           "absolute inset-y-0 left-0 flex items-center justify-center pl-8 pr-2"
         }
       >
@@ -49,8 +49,8 @@ export default function TweetSearch({
           type="submit"
           className={
             (!disabled
-              ? "bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white "
-              : "cursor-not-allowed bg-gray-200 text-gray-400 ") +
+              ? "bg-current text-skin-secondary hover:bg-focus hover:text-white "
+              : "cursor-not-allowed bg-current text-skin-third ") +
             "rounded-full px-4 py-1 font-semibold"
           }
           disabled={disabled}

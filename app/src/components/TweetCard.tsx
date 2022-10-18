@@ -66,7 +66,7 @@ export default function TweetCard({
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
                 role="img"
-                className="h-4 w-4 p-0.5 text-skin-secondary iconify iconify--heroicons-outline"
+                className="h-4 w-4 p-0.5 text-skin-third iconify iconify--heroicons-outline"
                 width="1em"
                 height="1em"
                 preserveAspectRatio="xMidYMid meet"

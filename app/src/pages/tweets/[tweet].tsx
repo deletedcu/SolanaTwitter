@@ -71,13 +71,13 @@ export default function Tweet() {
           </div>
           <div className="pt-4">
             {loading ? (
-              <div className="text-center text-skin-secondary">Loading...</div>
+              <div className="text-center text-skin-third">Loading...</div>
             ) : (
               <>
                 {tweet ? (
                   <TweetCard tweet={tweet} onDelete={onDelete} />
                 ) : (
-                  <div className="text-center text-skin-secondary">
+                  <div className="text-center text-skin-third">
                     Tweet not found
                   </div>
                 )}

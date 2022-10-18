@@ -78,7 +78,7 @@ export default function TweetFormUpdate({
               })}
               id="content"
               rows={1}
-              className="mb-3 w-full resize-none text-xl focus:outline-none text-skin-primary"
+              className="mb-3 w-full resize-none text-xl focus:outline-none text-skin-primary bg-transparent"
               placeholder="What's happening?"
             />
             <div className="-m-2 flex flex-wrap items-center justify-between">
@@ -90,7 +90,7 @@ export default function TweetFormUpdate({
                   value={slugTag}
                   type="text"
                   placeholder="tag"
-                  className="text-primary-500 rounded-full bg-current py-2 pl-10 pr-4"
+                  className="text-primary-500 rounded-full bg-skin-secondary py-2 pl-10 pr-4"
                   disabled={!slugTag}
                 />
                 <div className="absolute inset-y-0 left-0 flex pl-3 pr-2">
