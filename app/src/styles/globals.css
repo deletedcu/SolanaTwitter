@@ -10,21 +10,23 @@
     --fill-color-primary: 255 255 255;
     --fill-color-secondary: 243 244 246;
     --fill-color-third: 229 231 235;
-    --fill-color-opacity: 209, 213, 219;
-    --border-color: 156, 163, 175;
+    --fill-opacity: 0.3;
+    --border-color: 156 163 175;
+    --border-opacity: 0.3;
     --focus-color: 107 114 128;
   }
 
   .theme-dark {
-    --text-color-primary: 148 163 184;
-    --text-color-secondary: 100 116 139;
-    --text-color-third: 71 85 105;
-    --fill-color-primary: 15 23 42;
-    --fill-color-secondary: 30 41 59;
-    --fill-color-third: 51, 65, 85;
-    --fill-color-opacity: 51, 65, 85;
-    --border-color: 51, 65, 85;
-    --focus-color: 100 116 139;
+    --text-color-primary: 163 163 163;
+    --text-color-secondary: 115 115 115;
+    --text-color-third: 82 82 82;
+    --fill-color-primary: 23 23 23;
+    --fill-color-secondary: 38 38 38;
+    --fill-color-third: 64 64 64;
+    --fill-opacity: 0.3;
+    --border-color: 82 82 82;
+    --border-opacity: 0.3;
+    --focus-color: 115 115 115;
   }
 }
 

@@ -23,7 +23,11 @@ module.exports = {
           800: mainColor[800],
           900: mainColor[900],
         },
-        focus: "rgb(var(--focus-color))"
+        focus: "rgb(var(--focus-color))",
+        skin: {
+          primary: "rgb(var(--border-color) / var(--border-opacity))",
+          secondary: "rgb(var(--focus-color))",
+        },
       },
       textColor: {
         color: {
@@ -37,15 +41,9 @@ module.exports = {
           primary: "rgb(var(--fill-color-primary))",
           secondary: "rgb(var(--fill-color-secondary))",
           third: "rgb(var(--fill-color-third))",
-          opacity: "rgba(var(--fill-color-opacity), 0.2)",
+          opacity: "rgb(var(--fill-color-third) / var(--fill-opacity))",
         },
       },
-      borderColor: {
-        skin: {
-          primary: "rgba(var(--border-color), 0.3)",
-          secondary: "rgb(var(--focus-color))"
-        }
-      }
     },
   },
   plugins: [

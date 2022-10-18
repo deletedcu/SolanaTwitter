@@ -98,7 +98,7 @@ export default function UserList(props: UserListProps) {
           </div>
         )
       ) : (
-        <div className="border-b bg-fill-secondary px-8 py-4 text-center text-color-third">
+        <div className="border-b border-skin-primary bg-fill-secondary px-8 py-4 text-center text-color-third">
           Connect your wallet to start tweeting...
         </div>
       )}
