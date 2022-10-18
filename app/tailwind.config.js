@@ -23,7 +23,19 @@ module.exports = {
           800: mainColor[800],
           900: mainColor[900],
         },
+        current: "rgb(var(--border-color))"
       },
+      textColor: {
+        skin: {
+          primary: "rgb(var(--text-color-primary))",
+          secondary: "rgb(var(--text-color-secondary))"
+        }
+      },
+      backgroundColor: {
+        skin: {
+          fill: "rgb(var(--fill-color))",
+        }
+      }
     },
   },
   plugins: [require("@tailwindcss/forms")({

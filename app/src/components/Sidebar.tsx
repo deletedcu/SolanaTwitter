@@ -10,15 +10,15 @@ export default function Sidebar() {
 
   return (
     <aside className="fixed h-full w-72">
-      <div className="h-full overflow-y-auto border-r border-gray-300/50">
+      <div className="h-full overflow-y-auto border-r border-current">
         <div className="relative mb-8">
           <div className="relative overflow-hidden">
             <div className="glass absolute left-[2.5%] z-0 h-72 w-full scale-x-105 opacity-30"></div>
             <div className="flex h-72 items-center justify-center">
               <div className="mb-6 select-none text-center">
-                <div className="mx-auto mb-4 text-4xl">
+                <div className="mx-auto mb-4">
                   <Link href="/">
-                    <a className="inline-block round-full p-3 hover:bg-gray-100 md:self-start rounded-full">
+                    <a className="inline-block p-3 hover:bg-current md:self-start rounded-full">
                       <Image
                         src="/chat.png"
                         width={50}
@@ -28,11 +28,11 @@ export default function Sidebar() {
                     </a>
                   </Link>
                 </div>
-                <h1 className="mb-0 text-2xl font-semibold">Solana Twitter</h1>
-                <p className="text-xs italic text-gray-700">
+                <h1 className="mb-0 text-2xl font-semibold text-skin-primary">Solana Twitter</h1>
+                <p className="text-xs italic text-skin-secondary">
                   Solana communication platform
                 </p>
-                <p className="text-xs italic text-gray-700">
+                <p className="text-xs italic text-skin-secondary">
                   Created using Anchor, Solana, and Next.js
                 </p>
               </div>
@@ -47,13 +47,13 @@ export default function Sidebar() {
             <a
               className={
                 (router.pathname.startsWith("/tweets") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
               }
             >
               {router.pathname.startsWith("/tweets") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -62,7 +62,7 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -75,20 +75,20 @@ export default function Sidebar() {
                   />
                 </svg>
               )}
-              <div className="hidden text-xl md:block">Tweets</div>
+              <div className="hidden text-xl md:block text-skin-primary">Tweets</div>
             </a>
           </Link>
           <Link href="/tags">
             <a
               className={
                 (router.pathname.startsWith("/tags") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
               }
             >
               {router.pathname.startsWith("/tags") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -97,27 +97,27 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path d="M21 7.337h-3.93l.372-4.272c.036-.412-.27-.775-.682-.812-.417-.03-.776.27-.812.683l-.383 4.4h-6.32l.37-4.27c.037-.413-.27-.776-.68-.813-.42-.03-.777.27-.813.683l-.382 4.4H3.782c-.414 0-.75.337-.75.75s.336.75.75.75H7.61l-.55 6.327H3c-.414 0-.75.336-.75.75s.336.75.75.75h3.93l-.372 4.272c-.036.412.27.775.682.812l.066.003c.385 0 .712-.295.746-.686l.383-4.4h6.32l-.37 4.27c-.036.413.27.776.682.813l.066.003c.385 0 .712-.295.746-.686l.382-4.4h3.957c.413 0 .75-.337.75-.75s-.337-.75-.75-.75H16.39l.55-6.327H21c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm-6.115 7.826h-6.32l.55-6.326h6.32l-.55 6.326z" />
                 </svg>
               )}
-              <div className="hidden text-xl md:block">Tags</div>
+              <div className="hidden text-xl md:block text-skin-primary">Tags</div>
             </a>
           </Link>
           <Link href="/users">
             <a
               className={
                 (router.pathname.startsWith("/users") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
               }
             >
               {router.pathname.startsWith("/users") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -126,7 +126,7 @@ export default function Sidebar() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
+                  className="h-6 w-6 text-skin-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -139,7 +139,7 @@ export default function Sidebar() {
                   />
                 </svg>
               )}
-              <div className="hidden text-xl md:block">Users</div>
+              <div className="hidden text-xl md:block text-skin-primary">Users</div>
             </a>
           </Link>
           {connected && (
@@ -147,14 +147,14 @@ export default function Sidebar() {
               <a
                 className={
                   (router.pathname.startsWith("/profile") ? "font-bold " : "") +
-                  "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-gray-100 md:w-full"
+                  "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
                 }
               >
                 {router.pathname.startsWith("/profile") ? (
                   <svg
                     v-if="isActive"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-gray-700"
+                    className="h-6 w-6 text-skin-primary"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -167,7 +167,7 @@ export default function Sidebar() {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-gray-700"
+                    className="h-6 w-6 text-skin-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -180,7 +180,7 @@ export default function Sidebar() {
                     />
                   </svg>
                 )}
-                <div className="hidden text-xl md:block">Profile</div>
+                <div className="hidden text-xl md:block text-skin-primary">Profile</div>
               </a>
             </Link>
           )}

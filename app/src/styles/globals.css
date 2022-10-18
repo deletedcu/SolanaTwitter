@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --text-color-primary: 17 24 39;
+    --text-color-secondary: 107 114 128;
+    --fill-color: 255 255 255;
+    --border-color: 229 231 235;
+  }
+}
+
 @layer components {
   .card {
     position: relative;
