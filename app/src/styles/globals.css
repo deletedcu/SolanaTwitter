@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --text-color-primary: 17 24 39;
+    --text-color-secondary: 55 65 81;
+    --text-color-third: 107 114 128;
+    --fill-color-primary: 255 255 255;
+    --fill-color-secondary: 243 244 246;
+    --fill-color-third: 229 231 235;
+    --fill-color-opacity: 209, 213, 219;
+    --border-color: 156, 163, 175;
+    --focus-color: 107 114 128;
+  }
+
+  .theme-dark {
+    --text-color-primary: 148 163 184;
+    --text-color-secondary: 100 116 139;
+    --text-color-third: 71 85 105;
+    --fill-color-primary: 15 23 42;
+    --fill-color-secondary: 30 41 59;
+    --fill-color-third: 51, 65, 85;
+    --fill-color-opacity: 51, 65, 85;
+    --border-color: 51, 65, 85;
+    --focus-color: 100 116 139;
+  }
+}
+
 @layer components {
   .card {
     position: relative;
@@ -29,6 +55,18 @@
     box-shadow: 0 0 0 1px rgb(128 128 128 / 50%) inset, 0 0 0 2px #0000000d;
     text-shadow: 0 1px rgb(0 0 0 / 5%);
   }
+
+  .focus-input {
+    @apply outline-none border border-skin-secondary;
+  }
+}
+
+.szh-menu {
+  background-color: rgb(var(--fill-color-secondary)) !important;
+}
+
+.szh-menu__item--hover {
+ background-color: rgb(var(--fill-color-third)) !important;
 }
 
 .wallet-adapter-dropdown {

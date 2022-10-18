@@ -6,6 +6,7 @@ import { getUserAlias } from "../pages/api/alias";
 import { getWorkspace } from "../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -24,10 +25,11 @@ export default function Menubar() {
     <div className="fixed top-0 w-full z-40">
       <div className="ml-72">
         <div className="duration-400 sticky top-0 z-20 ml-px">
-          <div className="sticky top-0 z-40 transition-colors bg-gray-200/50 backdrop-blur">
-            <div className="h-16 flex items-center justify-between border-b border-gray-300/50 px-6 transition-all">
+          <div className="sticky top-0 z-40 transition-colors bg-fill-opacity backdrop-blur">
+            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-6 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
+                <ThemeSwitcher />
                 {workspace && connected && (
                   <>
                     <WalletItem
@@ -113,7 +115,7 @@ function Path() {
 
   const generatePath = (data: PathType[]) => {
     return (
-      <ul className="relative z-40 flex items-center py-0.5 px-6 text-gray-600">
+      <ul className="relative z-40 flex items-center py-0.5 px-6 text-color-secondary">
         <li>
           <Link href="/">
             <a className="flex items-center hover:underline">
@@ -142,7 +144,7 @@ function Path() {
           <li key={i} className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3 relative mx-1 text-gray-600/80  iconify iconify--heroicons-outline"
+              className="h-3 w-3 relative mx-1 iconify iconify--heroicons-outline"
               width="1em"
               height="1em"
               preserveAspectRatio="xMidYMid meet"

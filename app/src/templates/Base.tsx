@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 import Menubar from "../components/Menubar";
 import Sidebar from "../components/Sidebar";
+import { useTheme } from "../contexts/themeProvider";
 
 interface Props {
   children?: ReactNode;
 }
 
 export default function Base({ children }: Props) {
+  const { theme } = useTheme();
   return (
-    <div>
+    <div className={theme === "dark" ? "theme-dark" : ""}>
       <Menubar />
-      <div className="relative flex overflow-x-hidden">
+      <div className="relative flex overflow-x-hidden bg-fill-primary">
         <Sidebar />
         <main className="relative ml-72 flex min-h-screen grow flex-col">
           <div className="mt-16 mb-12 flex flex-grow">

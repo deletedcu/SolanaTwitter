@@ -43,10 +43,10 @@ export default function WalletItem({
         {({ hover }) => (
           <div>
             <button
-              className="group flex w-full items-center rounded-md text-left"
+              className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={copyToClipboard}
             >
-              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-sky-100">
+              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
                 {hover ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -100,10 +100,10 @@ export default function WalletItem({
         {({ hover }) => (
           <div>
             <button
-              className="group flex w-full items-center rounded-md text-left"
+              className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={showModal}
             >
-              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-sky-100">
+              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
                 {hover ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@ export default function WalletItem({
       <MenuDivider />
       <MenuItem>
         <button
-          className="flex w-full h-8 items-center px-3"
+          className="flex w-full h-8 items-center px-3 text-color-primary"
           onClick={disconnect}
         >
           Disconnect wallet

@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type SearchProps = {
   children?: ReactNode;
   modelValue?: string;
-  setModelValue: (a: string) => void;
+  setModelValue?: (a: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  search: () => void;
+  search: (a: string) => void;
 };
 
 export default function TweetSearch({
@@ -18,27 +18,35 @@ export default function TweetSearch({
   disabled,
   search,
 }: SearchProps) {
-  const handleSearchSubmit = () => {
-    search();
-  };
-
+  const [text, setText] = useState(modelValue || "");
   const { handleSubmit, register } = useForm();
-  const onSubmit = () => handleSearchSubmit();
+  const onSubmit = handleSubmit(() => {
+    search(text);
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative border-b">
+    <form onSubmit={onSubmit} className="relative border-b border-skin-primary">
       <input
         {...register("search")}
         type="text"
-        value={modelValue}
-        className="w-full bg-gray-100 py-4 pl-16 pr-32 text-gray-700"
+        value={text}
+        className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary focus:focus-input"
         placeholder={placeholder}
-        onChange={(e) => setModelValue(e.target.value)}
+        onChange={(e) => {
+          setText(e.target.value);
+          setModelValue && setModelValue(e.target.value);
+        }}
         autoComplete="off"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            onSubmit();
+          }
+        }}
       />
       <div
         className={
-          (modelValue ? "text-gray-700 " : "text-gray-400 ") +
+          (modelValue ? "text-color-secondary " : "text-color-third ") +
           "absolute inset-y-0 left-0 flex items-center justify-center pl-8 pr-2"
         }
       >
@@ -49,8 +57,8 @@ export default function TweetSearch({
           type="submit"
           className={
             (!disabled
-              ? "bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white "
-              : "cursor-not-allowed bg-gray-200 text-gray-400 ") +
+              ? "bg-fill-third text-color-secondary hover:bg-focus hover:text-white "
+              : "cursor-not-allowed bg-fill-third text-color-third ") +
             "rounded-full px-4 py-1 font-semibold"
           }
           disabled={disabled}

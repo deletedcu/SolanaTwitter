@@ -50,13 +50,13 @@ export default function TweetCard({
                 </a>
               </Link>
             </div>
-            <h3 className="inline font-semibold" title={tweet.user_display}>
+            <h3 className="inline font-semibold text-color-primary" title={tweet.user_display}>
               <Link href={userRoute}>
                 <a className="hover:underline">{tweet.user_display}</a>
               </Link>
             </h3>
-            <span className="text-gray-500">•</span>
-            <time className="text-sm text-gray-500" title={tweet.created_at}>
+            <span className="text-color-secondary">•</span>
+            <time className="text-sm text-color-secondary" title={tweet.created_at}>
               <Link href={`/tweets/${tweet.key}`}>
                 <a className="hover:underline">{tweet.created_ago}</a>
               </Link>
@@ -66,7 +66,7 @@ export default function TweetCard({
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
                 role="img"
-                className="h-4 w-4 p-0.5 text-gray-500 iconify iconify--heroicons-outline"
+                className="h-4 w-4 p-0.5 text-color-third iconify iconify--heroicons-outline"
                 width="1em"
                 height="1em"
                 preserveAspectRatio="xMidYMid meet"
@@ -83,9 +83,9 @@ export default function TweetCard({
               </svg>
             )}
           </div>
-          <div className="ml-12 border-b border-primary pb-4">
-            <div className="flex flex-col py-4 px-8 border border-primary rounded-lg bg-gray-100">
-              <p className="whitespace-pre-wrap">{tweet.content}</p>
+          <div className="ml-12 border-b border-skin-primary pb-4">
+            <div className="flex flex-col py-4 px-8 border border-skin-primary rounded-lg bg-fill-secondary">
+              <p className="whitespace-pre-wrap text-color-secondary">{tweet.content}</p>
               <div className="flex">
                 {tweet.tag && tweet.tag !== "[untagged]" && (
                   <Link href={`/tags/${tweet.tag}`}>
@@ -104,7 +104,7 @@ export default function TweetCard({
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
                         role="img"
-                        className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                        className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
                         width="1em"
                         height="1em"
                         preserveAspectRatio="xMidYMid meet"
@@ -130,7 +130,7 @@ export default function TweetCard({
                         xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true"
                         role="img"
-                        className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                        className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
                         width="1em"
                         height="1em"
                         preserveAspectRatio="xMidYMid meet"
@@ -153,7 +153,7 @@ export default function TweetCard({
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 p-1 text-gray-600 hover:text-primary-600 iconify iconify--heroicons-outline"
+                      className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
                       width="1em"
                       height="1em"
                       preserveAspectRatio="xMidYMid meet"

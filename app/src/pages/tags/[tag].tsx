@@ -36,15 +36,16 @@ export default function Tags() {
     setHasMore(more);
   };
 
-  const search = () => {
-    router.push(`/tags/${slugTag}`);
+  const search = (str: string) => {
+    router.push(`/tags/${str}`);
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
+    setTweets([]);
     setTag((router.query.tag as string));
-  }, [router.query]);
+  }, [router.query.tag]);
 
   useEffect(() => {
     if (wallet && connected && slugTag) {
@@ -80,8 +81,8 @@ export default function Tags() {
     <Base>
       <div className="flex w-full">
         <div className="mr-16 grow" style={{ position: "relative" }}>
-          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-gray-300/50">
-            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6">
+          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-skin-primary">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-color-primary">
               Tweets with Tag
             </h2>
           </div>
@@ -89,7 +90,6 @@ export default function Tags() {
             placeholder="tag"
             disabled={!slugTag}
             modelValue={slugTag}
-            setModelValue={setTag}
             search={search}
           >
             {tagIcon}
@@ -104,14 +104,14 @@ export default function Tags() {
             />
           )}
           {pagination && !pagination.loading && tweets.length === 0 && (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-color-third">
               No tweets were found in this tag...
             </div>
           )}
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
-            <h3 className="mb-4 pb-2.5 font-semibold leading-6">Recent Tags</h3>
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">Recent Tags</h3>
             <RecentTags tags={recentTags} />
           </div>
         </div>
