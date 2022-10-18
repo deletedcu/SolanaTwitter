@@ -16,11 +16,11 @@ export default function UserList(props: UserListProps) {
     <>
       {wallet ? (
         loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <div className="p-8 text-center text-skin-third">Loading...</div>
         ) : (
           <div className="overflow-x-auto relative">
-            <table className="w-full text-sm text-left text-gray-700">
-              <thead className="text-xs uppercase bg-gray-100">
+            <table className="w-full text-sm text-left text-skin-secondary">
+              <thead className="text-xs uppercase bg-skin-secondary">
                 <tr>
                   <th scope="col" className="py-3 px-3"></th>
                   <th scope="col" className="py-3 px-3">
@@ -44,9 +44,9 @@ export default function UserList(props: UserListProps) {
                   return (
                     <tr
                       key={key}
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                      className="bg-skin-primary border-b"
                     >
-                      <td className="py-4 pl-6 pr-3">{`#${key + 1}`}</td>
+                      <td className="py-4 pl-6 pr-3 text-skin-secondary">{`#${key + 1}`}</td>
                       <td className="py-4 px-3">
                         <Link href={userRoute}>
                           <a>
@@ -61,18 +61,18 @@ export default function UserList(props: UserListProps) {
                       </td>
                       <td className="py-4 px-3">
                         <Link href={userRoute}>
-                          <a className="font-semibold hover:underline">
+                          <a className="font-semibold hover:underline text-skin-primary">
                             {user.user.toBase58()}
                           </a>
                         </Link>
                         <br />
-                        <span className="text-gray-400">
+                        <span className="text-skin-third">
                           {user.user_display}
                         </span>
                       </td>
                       <td className="py-4 px-3">
                         <Link href={`/tweets/${user.tweet.toBase58()}`}>
-                          <a className="hover:underline">
+                          <a className="hover:underline text-skin-secondary">
                             <span>{user.created_ago}</span>
                           </a>
                         </Link>
@@ -87,7 +87,7 @@ export default function UserList(props: UserListProps) {
                       </td>
                       <td className="py-4 px-3 text-center">
                         <Link href={userRoute}>
-                          <a className="hover:underline">{user.total_posts}</a>
+                          <a className="hover:underline text-skin-secondary">{user.total_posts}</a>
                         </Link>
                       </td>
                     </tr>
@@ -98,7 +98,7 @@ export default function UserList(props: UserListProps) {
           </div>
         )
       ) : (
-        <div className="border-b bg-gray-50 px-8 py-4 text-center text-gray-500">
+        <div className="border-b bg-skin-secondary px-8 py-4 text-center text-skin-third">
           Connect your wallet to start tweeting...
         </div>
       )}

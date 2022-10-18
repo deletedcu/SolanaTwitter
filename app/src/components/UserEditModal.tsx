@@ -90,7 +90,7 @@ export default function UserEditModal({
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col">
                       <div className="mt-1 flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-current bg-current px-3 text-sm text-skin-third">
+                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-current bg-skin-secondary px-3 text-sm text-skin-third">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5 iconify iconify--heroicons-outline"
@@ -116,7 +116,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 rounded-none rounded-r-md border-current focus:border-focus focus:ring-focus sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 text-skin-secondary rounded-none rounded-r-md border-current focus:border-focus focus:ring-focus sm:text-sm"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
@@ -140,7 +140,7 @@ export default function UserEditModal({
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 z-40 bg-gray-400/50 backdrop-blur"></div>
+          <div className="fixed inset-0 z-40 bg-skin-opacity backdrop-blur"></div>
         </div>
       )}
     </>

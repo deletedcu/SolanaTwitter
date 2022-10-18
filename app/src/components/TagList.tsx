@@ -24,7 +24,7 @@ export default function TagList(props: TagListProps) {
           </div>
         )
       ) : (
-        <div className="border-b bg-current px-8 py-4 text-center text-skin-third">
+        <div className="border-b bg-skin-secondary px-8 py-4 text-center text-skin-third">
           Connect your wallet to start tweeting...
         </div>
       )}

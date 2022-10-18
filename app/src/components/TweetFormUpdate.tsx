@@ -78,7 +78,7 @@ export default function TweetFormUpdate({
               })}
               id="content"
               rows={1}
-              className="mb-3 w-full resize-none text-xl focus:outline-none text-skin-primary bg-transparent"
+              className="mb-3 w-full resize-none text-xl focus:outline-none text-skin-secondary bg-transparent"
               placeholder="What's happening?"
             />
             <div className="-m-2 flex flex-wrap items-center justify-between">
