@@ -65,7 +65,7 @@ export default function TweetList(props: TweetListProps) {
   return (
     <>
       {loading ? (
-        <div className="p-8 text-center text-skin-third">Loading...</div>
+        <div className="p-8 text-center text-color-third">Loading...</div>
       ) : (
         <div className="items">
           {filteredTweets.map((tweet, i) => (
@@ -75,7 +75,7 @@ export default function TweetList(props: TweetListProps) {
             <div className="m-4 text-center">
               <button
                 onClick={loadMore}
-                className="px-4 py-2 rounded-full border bg-skin-secondary hover:bg-current text-skin-secondary hover:text-skin-primary"
+                className="px-4 py-2 rounded-full border border-skin-primary bg-fill-secondary hover:bg-fill-third text-color-secondary hover:text-color-primary"
               >
                 Load more
               </button>

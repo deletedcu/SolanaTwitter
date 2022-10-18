@@ -9,18 +9,22 @@
     --text-color-third: 107 114 128;
     --fill-color-primary: 255 255 255;
     --fill-color-secondary: 243 244 246;
-    --border-color: 229 231 235;
-    --border-focus-color: 107 114 128;
+    --fill-color-third: 229 231 235;
+    --fill-color-opacity: 209, 213, 219;
+    --border-color: 156, 163, 175;
+    --focus-color: 107 114 128;
   }
 
   .theme-dark {
-    --text-color-primary: 17 24 39;
-    --text-color-secondary: 55 65 81;
-    --text-color-third: 107 114 128;
-    --fill-color-primary: 255 255 255;
-    --fill-color-secondary: 243 244 246;
-    --border-color: 229 231 235;
-    --border-focus-color: 107 114 128;
+    --text-color-primary: 148 163 184;
+    --text-color-secondary: 100 116 139;
+    --text-color-third: 71 85 105;
+    --fill-color-primary: 15 23 42;
+    --fill-color-secondary: 30 41 59;
+    --fill-color-third: 51, 65, 85;
+    --fill-color-opacity: 71 85 105;
+    --border-color: 51, 65, 85;
+    --focus-color: 100 116 139;
   }
 }
 

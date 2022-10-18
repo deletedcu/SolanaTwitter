@@ -46,9 +46,9 @@ export default function UserEditModal({
         <div>
           <div className="fixed flex justify-center items-center overflow-x-hidden overflow-y-auto inset-0 z-50 outline-none focus:outline-none">
             <div className="fixed top-0 my-[10vh] ">
-              <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-primary-50/5 bg-skin-primary py-6 px-8 text-center align-middle shadow-xl transition-all">
+              <div className="max-w-[21.5rem] transform overflow-hidden rounded-2xl border border-primary-50/5 bg-fill-primary py-6 px-8 text-center align-middle shadow-xl transition-all">
                 <button
-                  className="btn btn-circle btn-sm absolute right-2 top-2 p-2 rounded-full border-transparent bg-transparent text-skin-secondary hover:border-current hover:bg-current hover:text-skin-primary"
+                  className="btn btn-circle btn-sm absolute right-2 top-2 p-2 rounded-full border-transparent bg-transparent text-color-secondary hover:border-skin-primary hover:bg-fill-third hover:text-color-primary"
                   onClick={onClose}
                 >
                   <svg
@@ -77,10 +77,10 @@ export default function UserEditModal({
                     alt="profile"
                   />
                 </div>
-                <h2 className="mt-4 text-lg font-medium leading-6 text-skin-primary">
+                <h2 className="mt-4 text-lg font-medium leading-6 text-color-primary">
                   Edit Your Alias
                 </h2>
-                <div className="mt-2 text-skin-secondary">
+                <div className="mt-2 text-color-secondary">
                   <p className="text-sm">
                     Change the alias that is displayed for your connected
                     wallets publickey.
@@ -90,7 +90,7 @@ export default function UserEditModal({
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col">
                       <div className="mt-1 flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-current bg-skin-secondary px-3 text-sm text-skin-third">
+                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-skin-primary bg-fill-secondary px-3 text-sm text-color-third">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5 iconify iconify--heroicons-outline"
@@ -116,7 +116,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 text-skin-secondary rounded-none rounded-r-md border-current focus:border-focus focus:ring-focus sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 text-color-secondary rounded-none rounded-r-md border-skin-primary focus:border-focus focus:ring-focus sm:text-sm"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
@@ -140,7 +140,7 @@ export default function UserEditModal({
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 z-40 bg-skin-opacity backdrop-blur"></div>
+          <div className="fixed inset-0 z-40 bg-fill-opacity backdrop-blur"></div>
         </div>
       )}
     </>

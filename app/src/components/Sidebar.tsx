@@ -10,7 +10,7 @@ export default function Sidebar() {
 
   return (
     <aside className="fixed h-full w-72">
-      <div className="h-full overflow-y-auto border-r border-current">
+      <div className="h-full overflow-y-auto border-r border-skin-primary">
         <div className="relative mb-8">
           <div className="relative overflow-hidden">
             <div className="glass absolute left-[2.5%] z-0 h-72 w-full scale-x-105 opacity-30"></div>
@@ -18,7 +18,7 @@ export default function Sidebar() {
               <div className="mb-6 select-none text-center">
                 <div className="mx-auto mb-4">
                   <Link href="/">
-                    <a className="inline-block p-3 hover:bg-current md:self-start rounded-full">
+                    <a className="inline-block p-3 hover:bg-fill-third md:self-start rounded-full">
                       <Image
                         src="/chat.png"
                         width={50}
@@ -28,11 +28,11 @@ export default function Sidebar() {
                     </a>
                   </Link>
                 </div>
-                <h1 className="mb-0 text-2xl font-semibold text-skin-primary">Solana Twitter</h1>
-                <p className="text-xs italic text-skin-secondary">
+                <h1 className="mb-0 text-2xl font-semibold text-color-primary">Solana Twitter</h1>
+                <p className="text-xs italic text-color-secondary">
                   Solana communication platform
                 </p>
-                <p className="text-xs italic text-skin-secondary">
+                <p className="text-xs italic text-color-secondary">
                   Created using Anchor, Solana, and Next.js
                 </p>
               </div>
@@ -42,12 +42,12 @@ export default function Sidebar() {
             <WalletMultiButton />
           </div>
         </div>
-        <div className="mx-12 flex flex-col items-center space-y-2 md:items-stretch text-skin-primary">
+        <div className="mx-12 flex flex-col items-center space-y-2 md:items-stretch text-color-primary">
           <Link href="/">
             <a
               className={
                 (router.pathname.startsWith("/tweets") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-fill-third md:w-full"
               }
             >
               {router.pathname.startsWith("/tweets") ? (
@@ -82,7 +82,7 @@ export default function Sidebar() {
             <a
               className={
                 (router.pathname.startsWith("/tags") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-fill-third md:w-full"
               }
             >
               {router.pathname.startsWith("/tags") ? (
@@ -111,7 +111,7 @@ export default function Sidebar() {
             <a
               className={
                 (router.pathname.startsWith("/users") ? "font-bold " : "") +
-                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
+                "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-fill-third md:w-full"
               }
             >
               {router.pathname.startsWith("/users") ? (
@@ -147,7 +147,7 @@ export default function Sidebar() {
               <a
                 className={
                   (router.pathname.startsWith("/profile") ? "font-bold " : "") +
-                  "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-current md:w-full"
+                  "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-fill-third md:w-full"
                 }
               >
                 {router.pathname.startsWith("/profile") ? (

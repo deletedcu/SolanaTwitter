@@ -12,7 +12,7 @@ export default function Base({ children }: Props) {
   return (
     <div className={theme === "dark" ? "theme-dark" : ""}>
       <Menubar />
-      <div className="relative flex overflow-x-hidden bg-skin-primary">
+      <div className="relative flex overflow-x-hidden bg-fill-primary">
         <Sidebar />
         <main className="relative ml-72 flex min-h-screen grow flex-col">
           <div className="mt-16 mb-12 flex flex-grow">

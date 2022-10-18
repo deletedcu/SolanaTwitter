@@ -64,8 +64,8 @@ export default function User() {
     <Base>
       <div className="flex w-full">
         <div className="mr-16 grow" style={{ position: "relative" }}>
-          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-current">
-            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-skin-primary">
+          <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-skin-primary">
+            <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-color-primary">
               {wallet && user && wallet.publicKey.toBase58() === user
                 ? "Your Tweets"
                 : `${userAlias}'s Tweets`}
@@ -80,14 +80,14 @@ export default function User() {
             />
           )}
           {pagination && !pagination!.loading && tweets.length === 0 && (
-            <div className="p-8 text-center text-skin-third">
+            <div className="p-8 text-center text-color-third">
               User not found...
             </div>
           )}
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
-            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-skin-primary">
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
             {wallet && (

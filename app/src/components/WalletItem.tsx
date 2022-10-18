@@ -39,11 +39,11 @@ export default function WalletItem({
       }
       transition
     >
-      <MenuItem className="min-w-[15em] bg-skin-primary">
+      <MenuItem className="min-w-[15em] bg-fill-primary">
         {({ hover }) => (
           <div>
             <button
-              className="group flex w-full items-center rounded-md text-left text-skin-primary"
+              className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={copyToClipboard}
             >
               <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
@@ -100,7 +100,7 @@ export default function WalletItem({
         {({ hover }) => (
           <div>
             <button
-              className="group flex w-full items-center rounded-md text-left text-skin-primary"
+              className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={showModal}
             >
               <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
@@ -153,7 +153,7 @@ export default function WalletItem({
       <MenuDivider />
       <MenuItem>
         <button
-          className="flex w-full h-8 items-center px-3 text-skin-primary"
+          className="flex w-full h-8 items-center px-3 text-color-primary"
           onClick={disconnect}
         >
           Disconnect wallet

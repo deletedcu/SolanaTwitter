@@ -1,7 +1,7 @@
 export const userIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-skin-secondary"
+    className="h-5 w-5 text-color-secondary"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -18,7 +18,7 @@ export const userIcon = (
 export const tagIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-skin-secondary"
+    className="h-5 w-5 text-color-secondary"
     viewBox="0 0 20 20"
     fill="currentColor"
   >

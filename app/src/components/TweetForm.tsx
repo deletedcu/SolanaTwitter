@@ -30,7 +30,7 @@ export default function TweetForm({
 
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
-  let characterLimitColor = "text-skin-third";
+  let characterLimitColor = "text-color-third";
   if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
   if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
 
@@ -51,7 +51,7 @@ export default function TweetForm({
   return (
     <>
       {connected ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="border-b px-8 py-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="border-b border-skin-primary px-8 py-4">
           {/* <!-- Content field. --> */}
           <TextareaAutosize
             {...register("content", {
@@ -60,7 +60,7 @@ export default function TweetForm({
             })}
             id="content"
             rows={1}
-            className="mb-3 w-full resize-none text-xl focus:outline-none text-skin-secondary bg-transparent"
+            className="mb-3 w-full resize-none text-xl focus:outline-none text-color-secondary bg-transparent"
             placeholder="What's happening?"
           />
           <div className="-m-2 flex flex-wrap items-center justify-between">
@@ -72,7 +72,7 @@ export default function TweetForm({
                 value={effectiveTag}
                 type="text"
                 placeholder="tag"
-                className="text-primary-500 rounded-full bg-skin-secondary py-2 pl-10 pr-4"
+                className="text-primary-500 rounded-full bg-fill-secondary py-2 pl-10 pr-4"
                 disabled={!!forceTag}
                 autoComplete="off"
               />
@@ -80,7 +80,7 @@ export default function TweetForm({
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className={
-                    (effectiveTag ? "text-primary-500 " : "text-skin-third ") +
+                    (effectiveTag ? "text-primary-500 " : "text-color-third ") +
                     "m-auto h-5 w-5"
                   }
                   viewBox="0 0 20 20"
@@ -98,7 +98,7 @@ export default function TweetForm({
               {/* <!-- Character limit. --> */}
               <div className="text-sm">
                 <span className={characterLimitColor}>{characterLimit}</span>
-                <span className="text-skin-secondary">{` / ${LIMIT}`}</span>
+                <span className="text-color-secondary">{` / ${LIMIT}`}</span>
               </div>
               {/* <!-- Tweet button. --> */}
               <button
@@ -117,7 +117,7 @@ export default function TweetForm({
           </div>
         </form>
       ) : (
-        <div className="border-b bg-curent px-8 py-4 text-center text-skin-secondary">
+        <div className="border-b bg-curent px-8 py-4 text-center text-color-secondary">
           Connect your wallet to start tweeting...
         </div>
       )}

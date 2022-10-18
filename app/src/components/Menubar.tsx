@@ -25,8 +25,8 @@ export default function Menubar() {
     <div className="fixed top-0 w-full z-40">
       <div className="ml-72">
         <div className="duration-400 sticky top-0 z-20 ml-px">
-          <div className="sticky top-0 z-40 transition-colors bg-skin-opacity backdrop-blur">
-            <div className="h-16 flex items-center justify-between border-b border-current px-6 transition-all">
+          <div className="sticky top-0 z-40 transition-colors bg-fill-opacity backdrop-blur">
+            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-6 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
                 <ThemeSwitcher />
@@ -115,7 +115,7 @@ function Path() {
 
   const generatePath = (data: PathType[]) => {
     return (
-      <ul className="relative z-40 flex items-center py-0.5 px-6 text-skin-secondary">
+      <ul className="relative z-40 flex items-center py-0.5 px-6 text-color-secondary">
         <li>
           <Link href="/">
             <a className="flex items-center hover:underline">
