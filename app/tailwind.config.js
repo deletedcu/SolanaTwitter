@@ -23,22 +23,27 @@ module.exports = {
           800: mainColor[800],
           900: mainColor[900],
         },
-        current: "rgb(var(--border-color))"
+        current: "rgb(var(--border-color))",
       },
       textColor: {
         skin: {
           primary: "rgb(var(--text-color-primary))",
-          secondary: "rgb(var(--text-color-secondary))"
-        }
+          secondary: "rgb(var(--text-color-secondary))",
+          third: "rgb(var(--text-color-third))",
+        },
       },
       backgroundColor: {
         skin: {
-          fill: "rgb(var(--fill-color))",
-        }
-      }
+          primary: "rgb(var(--fill-color-primary))",
+          secondary: "rgb(var(--fill-color-secondary))",
+          opacity: "rgb(var(--border-color) / 0.5)",
+        },
+      },
     },
   },
-  plugins: [require("@tailwindcss/forms")({
-    strategy: "class"
-  })],
+  plugins: [
+    require("@tailwindcss/forms")({
+      strategy: "class",
+    }),
+  ],
 };

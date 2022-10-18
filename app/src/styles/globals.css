@@ -5,8 +5,10 @@
 @layer base {
   :root {
     --text-color-primary: 17 24 39;
-    --text-color-secondary: 107 114 128;
-    --fill-color: 255 255 255;
+    --text-color-secondary: 55 65 81;
+    --text-color-third: 156 163 175;
+    --fill-color-primary: 255 255 255;
+    --fill-color-secondary: 243 244 246;
     --border-color: 229 231 235;
   }
 }
