@@ -34,8 +34,8 @@ export const darkIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="iconify iconify--heroicons-outline"
-    width="1em"
-    height="1em"
+    width="1.2em"
+    height="1.2em"
     viewBox="0 0 24 24"
   >
     <path
@@ -53,8 +53,8 @@ export const lightIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="iconify iconify--heroicons-outline"
-    width="1em"
-    height="1em"
+    width="1.2em"
+    height="1.2em"
     viewBox="0 0 24 24"
   >
     <path

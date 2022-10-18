@@ -44,7 +44,7 @@ export default function UserList(props: UserListProps) {
                   return (
                     <tr
                       key={key}
-                      className="bg-fill-primary border-b"
+                      className="bg-fill-primary border-b border-skin-primary"
                     >
                       <td className="py-4 pl-6 pr-3 text-color-secondary">{`#${key + 1}`}</td>
                       <td className="py-4 px-3">
