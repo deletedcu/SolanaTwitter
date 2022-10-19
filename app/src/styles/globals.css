@@ -17,9 +17,9 @@
   }
 
   .theme-dark {
-    --text-color-primary: 163 163 163;
-    --text-color-secondary: 115 115 115;
-    --text-color-third: 82 82 82;
+    --text-color-primary: 245 245 245;
+    --text-color-secondary: 212 212 212;
+    --text-color-third: 115 115 115;
     --fill-color-primary: 23 23 23;
     --fill-color-secondary: 38 38 38;
     --fill-color-third: 64 64 64;
