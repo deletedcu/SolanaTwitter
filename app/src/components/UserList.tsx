@@ -1,6 +1,6 @@
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
-import Image from "next/image";
 import Link from "next/link";
+import { SuperEllipseImg } from "react-superellipse";
 import { UserType } from "../models";
 
 interface UserListProps {
@@ -46,15 +46,20 @@ export default function UserList(props: UserListProps) {
                       key={key}
                       className="bg-fill-primary border-b border-skin-primary"
                     >
-                      <td className="py-4 pl-6 pr-3 text-color-secondary">{`#${key + 1}`}</td>
+                      <td className="py-4 pl-6 pr-3 text-color-secondary">{`#${
+                        key + 1
+                      }`}</td>
                       <td className="py-4 px-3">
                         <Link href={userRoute}>
                           <a>
-                            <Image
-                              src={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
-                              alt={user.user.toBase58()}
-                              width="35"
-                              height="35"
+                            <SuperEllipseImg
+                              width={36}
+                              height={36}
+                              href={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
+                              r1={0.1}
+                              r2={0.3}
+                              strokeColor="rgba(156, 163, 175, 0.3)"
+                              strokeWidth={1}
                             />
                           </a>
                         </Link>
@@ -87,7 +92,9 @@ export default function UserList(props: UserListProps) {
                       </td>
                       <td className="py-4 px-3 text-center">
                         <Link href={userRoute}>
-                          <a className="hover:underline text-color-secondary">{user.total_posts}</a>
+                          <a className="hover:underline text-color-secondary">
+                            {user.total_posts}
+                          </a>
                         </Link>
                       </td>
                     </tr>
