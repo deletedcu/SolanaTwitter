@@ -21,8 +21,8 @@ export default function ThemeSwitcher() {
           className={`iconify iconify--heroicons-outline ${
             theme === "dark" ? "swap-on" : "swap-off"
           }`}
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
         >
           <path
@@ -40,8 +40,8 @@ export default function ThemeSwitcher() {
           className={`iconify iconify--heroicons-outline ${
             theme === "light" ? "swap-on" : "swap-off"
           }`}
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
         >
           <path
