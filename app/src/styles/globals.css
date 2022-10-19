@@ -6,11 +6,11 @@
   :root {
     --text-color-primary: 17 24 39;
     --text-color-secondary: 55 65 81;
-    --text-color-third: 107 114 128;
+    --text-color-third: 75, 85, 99;
     --fill-color-primary: 255 255 255;
     --fill-color-secondary: 243 244 246;
     --fill-color-third: 229 231 235;
-    --fill-opacity: 0.3;
+    --fill-opacity: 0.5;
     --border-color: 156 163 175;
     --border-opacity: 0.3;
     --focus-color: 107 114 128;
@@ -23,7 +23,7 @@
     --fill-color-primary: 23 23 23;
     --fill-color-secondary: 38 38 38;
     --fill-color-third: 64 64 64;
-    --fill-opacity: 0.3;
+    --fill-opacity: 0.5;
     --border-color: 82 82 82;
     --border-opacity: 0.3;
     --focus-color: 115 115 115;

@@ -57,13 +57,19 @@ export default function TweetFormUpdate({
       {connected ? (
         <div className="px-6 py-4">
           <div className="flex items-center gap-2">
-            <h3 className="inline font-semibold text-color-primary" title={tweet.user_display}>
+            <h3
+              className="inline font-semibold text-color-primary"
+              title={tweet.user_display}
+            >
               <Link href="/profile">
                 <a className="hover:underline">{tweet.user_display}</a>
               </Link>
             </h3>
             <span className="text-color-secondary">•</span>
-            <time className="text-sm text-color-secondary" title={tweet.created_at}>
+            <time
+              className="text-sm text-color-secondary"
+              title={tweet.created_at}
+            >
               <Link href={`/tweets/${tweet.key}`}>
                 <a className="hover:underline">{tweet.created_ago}</a>
               </Link>
@@ -129,7 +135,7 @@ export default function TweetFormUpdate({
                   className={
                     (canTweet
                       ? "bg-primary-500 "
-                      : "bg-primary-300 cursor-not-allowed ") +
+                      : "bg-primary-300/80 cursor-not-allowed ") +
                     "rounded-full px-4 py-2 font-semibold text-white"
                   }
                   type="submit"

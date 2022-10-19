@@ -46,14 +46,14 @@ export default function WalletItem({
               className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={copyToClipboard}
             >
-              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
+              <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary-500 text-primary-100">
                 {hover ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     role="img"
-                    className="h-5 w-5 iconify iconify--heroicons-outline"
-                    width="1em"
-                    height="1em"
+                    className="iconify iconify--heroicons-outline"
+                    width="20"
+                    height="20"
                     preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
@@ -64,7 +64,7 @@ export default function WalletItem({
                       strokeLinejoin="round"
                       strokeWidth="2"
                       d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1M8 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M8 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m0 0h2a2 2 0 0 1 2 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                    ></path>
+                    />
                   </svg>
                 ) : (
                   <svg
@@ -103,13 +103,13 @@ export default function WalletItem({
               className="group flex w-full items-center rounded-md text-left text-color-primary"
               onClick={showModal}
             >
-              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-md bg-primary-100">
+              <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary-500 text-primary-100">
                 {hover ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 iconify iconify--heroicons-outline"
-                    width="1em"
-                    height="1em"
+                    className="iconify iconify--heroicons-outline"
+                    width="20"
+                    height="20"
                     preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
@@ -125,9 +125,9 @@ export default function WalletItem({
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 iconify iconify--heroicons-outline"
-                    width="1em"
-                    height="1em"
+                    className="iconify iconify--heroicons-outline"
+                    width="20"
+                    height="20"
                     preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
