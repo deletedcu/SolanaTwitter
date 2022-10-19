@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, MenuButton, MenuDivider, MenuItem } from "@szhsin/react-menu";
-import Image from "next/image";
 import { PublicKey } from "@solana/web3.js";
+import { SuperEllipseImg } from "react-superellipse";
 import { toCollapse } from "../utils";
 
 import "@szhsin/react-menu/dist/index.css";
@@ -29,11 +29,14 @@ export default function WalletItem({
     <Menu
       menuButton={
         <MenuButton>
-          <Image
-            src={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
-            width="35"
-            height="35"
-            alt="user icon"
+          <SuperEllipseImg
+            width={36}
+            height={36}
+            href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
+            r1={0.1}
+            r2={0.3}
+            strokeColor="rgba(156, 163, 175, 0.3)"
+            strokeWidth={1}
           />
         </MenuButton>
       }

@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
-import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { SuperEllipseImg } from "react-superellipse";
 import { createUserAlias, updateUserAlias } from "../pages/api/alias";
 import { toCollapse } from "../utils";
 
@@ -70,11 +70,14 @@ export default function UserEditModal({
                   </svg>
                 </button>
                 <div className="flex items-center justify-center">
-                  <Image
-                    src={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
-                    width={40}
-                    height={40}
-                    alt="profile"
+                  <SuperEllipseImg
+                    width={50}
+                    height={50}
+                    href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
+                    r1={0.1}
+                    r2={0.3}
+                    strokeColor="rgba(156, 163, 175, 0.3)"
+                    strokeWidth={1}
                   />
                 </div>
                 <h2 className="mt-4 text-lg font-medium leading-6 text-color-primary">
@@ -116,7 +119,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:border-focus focus:ring-focus"
+                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:focus-input focus:ring-0"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
