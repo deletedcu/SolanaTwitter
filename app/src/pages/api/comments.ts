@@ -2,7 +2,7 @@ import { Program, web3 } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { Comment } from "../../models/Comment";
-import { getWorkspace, sleep, toCollapse } from "../../utils";
+import { sleep, toCollapse } from "../../utils";
 import { getUserAlias } from "./alias";
 
 export const sendComment = async (
@@ -28,7 +28,7 @@ export const sendComment = async (
     const commentAccount = await program.account.comment.fetch(
       comment.publicKey
     );
-    const alias = await getUserAlias(commentAccount.user as PublicKey);
+    const alias = await getUserAlias(program, commentAccount.user as PublicKey);
     return {
       comment: new Comment(comment.publicKey, commentAccount, alias),
       message: "Your comment was sent successfully!",
@@ -97,11 +97,7 @@ export const deleteComment = async (
   }
 };
 
-export const fetchComments = async (filters: any[]) => {
-  const workspace = getWorkspace();
-  if (!workspace) return [];
-  const { program } = workspace;
-
+export const fetchComments = async (program: Program, filters: any[]) => {
   const comments = await program.account.comment.all(filters);
   const allComments = comments.map((comment) => {
     const alias = toCollapse(comment.account.user as PublicKey);

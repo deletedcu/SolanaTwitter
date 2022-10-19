@@ -1,6 +1,6 @@
-import { PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { getWorkspace, toCollapse } from "../../utils";
+import { toCollapse } from "../../utils";
 import { Program } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 
@@ -102,11 +102,10 @@ export const deleteUserAlias = async (
   }
 };
 
-export const getUserAlias = async (publicKey: PublicKey): Promise<string> => {
-  const workspace = getWorkspace();
-  if (!workspace) return toCollapse(publicKey);
-  const { program } = workspace;
-
+export const getUserAlias = async (
+  program: Program,
+  publicKey: PublicKey
+): Promise<string> => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), publicKey.toBuffer()],
     program.programId
@@ -124,11 +123,10 @@ export type AliasProps = {
   [key: string]: string;
 };
 
-export const fetchUsersAlias = async () => {
-  const workspace = getWorkspace();
-  if (!workspace) return {};
-  const { program, connection } = workspace;
-
+export const fetchUsersAlias = async (
+  program: Program,
+  connection: Connection
+) => {
   // Prepare the discriminator filter
   const aliasClient = program.account.userAlias;
   const aliasAccountName = "UserAlias";

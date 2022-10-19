@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
 import { getUserAlias } from "../pages/api/alias";
-import { getWorkspace } from "../utils";
+import { useWorkspace } from "../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -12,12 +12,12 @@ export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [alias, setAlias] = useState("");
 
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
   const { disconnect, connected } = useWallet();
 
   useEffect(() => {
     if (workspace && !showEditModal) {
-      getUserAlias(workspace.wallet.publicKey).then((value) => setAlias(value));
+      getUserAlias(workspace.program, workspace.wallet.publicKey).then((value) => setAlias(value));
     }
   }, [workspace, showEditModal]);
 

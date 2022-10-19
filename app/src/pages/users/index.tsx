@@ -6,8 +6,8 @@ import { fetchUsers } from "../api/tweets";
 import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import RecentUsers from "../../components/RecentUsers";
+import { useWorkspace } from "../../utils";
 
 export default function Users() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Users() {
   const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const wallet = useAnchorWallet();
+  const workspace = useWorkspace();
 
   const search = (str: string) => {
     router.push(`/users/${str}`);
@@ -30,14 +30,15 @@ export default function Users() {
   };
 
   useEffect(() => {
-    fetchUsers()
+    if (!workspace) return;
+    fetchUsers(workspace.program, workspace.connection)
       .then((fetchedUsers) => {
         setAllUsers(fetchedUsers);
         setFilterUsers(fetchedUsers);
         setRecentUsers(fetchedUsers.slice(0, 5));
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [workspace]);
 
   return (
     <Base>
@@ -64,10 +65,10 @@ export default function Users() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
-            {wallet && (
+            {workspace && (
               <RecentUsers
                 users={recentUsers}
-                owner={wallet.publicKey.toBase58()}
+                owner={workspace.wallet.publicKey.toBase58()}
               />
             )}
           </div>

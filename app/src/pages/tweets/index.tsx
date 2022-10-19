@@ -10,7 +10,7 @@ import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { getWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace, initWorkspace } from "../../utils";
 import { paginateTweets } from "../api/tweets";
 
 export default function Tweets() {
@@ -20,7 +20,7 @@ export default function Tweets() {
   const [initialLoading, setInitialLoading] = useState(false);
   const [recentTweets, setRecentTweets] = useState<Tweet[]>([]);
 
-  let workspace = getWorkspace();
+  let workspace = useWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -38,15 +38,30 @@ export default function Tweets() {
       if (!workspace) {
         initWorkspace(wallet, connection);
       }
-      setTweets([]);
-      const newPagination = paginateTweets([], 5, onNewPage);
-      setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
       setInitialLoading(false);
     }
   }, [wallet, connected, workspace, connection]);
+
+  useEffect(() => {
+    if (workspace) {
+      setTweets([]);
+      const newPagination = paginateTweets(
+        workspace.program,
+        workspace.connection,
+        [],
+        5,
+        onNewPage
+      );
+      setPagination(newPagination);
+    } else {
+      setPagination(null);
+      setTweets([]);
+      setInitialLoading(false);
+    }
+  }, [workspace]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
@@ -90,7 +105,10 @@ export default function Tweets() {
                 Recent Activities
               </h3>
               {wallet && (
-                <RecentTweets tweets={recentTweets} owner={wallet.publicKey.toBase58()}/>
+                <RecentTweets
+                  tweets={recentTweets}
+                  owner={wallet.publicKey.toBase58()}
+                />
               )}
             </div>
           </div>

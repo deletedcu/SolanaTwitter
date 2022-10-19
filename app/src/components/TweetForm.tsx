@@ -6,7 +6,7 @@ import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { sendTweet } from "../pages/api/tweets";
 import {
-  getWorkspace,
+  useWorkspace,
   notifyLoading,
   notifyUpdate,
   useCountCharacterLimit,
@@ -28,7 +28,7 @@ export default function TweetForm({
   forceTag?: string;
 }) {
   const { theme } = useTheme();
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 

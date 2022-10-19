@@ -1,17 +1,14 @@
 import bs58 from "bs58";
-import { PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { getWorkspace, sleep } from "../../utils";
+import { sleep } from "../../utils";
 import { web3, utils, Program } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
 import { fetchUsersAlias, getUserAlias } from "./alias";
 import { commentTweetFilter, fetchComments } from "./comments";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 
-export const fetchTweets = async (filters: any[] = []) => {
-  const workspace = getWorkspace();
-  if (!workspace) return [];
-  const { program } = workspace;
+export const fetchTweets = async (program: Program, filters: any[] = []) => {
   const tweets = await program.account.tweet.all(filters);
 
   const orderedTweets = tweets
@@ -24,13 +21,12 @@ export const fetchTweets = async (filters: any[] = []) => {
 };
 
 export const paginateTweets = (
+  program: Program,
+  connection: Connection,
   filters: any[] = [],
   perPage = 10,
   onNewPage = (a: Tweet[], b: boolean, c: number) => {}
 ) => {
-  const workspace = getWorkspace();
-  if (!workspace) return;
-  const { program, connection } = workspace;
   let page = 0;
 
   const prefetchCb = async () => {
@@ -81,7 +77,7 @@ export const paginateTweets = (
 
     for (let i = 0; i < newPageTweets.length; i++) {
       const filters = [commentTweetFilter(newPageTweets[i].key)];
-      const comments = await fetchComments(filters);
+      const comments = await fetchComments(program, filters);
       newPageTweets[i].comments = comments || [];
     }
     const hasNextPage = hasPage(page + 1);
@@ -92,13 +88,10 @@ export const paginateTweets = (
   return { page, getNextPage, ...pagination };
 };
 
-export const getTweet = async (publicKey: PublicKey) => {
-  const workspace = getWorkspace();
-  if (!workspace) return null;
-  const { program } = workspace;
+export const getTweet = async (program: Program, publicKey: PublicKey) => {
   const account = await program.account.tweet.fetch(publicKey);
   const tweet = new Tweet(publicKey, account);
-  const comments = await fetchComments([commentTweetFilter(tweet.key)]);
+  const comments = await fetchComments(program, [commentTweetFilter(tweet.key)]);
   tweet.comments = comments || [];
   return tweet;
 };
@@ -126,7 +119,7 @@ export const sendTweet = async (
     const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
     // @ts-ignore
     const userKey: PublicKey = tweetAccount.user;
-    const alias = await getUserAlias(userKey);
+    const alias = await getUserAlias(program, userKey);
     return {
       tweet: new Tweet(tweet.publicKey, tweetAccount, alias),
       message: "Your tweet was sent successfully!",
@@ -195,11 +188,7 @@ export const deleteTweet = async (
   }
 };
 
-export const fetchTags = async () => {
-  const workspace = getWorkspace();
-  if (!workspace) return [];
-  const { program, connection } = workspace;
-
+export const fetchTags = async (program: Program, connection: Connection) => {
   // Prepare the discriminator filter
   const tweetClient = program.account.tweet;
   const tweetAccountName = "Tweet";
@@ -242,11 +231,7 @@ export const fetchTags = async () => {
   return Object.values(tags);
 };
 
-export const fetchUsers = async () => {
-  const workspace = getWorkspace();
-  if (!workspace) return [];
-  const { program, connection } = workspace;
-
+export const fetchUsers = async (program: Program, connection: Connection) => {
   // Prepare the discriminator filter
   const tweetClient = program.account.tweet;
   const tweetAccountName = "Tweet";
@@ -272,7 +257,7 @@ export const fetchUsers = async () => {
     [key: string]: UserType;
   };
 
-  const aliasData = await fetchUsersAlias();
+  const aliasData = await fetchUsersAlias(program, connection);
 
   const users = tweetMap.reduce((acc: accType, item: UserType) => {
     if (item.last_tag !== "[deleted]") {

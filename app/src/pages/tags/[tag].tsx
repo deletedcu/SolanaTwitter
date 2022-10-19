@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TagType, Tweet } from "../../models";
-import { getWorkspace, initWorkspace, useSlug } from "../../utils";
+import { useWorkspace, initWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
@@ -24,7 +24,7 @@ export default function Tags() {
   const [hasMore, setHasMore] = useState(false);
   const [recentTags, setRecentTags] = useState<TagType[]>([]);
 
-  let workspace = getWorkspace();
+  let workspace = useWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -44,38 +44,53 @@ export default function Tags() {
 
   useEffect(() => {
     setTweets([]);
-    setTag((router.query.tag as string));
+    setTag(router.query.tag as string);
   }, [router.query.tag]);
 
   useEffect(() => {
-    if (wallet && connected && slugTag) {
+    if (wallet && connected) {
       if (!workspace) {
         initWorkspace(wallet, connection);
       }
+    } else {
+      setPagination(null);
+      setTweets([]);
+      setViewedTag("");
+    }
+  }, [wallet, connected, workspace, connection]);
+
+  useEffect(() => {
+    if (workspace) {
       if (slugTag === viewedTag) return;
       setTweets([]);
       setViewedTag(slugTag);
       const filters = [tagFilter(slugTag)];
-      const newPagination = paginateTweets(filters, 5, onNewPage);
+      const newPagination = paginateTweets(
+        workspace!.program,
+        workspace!.connection,
+        filters,
+        5,
+        onNewPage
+      );
       setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
       setViewedTag("");
     }
-  }, [wallet, connected, slugTag, workspace, viewedTag, connection]);
+  }, [slugTag, viewedTag, workspace]);
 
   useEffect(() => {
-    if (pagination) {
+    if (pagination && workspace) {
       pagination.prefetch().then(pagination.getNextPage);
-      fetchTags().then((fetchedTags) => {
+      fetchTags(workspace.program, workspace.connection).then((fetchedTags) => {
         const recentOrdered = fetchedTags
           .slice(0, 5)
           .sort((a, b) => b.timestamp - a.timestamp);
         setRecentTags(recentOrdered);
-      })
+      });
     }
-  }, [pagination]);
+  }, [pagination, workspace]);
 
   return (
     <Base>
@@ -111,7 +126,9 @@ export default function Tags() {
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
-            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">Recent Tags</h3>
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
+              Recent Tags
+            </h3>
             <RecentTags tags={recentTags} />
           </div>
         </div>

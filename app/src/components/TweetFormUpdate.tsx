@@ -7,7 +7,7 @@ import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { updateTweet } from "../pages/api/tweets";
 import {
-  getWorkspace,
+  useWorkspace,
   notifyLoading,
   notifyUpdate,
   useCountCharacterLimit,
@@ -29,7 +29,7 @@ export default function TweetFormUpdate({
   onClose: () => void;
 }) {
   const { theme } = useTheme();
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       content: tweet.content,

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SuperEllipseImg } from "react-superellipse";
 import { Tweet } from "../models";
 import { Comment } from "../models/Comment";
-import { getWorkspace } from "../utils";
+import { useWorkspace } from "../utils";
 import CommentCard from "./CommentCard";
 import CommentForm from "./CommentForm";
 import TweetFormUpdate from "./TweetFormUpdate";
@@ -19,7 +19,7 @@ export default function TweetCard({
   const [isCommentEditing, setIsCommentEditing] = useState(false);
 
   // @ts-ignore
-  const { wallet } = getWorkspace();
+  const { wallet } = useWorkspace();
   const userRoute =
     wallet && wallet.publicKey.toBase58() === tweet.user.toBase58()
       ? "/profile"

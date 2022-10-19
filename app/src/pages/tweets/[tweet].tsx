@@ -8,7 +8,8 @@ import { AliasProps } from "../api/alias";
 import { deleteTweet, getTweet } from "../api/tweets";
 import { fetchUsersAlias } from "../api/alias";
 import { utils } from "@project-serum/anchor";
-import { getWorkspace } from "../../utils";
+import { useWorkspace, notifyLoading, notifyUpdate } from "../../utils";
+import { useTheme } from "../../contexts/themeProvider";
 
 export default function Tweet() {
   const router = useRouter();
@@ -18,17 +19,24 @@ export default function Tweet() {
   const [usersAlias, setUsersAlias] = useState<AliasProps>({});
   const tweetAddress = router.query.tweet as string;
 
-  const workspace = getWorkspace();
+  const { theme } = useTheme();
+  const workspace = useWorkspace();
 
   useEffect(() => {
-    fetchUsersAlias().then((value) => setUsersAlias(value));
-  }, []);
+    if (workspace) {
+      fetchUsersAlias(workspace.program, workspace.connection).then((value) =>
+        setUsersAlias(value)
+      );
+    }
+  }, [workspace]);
 
   useEffect(() => {
-    getTweet(new PublicKey(tweetAddress))
-      .then((fetchedTweet) => setOriginTweet(fetchedTweet))
-      .finally(() => setLoading(false));
-  }, [tweetAddress]);
+    if (workspace && tweetAddress) {
+      getTweet(workspace.program, new PublicKey(tweetAddress))
+        .then((fetchedTweet) => setOriginTweet(fetchedTweet))
+        .finally(() => setLoading(false));
+    }
+  }, [tweetAddress, workspace]);
 
   useEffect(() => {
     if (!workspace || !originTweet) return;
@@ -54,8 +62,18 @@ export default function Tweet() {
   }, [originTweet, usersAlias, workspace]);
 
   const onDelete = async (tweet: TweetModel) => {
-    const result = await deleteTweet(tweet);
-    if (result) {
+    if (!workspace) return;
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
+    const result = await deleteTweet(
+      workspace.program,
+      workspace.wallet,
+      tweet
+    );
+    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+    if (result.success) {
       setTweet(null);
     }
   };

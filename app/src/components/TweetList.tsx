@@ -5,7 +5,7 @@ import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { AliasProps, fetchUsersAlias } from "../pages/api/alias";
 import { deleteTweet } from "../pages/api/tweets";
-import { getWorkspace, notifyLoading, notifyUpdate } from "../utils";
+import { useWorkspace, notifyLoading, notifyUpdate } from "../utils";
 import TweetCard from "./TweetCard";
 
 interface TweetListProps {
@@ -19,12 +19,16 @@ export default function TweetList(props: TweetListProps) {
   const { tweets, loading, hasMore, loadMore } = props;
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
   const [usersAlias, setUsersAlias] = useState<AliasProps>({});
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
   const { theme } = useTheme();
 
   useEffect(() => {
-    fetchUsersAlias().then((value) => setUsersAlias(value));
-  }, []);
+    if (workspace) {
+      fetchUsersAlias(workspace.program, workspace.connection).then((value) =>
+        setUsersAlias(value)
+      );
+    }
+  }, [workspace]);
 
   useEffect(() => {
     if (workspace) {
@@ -60,7 +64,11 @@ export default function TweetList(props: TweetListProps) {
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await deleteTweet(workspace.program, workspace.wallet, tweet);
+    const result = await deleteTweet(
+      workspace.program,
+      workspace.wallet,
+      tweet
+    );
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
       const fTweets = filteredTweets.filter(

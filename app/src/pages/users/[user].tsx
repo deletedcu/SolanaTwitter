@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Tweet, UserType } from "../../models";
 import { fetchUsers, paginateTweets, userFilter } from "../api/tweets";
 import TweetList from "../../components/TweetList";
-import { getWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace, initWorkspace } from "../../utils";
 import {
   useAnchorWallet,
   useConnection,
@@ -24,7 +24,7 @@ export default function User() {
   const [hasMore, setHasMore] = useState(false);
   const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
 
-  let workspace = getWorkspace();
+  let workspace = useWorkspace();
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { connected } = useWallet();
@@ -35,30 +35,49 @@ export default function User() {
   };
 
   useEffect(() => {
-    if (wallet && connected && user) {
-      if (user === viewedUser) return;
+    if (wallet && connected) {
       if (!workspace) {
         initWorkspace(wallet, connection);
       }
-      setTweets([]);
-      setViewedUser(user);
-      const filters = [userFilter(user)];
-      const newPagination = paginateTweets(filters, 5, onNewPage);
-      setPagination(newPagination);
-      getUserAlias(new PublicKey(user)).then((value) => setUserAlias(value));
     } else {
       setPagination(null);
       setTweets([]);
       setViewedUser("");
     }
-  }, [wallet, connected, user, viewedUser, workspace, connection]);
+  }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
-    if (pagination) {
-      pagination.prefetch().then(pagination.getNextPage);
-      fetchUsers().then((value) => setRecentUsers(value.slice(0, 5)));
+    if (workspace) {
+      if (user === viewedUser) return;
+      setTweets([]);
+      setViewedUser(user);
+      const filters = [userFilter(user)];
+      const newPagination = paginateTweets(
+        workspace!.program,
+        workspace!.connection,
+        filters,
+        5,
+        onNewPage
+      );
+      setPagination(newPagination);
+      getUserAlias(workspace!.program, new PublicKey(user)).then((value) =>
+        setUserAlias(value)
+      );
+    } else {
+      setPagination(null);
+      setTweets([]);
+      setViewedUser("");
     }
-  }, [pagination]);
+  }, [user, viewedUser, workspace]);
+
+  useEffect(() => {
+    if (pagination && workspace) {
+      pagination.prefetch().then(pagination.getNextPage);
+      fetchUsers(workspace.program, workspace.connection).then((value) =>
+        setRecentUsers(value.slice(0, 5))
+      );
+    }
+  }, [pagination, workspace]);
 
   return (
     <Base>

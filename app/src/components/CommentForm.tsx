@@ -5,7 +5,7 @@ import { useTheme } from "../contexts/themeProvider";
 import { Comment } from "../models/Comment";
 import { sendComment } from "../pages/api/comments";
 import {
-  getWorkspace,
+  useWorkspace,
   notifyLoading,
   notifyUpdate,
   useCountCharacterLimit,
@@ -28,7 +28,7 @@ export default function CommentForm({
   const { theme } = useTheme();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
 
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
