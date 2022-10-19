@@ -1,18 +1,16 @@
-import { web3 } from "@project-serum/anchor";
+import { Program, web3 } from "@project-serum/anchor";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { Comment } from "../../models/Comment";
 import { getWorkspace, sleep, toCollapse } from "../../utils";
 import { getUserAlias } from "./alias";
 
-export const sendComment = async (tweet: PublicKey, content: string) => {
-  const workspace = getWorkspace();
-  if (!workspace) {
-    return {
-      comment: null,
-      message: "Connect wallet to send comment...",
-    };
-  }
-  const { program, wallet } = workspace;
+export const sendComment = async (
+  program: Program,
+  wallet: AnchorWallet,
+  tweet: PublicKey,
+  content: string
+) => {
   const comment = web3.Keypair.generate();
 
   try {
@@ -45,12 +43,12 @@ export const sendComment = async (tweet: PublicKey, content: string) => {
   }
 };
 
-export const updateComment = async (commentKey: PublicKey, content: string) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { success: false, message: "Connect wallet to update comment..." };
-  const { program, wallet } = workspace;
-
+export const updateComment = async (
+  program: Program,
+  wallet: AnchorWallet,
+  commentKey: PublicKey,
+  content: string
+) => {
   try {
     await program.methods
       .updateComment(content)
@@ -74,12 +72,11 @@ export const updateComment = async (commentKey: PublicKey, content: string) => {
   }
 };
 
-export const deleteComment = async (commentKey: PublicKey) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { success: false, message: "Connect wallet to delete comment..." };
-  const { program, wallet } = workspace;
-
+export const deleteComment = async (
+  program: Program,
+  wallet: AnchorWallet,
+  commentKey: PublicKey
+) => {
   try {
     await program.methods
       .deleteComment()
@@ -112,21 +109,6 @@ export const fetchComments = async (filters: any[]) => {
   });
 
   return allComments.sort((a, b) => b.timestamp - a.timestamp);
-
-  // type commentProps = {
-  //   [key: string]: [Comment];
-  // };
-
-  // const result = allComments.reduce((acc: commentProps, item: Comment) => {
-  //   if (acc[item.key]) {
-  //     acc[item.key].push(item);
-  //   } else {
-  //     acc[item.key] = [item];
-  //   }
-  //   return acc;
-  // }, {});
-
-  // return result;
 };
 
 export const commentTweetFilter = (tweetKey: string) => ({

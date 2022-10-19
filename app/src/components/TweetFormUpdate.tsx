@@ -7,6 +7,7 @@ import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { updateTweet } from "../pages/api/tweets";
 import {
+  getWorkspace,
   notifyLoading,
   notifyUpdate,
   useCountCharacterLimit,
@@ -28,6 +29,7 @@ export default function TweetFormUpdate({
   onClose: () => void;
 }) {
   const { theme } = useTheme();
+  const workspace = getWorkspace();
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       content: tweet.content,
@@ -54,12 +56,18 @@ export default function TweetFormUpdate({
 
   // Actions
   const update = async (data: FormValues) => {
-    if (!canTweet) return;
+    if (!canTweet || !workspace) return;
     const toastId = notifyLoading(
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await updateTweet(tweet, slugTag, data.content);
+    const result = await updateTweet(
+      workspace.program,
+      workspace.wallet,
+      tweet,
+      slugTag,
+      data.content
+    );
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
       onClose();

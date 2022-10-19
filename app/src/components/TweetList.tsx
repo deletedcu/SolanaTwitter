@@ -55,11 +55,12 @@ export default function TweetList(props: TweetListProps) {
   }, [tweets, usersAlias, workspace]);
 
   const onDelete = async (tweet: Tweet) => {
+    if (!workspace) return;
     const toastId = notifyLoading(
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await deleteTweet(tweet);
+    const result = await deleteTweet(workspace.program, workspace.wallet, tweet);
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
       const fTweets = filteredTweets.filter(

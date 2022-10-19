@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { SuperEllipseImg } from "react-superellipse";
 import { useTheme } from "../contexts/themeProvider";
 import { createUserAlias, updateUserAlias } from "../pages/api/alias";
-import { notifyLoading, notifyUpdate, toCollapse } from "../utils";
+import { getWorkspace, notifyLoading, notifyUpdate, toCollapse } from "../utils";
 
 type FormValues = {
   name: string;
@@ -23,25 +23,27 @@ export default function UserEditModal({
   const LIMIT = 50;
   const { theme } = useTheme();
   const { register, handleSubmit, watch, resetField } = useForm<FormValues>();
-
+  const workspace = getWorkspace();
   const canSend = watch("name") && watch("name") !== alias;
 
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
   const send = async (data: FormValues) => {
-    const toastId = notifyLoading(
-      "Transaction in progress. Please wait...",
-      theme
-    );
-    let result;
-    if (alias === toCollapse(publicKey)) {
-      result = await createUserAlias(data.name);
-    } else {
-      result = await updateUserAlias(data.name);
-    }
-    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
-    if (result.success) {
-      onClose();
+    if (workspace) {
+      const toastId = notifyLoading(
+        "Transaction in progress. Please wait...",
+        theme
+      );
+      let result;
+      if (alias === toCollapse(publicKey)) {
+        result = await createUserAlias(workspace.program, workspace.wallet, data.name);
+      } else {
+        result = await updateUserAlias(workspace.program, workspace.wallet, data.name);
+      }
+      notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+      if (result.success) {
+        onClose();
+      }
     }
   };
 

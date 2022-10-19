@@ -1,13 +1,14 @@
 import { PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 import { getWorkspace, toCollapse } from "../../utils";
+import { Program } from "@project-serum/anchor";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
 
-export const createUserAlias = async (alias: string) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { success: false, message: "Connect wallet to create alias..." };
-  const { program, wallet } = workspace;
-
+export const createUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet,
+  alias: string
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId
@@ -36,12 +37,11 @@ export const createUserAlias = async (alias: string) => {
   }
 };
 
-export const updateUserAlias = async (alias: string) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { success: false, message: "Connect wallet to update alias..." };
-  const { program, wallet } = workspace;
-
+export const updateUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet,
+  alias: string
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId
@@ -70,12 +70,10 @@ export const updateUserAlias = async (alias: string) => {
   }
 };
 
-export const deleteUserAlias = async () => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { success: false, message: "Connect wallet to delete alias" };
-  const { program, wallet } = workspace;
-
+export const deleteUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId

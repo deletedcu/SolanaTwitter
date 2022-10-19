@@ -2,10 +2,11 @@ import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
 import { getWorkspace, sleep } from "../../utils";
-import { web3, utils } from "@project-serum/anchor";
+import { web3, utils, Program } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
 import { fetchUsersAlias, getUserAlias } from "./alias";
 import { commentTweetFilter, fetchComments } from "./comments";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
 
 export const fetchTweets = async (filters: any[] = []) => {
   const workspace = getWorkspace();
@@ -102,12 +103,12 @@ export const getTweet = async (publicKey: PublicKey) => {
   return tweet;
 };
 
-export const sendTweet = async (tag: string, content: string) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return { tweet: null, message: "Connect your wallet to start tweeting..." };
-
-  const { wallet, program } = workspace;
+export const sendTweet = async (
+  program: Program,
+  wallet: AnchorWallet,
+  tag: string,
+  content: string
+) => {
   const tweet = web3.Keypair.generate();
 
   try {
@@ -141,18 +142,12 @@ export const sendTweet = async (tag: string, content: string) => {
 };
 
 export const updateTweet = async (
+  program: Program,
+  wallet: AnchorWallet,
   tweet: Tweet,
   tag: string,
   content: string
 ) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return {
-      success: false,
-      message: "Connect your wallet to update tweet...",
-    };
-  const { wallet, program } = workspace;
-
   try {
     await program.methods
       .updateTweet(tag, content)
@@ -172,15 +167,11 @@ export const updateTweet = async (
   }
 };
 
-export const deleteTweet = async (tweet: Tweet) => {
-  const workspace = getWorkspace();
-  if (!workspace)
-    return {
-      success: false,
-      message: "Connect wallet to delete tweet...",
-    };
-  const { wallet, program } = workspace;
-
+export const deleteTweet = async (
+  program: Program,
+  wallet: AnchorWallet,
+  tweet: Tweet
+) => {
   try {
     await program.methods
       .deleteTweet()

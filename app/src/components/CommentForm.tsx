@@ -4,7 +4,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useTheme } from "../contexts/themeProvider";
 import { Comment } from "../models/Comment";
 import { sendComment } from "../pages/api/comments";
-import { notifyLoading, notifyUpdate, useCountCharacterLimit } from "../utils";
+import {
+  getWorkspace,
+  notifyLoading,
+  notifyUpdate,
+  useCountCharacterLimit,
+} from "../utils";
 
 type FormValues = {
   content: string;
@@ -23,6 +28,7 @@ export default function CommentForm({
   const { theme } = useTheme();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
+  const workspace = getWorkspace();
 
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
@@ -33,11 +39,17 @@ export default function CommentForm({
   const canComment = watch("content") && LIMIT - characterLimit > 0;
 
   const send = async (data: FormValues) => {
+    if (!workspace) return;
     const toastId = notifyLoading(
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await sendComment(tweet, data.content);
+    const result = await sendComment(
+      workspace.program,
+      workspace.wallet,
+      tweet,
+      data.content
+    );
     notifyUpdate(toastId, result.message, result.comment ? "success" : "error");
     if (result.comment) {
       added(result.comment);
