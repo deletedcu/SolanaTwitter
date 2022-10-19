@@ -1,10 +1,11 @@
 import { PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { getWorkspace, notify, toCollapse } from "../../utils";
+import { getWorkspace, toCollapse } from "../../utils";
 
 export const createUserAlias = async (alias: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace)
+    return { success: false, message: "Connect wallet to create alias..." };
   const { program, wallet } = workspace;
 
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
@@ -21,17 +22,24 @@ export const createUserAlias = async (alias: string) => {
       })
       .rpc();
 
-    notify("Your alias was created successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was created successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
 export const updateUserAlias = async (alias: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace)
+    return { success: false, message: "Connect wallet to update alias..." };
   const { program, wallet } = workspace;
 
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
@@ -48,17 +56,24 @@ export const updateUserAlias = async (alias: string) => {
       })
       .rpc();
 
-    notify("Your alias was updated successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was updated successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
 export const deleteUserAlias = async () => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace)
+    return { success: false, message: "Connect wallet to delete alias" };
   const { program, wallet } = workspace;
 
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
@@ -75,11 +90,17 @@ export const deleteUserAlias = async () => {
       })
       .rpc();
 
-    notify("Your alias was deleted successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was deleted successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
