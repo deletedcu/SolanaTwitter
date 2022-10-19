@@ -1,7 +1,7 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { getWorkspace, notify, sleep } from "../../utils";
+import { getWorkspace, sleep } from "../../utils";
 import { web3, utils } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
 import { fetchUsersAlias, getUserAlias } from "./alias";
@@ -104,7 +104,8 @@ export const getTweet = async (publicKey: PublicKey) => {
 
 export const sendTweet = async (tag: string, content: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return { tweet: null, message: "Connect your wallet to start tweeting..." };
+  if (!workspace)
+    return { tweet: null, message: "Connect your wallet to start tweeting..." };
 
   const { wallet, program } = workspace;
   const tweet = web3.Keypair.generate();
@@ -145,7 +146,11 @@ export const updateTweet = async (
   content: string
 ) => {
   const workspace = getWorkspace();
-  if (!workspace) return { success: false, message: "Connect your wallet to update tweet..."};
+  if (!workspace)
+    return {
+      success: false,
+      message: "Connect your wallet to update tweet...",
+    };
   const { wallet, program } = workspace;
 
   try {
@@ -163,13 +168,17 @@ export const updateTweet = async (
   } catch (err) {
     console.error(err);
     // @ts-ignore
-    return { success: false, message: err.toString()};
+    return { success: false, message: err.toString() };
   }
 };
 
 export const deleteTweet = async (tweet: Tweet) => {
   const workspace = getWorkspace();
-  if (!workspace) return false;
+  if (!workspace)
+    return {
+      success: false,
+      message: "Connect wallet to delete tweet...",
+    };
   const { wallet, program } = workspace;
 
   try {
@@ -180,13 +189,18 @@ export const deleteTweet = async (tweet: Tweet) => {
         user: wallet.publicKey,
       })
       .rpc();
-    notify("Your tweet was deleted successfully!", "success");
-    return true;
+
+    return {
+      success: true,
+      message: "Your tweet was deleted successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
-    return false;
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 

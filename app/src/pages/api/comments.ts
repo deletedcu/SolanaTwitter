@@ -1,12 +1,17 @@
 import { web3 } from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { Comment } from "../../models/Comment";
-import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
+import { getWorkspace, sleep, toCollapse } from "../../utils";
 import { getUserAlias } from "./alias";
 
 export const sendComment = async (tweet: PublicKey, content: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace) {
+    return {
+      comment: null,
+      message: "Connect wallet to send comment...",
+    };
+  }
   const { program, wallet } = workspace;
   const comment = web3.Keypair.generate();
 
@@ -21,24 +26,29 @@ export const sendComment = async (tweet: PublicKey, content: string) => {
       .signers([comment])
       .rpc();
 
-    notify("Your comment was sent successfully!", "success");
     sleep(2000);
     const commentAccount = await program.account.comment.fetch(
       comment.publicKey
     );
     const alias = await getUserAlias(commentAccount.user as PublicKey);
-    return new Comment(comment.publicKey, commentAccount, alias);
+    return {
+      comment: new Comment(comment.publicKey, commentAccount, alias),
+      message: "Your comment was sent successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
-    return;
+    return {
+      comment: null,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
 export const updateComment = async (commentKey: PublicKey, content: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace)
+    return { success: false, message: "Connect wallet to update comment..." };
   const { program, wallet } = workspace;
 
   try {
@@ -50,17 +60,24 @@ export const updateComment = async (commentKey: PublicKey, content: string) => {
       })
       .rpc();
 
-    notify("Your comment was updated successfully!", "success");
+    return {
+      success: true,
+      message: "Your comment was updated successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
 export const deleteComment = async (commentKey: PublicKey) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace)
+    return { success: false, message: "Connect wallet to delete comment..." };
   const { program, wallet } = workspace;
 
   try {
@@ -72,11 +89,14 @@ export const deleteComment = async (commentKey: PublicKey) => {
       })
       .rpc();
 
-    notify("Your comment was deleted successfully!", "success");
+    return { success: true, message: "Your comment was deleted successfully!" };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
@@ -87,7 +107,7 @@ export const fetchComments = async (filters: any[]) => {
 
   const comments = await program.account.comment.all(filters);
   const allComments = comments.map((comment) => {
-    const alias = toCollapse((comment.account.user as PublicKey));
+    const alias = toCollapse(comment.account.user as PublicKey);
     return new Comment(comment.publicKey, comment.account, alias);
   });
 

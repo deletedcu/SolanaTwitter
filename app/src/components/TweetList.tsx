@@ -1,10 +1,11 @@
 import { utils } from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { AliasProps, fetchUsersAlias } from "../pages/api/alias";
 import { deleteTweet } from "../pages/api/tweets";
-import { getWorkspace } from "../utils";
+import { getWorkspace, notifyLoading, notifyUpdate } from "../utils";
 import TweetCard from "./TweetCard";
 
 interface TweetListProps {
@@ -19,6 +20,7 @@ export default function TweetList(props: TweetListProps) {
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
   const [usersAlias, setUsersAlias] = useState<AliasProps>({});
   const workspace = getWorkspace();
+  const { theme } = useTheme();
 
   useEffect(() => {
     fetchUsersAlias().then((value) => setUsersAlias(value));
@@ -53,8 +55,13 @@ export default function TweetList(props: TweetListProps) {
   }, [tweets, usersAlias, workspace]);
 
   const onDelete = async (tweet: Tweet) => {
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
     const result = await deleteTweet(tweet);
-    if (result) {
+    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+    if (result.success) {
       const fTweets = filteredTweets.filter(
         (t) => t.publickey.toBase58() !== tweet.publickey.toBase58()
       );

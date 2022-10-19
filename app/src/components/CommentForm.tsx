@@ -1,9 +1,10 @@
 import { PublicKey } from "@solana/web3.js";
 import TextareaAutosize from "react-autosize-textarea/lib";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTheme } from "../contexts/themeProvider";
 import { Comment } from "../models/Comment";
 import { sendComment } from "../pages/api/comments";
-import { useCountCharacterLimit } from "../utils";
+import { notifyLoading, notifyUpdate, useCountCharacterLimit } from "../utils";
 
 type FormValues = {
   content: string;
@@ -19,6 +20,7 @@ export default function CommentForm({
   added: (a: Comment) => void;
   onClose: () => void;
 }) {
+  const { theme } = useTheme();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
@@ -31,9 +33,14 @@ export default function CommentForm({
   const canComment = watch("content") && LIMIT - characterLimit > 0;
 
   const send = async (data: FormValues) => {
-    const comment = await sendComment(tweet, data.content);
-    if (comment) {
-      added(comment);
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
+    const result = await sendComment(tweet, data.content);
+    notifyUpdate(toastId, result.message, result.comment ? "success" : "error");
+    if (result.comment) {
+      added(result.comment);
       resetField("content");
       onClose();
     }
