@@ -3,9 +3,15 @@ import Link from "next/link";
 import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { updateTweet } from "../pages/api/tweets";
-import { useCountCharacterLimit, useSlug } from "../utils";
+import {
+  notifyLoading,
+  notifyUpdate,
+  useCountCharacterLimit,
+  useSlug,
+} from "../utils";
 
 type FormValues = {
   content: string;
@@ -21,6 +27,7 @@ export default function TweetFormUpdate({
   tweet: Tweet;
   onClose: () => void;
 }) {
+  const { theme } = useTheme();
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       content: tweet.content,
@@ -48,8 +55,15 @@ export default function TweetFormUpdate({
   // Actions
   const update = async (data: FormValues) => {
     if (!canTweet) return;
-    await updateTweet(tweet, slugTag, data.content);
-    onClose();
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
+    const result = await updateTweet(tweet, slugTag, data.content);
+    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+    if (result.success) {
+      onClose();
+    }
   };
 
   return (

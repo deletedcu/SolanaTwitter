@@ -104,16 +104,10 @@ export const getTweet = async (publicKey: PublicKey) => {
 
 export const sendTweet = async (tag: string, content: string) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace) return { tweet: null, message: "Connect your wallet to start tweeting..." };
 
   const { wallet, program } = workspace;
   const tweet = web3.Keypair.generate();
-
-  // track error
-  console.log("tag, content", tag, content);
-  console.log("user", wallet.publicKey.toBase58());
-  console.log("tweet", tweet.publicKey.toBase58());
-  console.log("systemProgram", web3.SystemProgram.programId.toBase58());
 
   try {
     await program.methods
@@ -126,18 +120,22 @@ export const sendTweet = async (tag: string, content: string) => {
       .signers([tweet])
       .rpc();
 
-    notify("Your tweet was sent successfully!", "success");
     sleep(2000);
     const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
     // @ts-ignore
     const userKey: PublicKey = tweetAccount.user;
     const alias = await getUserAlias(userKey);
-    return new Tweet(tweet.publicKey, tweetAccount, alias);
+    return {
+      tweet: new Tweet(tweet.publicKey, tweetAccount, alias),
+      message: "Your tweet was sent successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
-    return;
+    return {
+      tweet: null,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
@@ -147,7 +145,7 @@ export const updateTweet = async (
   content: string
 ) => {
   const workspace = getWorkspace();
-  if (!workspace) return;
+  if (!workspace) return { success: false, message: "Connect your wallet to update tweet..."};
   const { wallet, program } = workspace;
 
   try {
@@ -161,12 +159,11 @@ export const updateTweet = async (
 
     tweet.tag = tag;
     tweet.content = content;
-    notify("Your tweet was updated successfully!", "success");
+    return { success: true, message: "Your tweet was updated successfully!" };
   } catch (err) {
     console.error(err);
     // @ts-ignore
-    notify(err.toString(), "error");
-    return;
+    return { success: false, message: err.toString()};
   }
 };
 

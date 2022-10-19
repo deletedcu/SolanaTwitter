@@ -26,7 +26,7 @@ export default function Menubar() {
       <div className="ml-72">
         <div className="duration-400 sticky top-0 z-20 ml-px">
           <div className="sticky top-0 z-40 transition-colors bg-fill-opacity backdrop-blur">
-            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-6 transition-all">
+            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-2 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
                 <ThemeSwitcher />

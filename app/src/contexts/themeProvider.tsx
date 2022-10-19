@@ -5,23 +5,21 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Theme } from "react-toastify";
 
 interface ThemeConfig {
-  theme: string;
+  theme: Theme;
   toggleTheme: () => void;
 }
 
 export const ThemeContext = createContext<ThemeConfig>(null!);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<string>("light");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    setTheme(
-      window.localStorage.getItem("theme") === null
-        ? "light"
-        : window.localStorage.getItem("theme")!
-    );
+    // @ts-ignore
+    setTheme(window.localStorage.getItem("theme") === null ? "light" : window.localStorage.getItem("theme")!);
   }, []);
 
   const toggleTheme = () => {
