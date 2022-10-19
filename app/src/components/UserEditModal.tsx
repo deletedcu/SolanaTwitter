@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
-import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { SuperEllipseImg } from "react-superellipse";
 import { createUserAlias, updateUserAlias } from "../pages/api/alias";
 import { toCollapse } from "../utils";
 
@@ -66,15 +66,18 @@ export default function UserEditModal({
                       strokeLinejoin="round"
                       strokeWidth="2"
                       d="M6 18L18 6M6 6l12 12"
-                    ></path>
+                    />
                   </svg>
                 </button>
                 <div className="flex items-center justify-center">
-                  <Image
-                    src={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
-                    width={40}
-                    height={40}
-                    alt="profile"
+                  <SuperEllipseImg
+                    width={50}
+                    height={50}
+                    href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
+                    r1={0.1}
+                    r2={0.3}
+                    strokeColor="rgba(156, 163, 175, 0.3)"
+                    strokeWidth={1}
                   />
                 </div>
                 <h2 className="mt-4 text-lg font-medium leading-6 text-color-primary">
@@ -90,7 +93,7 @@ export default function UserEditModal({
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col">
                       <div className="mt-1 flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-skin-primary bg-fill-secondary px-3 text-sm text-color-secondary">
+                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-skin-primary bg-fill-secondary px-3 text-color-secondary">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5 iconify iconify--heroicons-outline"
@@ -116,7 +119,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:border-focus focus:ring-focus sm:text-sm"
+                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:focus-input focus:ring-0"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}
@@ -128,7 +131,7 @@ export default function UserEditModal({
                       className={
                         (canSend
                           ? "bg-primary-500 "
-                          : "bg-primary-300 cursor-not-allowed ") +
+                          : "bg-primary-300/80 cursor-not-allowed ") +
                         "px-4 py-2 font-semibold text-white rounded-md mt-6 inline-flex w-full justify-center"
                       }
                       disabled={!canSend}
@@ -140,7 +143,7 @@ export default function UserEditModal({
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 z-40 bg-fill-opacity backdrop-blur"></div>
+          <div className="fixed inset-0 z-40 bg-fill-opacity"></div>
         </div>
       )}
     </>

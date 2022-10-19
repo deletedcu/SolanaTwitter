@@ -6,26 +6,26 @@
   :root {
     --text-color-primary: 17 24 39;
     --text-color-secondary: 55 65 81;
-    --text-color-third: 107 114 128;
+    --text-color-third: 75, 85, 99;
     --fill-color-primary: 255 255 255;
     --fill-color-secondary: 243 244 246;
     --fill-color-third: 229 231 235;
-    --fill-opacity: 0.3;
+    --fill-opacity: 0.5;
     --border-color: 156 163 175;
     --border-opacity: 0.3;
     --focus-color: 107 114 128;
   }
 
   .theme-dark {
-    --text-color-primary: 163 163 163;
-    --text-color-secondary: 115 115 115;
-    --text-color-third: 82 82 82;
+    --text-color-primary: 245 245 245;
+    --text-color-secondary: 212 212 212;
+    --text-color-third: 115 115 115;
     --fill-color-primary: 23 23 23;
     --fill-color-secondary: 38 38 38;
     --fill-color-third: 64 64 64;
-    --fill-opacity: 0.3;
+    --fill-opacity: 0.5;
     --border-color: 82 82 82;
-    --border-opacity: 0.3;
+    --border-opacity: 0.5;
     --focus-color: 115 115 115;
   }
 }
@@ -61,6 +61,59 @@
   .focus-input {
     @apply outline-none border border-skin-secondary;
   }
+
+  /** ------------------------ThemeSwitcher component--------------------------------- */
+  .swap {
+    position: relative;
+    display: inline-grid;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    place-content: center;
+    cursor: pointer;
+  }
+
+  .swap > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: transform, opacity;
+  }
+
+  .swap-rotate .swap-on {
+    --tw-rotate: 45deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+      rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+      scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .swap .swap-on {
+    opacity: 0;
+  }
+
+  .swap-active .swap-on {
+    opacity: 1;
+  }
+
+  .swap-rotate.swap-active .swap-on {
+    --tw-rotate: 0deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+      rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+      scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .swap-rotate.swap-active .swap-off {
+    --tw-rotate: -45deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+      rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+      scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .swap.swap-active .swap-off {
+    opacity: 0;
+  }
+  /** -------------------------------------------------------------------------------- */
 }
 
 .szh-menu {
@@ -68,7 +121,7 @@
 }
 
 .szh-menu__item--hover {
- background-color: rgb(var(--fill-color-third)) !important;
+  background-color: rgb(var(--fill-color-third)) !important;
 }
 
 .wallet-adapter-dropdown {

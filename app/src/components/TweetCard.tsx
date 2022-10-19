@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { SuperEllipseImg } from "react-superellipse";
 import { Tweet } from "../models";
 import { Comment } from "../models/Comment";
 import { getWorkspace } from "../utils";
@@ -41,11 +41,14 @@ export default function TweetCard({
             <div className="mr-2">
               <Link href={userRoute}>
                 <a>
-                  <Image
-                    src={`https://avatars.dicebear.com/api/jdenticon/${tweet.user.toBase58()}.svg`}
-                    alt={tweet.user.toBase58()}
-                    width="35"
-                    height="35"
+                  <SuperEllipseImg
+                    width={36}
+                    height={36}
+                    href={`https://avatars.dicebear.com/api/jdenticon/${tweet.user.toBase58()}.svg`}
+                    r1={0.1}
+                    r2={0.3}
+                    strokeColor="rgba(156, 163, 175, 0.3)"
+                    strokeWidth={1}
                   />
                 </a>
               </Link>

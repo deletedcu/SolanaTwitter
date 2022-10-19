@@ -51,7 +51,10 @@ export default function TweetForm({
   return (
     <>
       {connected ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="border-b border-skin-primary px-8 py-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="border-b border-skin-primary px-8 py-4"
+        >
           {/* <!-- Content field. --> */}
           <TextareaAutosize
             {...register("content", {
@@ -106,7 +109,7 @@ export default function TweetForm({
                 className={
                   (canTweet
                     ? "bg-primary-500 "
-                    : "bg-primary-300 cursor-not-allowed ") +
+                    : "bg-primary-300/80 cursor-not-allowed ") +
                   "rounded-full px-4 py-2 font-semibold text-white"
                 }
                 type="submit"

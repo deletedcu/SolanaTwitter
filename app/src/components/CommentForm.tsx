@@ -74,7 +74,7 @@ export default function CommentForm({
             className={
               (canComment
                 ? "bg-primary-500 "
-                : "bg-primary-300 cursor-not-allowed ") +
+                : "bg-primary-300/80 cursor-not-allowed ") +
               "rounded-full px-4 py-2 font-semibold text-white"
             }
             type="submit"

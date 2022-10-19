@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Comment } from "../models/Comment";
 import { getWorkspace } from "../utils";
+import { SuperEllipseImg } from "react-superellipse";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
   // @ts-ignore
@@ -17,28 +17,39 @@ export default function CommentCard({ comment }: { comment: Comment }) {
         <div className="mr-2">
           <Link href={userRoute}>
             <a>
-              <Image
-                src={`https://avatars.dicebear.com/api/jdenticon/${comment.user.toBase58()}.svg`}
-                alt={comment.user.toBase58()}
-                width="25"
-                height="25"
+              <SuperEllipseImg
+                width={28}
+                height={28}
+                href={`https://avatars.dicebear.com/api/jdenticon/${comment.user.toBase58()}.svg`}
+                r1={0.1}
+                r2={0.3}
+                strokeColor="rgba(156, 163, 175, 0.3)"
+                strokeWidth={1}
               />
             </a>
           </Link>
         </div>
-        <h3 className="inline font-semibold text-color-primary" title={comment.user_display}>
+        <h3
+          className="inline font-semibold text-color-primary"
+          title={comment.user_display}
+        >
           <Link href={userRoute}>
             <a className="hover:underline">{comment.user_display}</a>
           </Link>
         </h3>
         <span className="text-color-secondary">•</span>
-        <time className="text-sm text-color-secondary" title={comment.created_at}>
+        <time
+          className="text-sm text-color-secondary"
+          title={comment.created_at}
+        >
           <Link href={`/tweets/${comment.key}`}>
             <a className="hover:underline">{comment.created_ago}</a>
           </Link>
         </time>
       </div>
-      <p className="whitespace-pre-wrap ml-10 text-color-secondary">{comment.content}</p>
+      <p className="whitespace-pre-wrap ml-10 text-color-secondary">
+        {comment.content}
+      </p>
     </div>
   );
 }
