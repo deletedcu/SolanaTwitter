@@ -1,7 +1,7 @@
 import bs58 from "bs58";
 import { PublicKey } from "@solana/web3.js";
 import { TagType, Tweet, UserType } from "../../models";
-import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
+import { getWorkspace, notify, sleep } from "../../utils";
 import { web3, utils } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
 import { fetchUsersAlias, getUserAlias } from "./alias";
@@ -108,6 +108,12 @@ export const sendTweet = async (tag: string, content: string) => {
 
   const { wallet, program } = workspace;
   const tweet = web3.Keypair.generate();
+
+  // track error
+  console.log("tag, content", tag, content);
+  console.log("user", wallet.publicKey.toBase58());
+  console.log("tweet", tweet.publicKey.toBase58());
+  console.log("systemProgram", web3.SystemProgram.programId.toBase58());
 
   try {
     await program.methods

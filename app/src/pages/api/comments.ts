@@ -1,8 +1,8 @@
-import { utils, web3 } from "@project-serum/anchor";
+import { web3 } from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { Comment } from "../../models/Comment";
 import { getWorkspace, notify, sleep, toCollapse } from "../../utils";
-import { fetchUsersAlias, getUserAlias } from "./alias";
+import { getUserAlias } from "./alias";
 
 export const sendComment = async (tweet: PublicKey, content: string) => {
   const workspace = getWorkspace();
