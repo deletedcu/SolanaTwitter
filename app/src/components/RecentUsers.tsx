@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { UserType } from "../models";
+import { useWorkspace } from "../utils";
 
-export default function RecentUsers({
-  users,
-  owner,
-}: {
-  users: UserType[];
-  owner: string;
-}) {
+export default function RecentUsers({ users }: { users: UserType[] }) {
+  const workspace = useWorkspace();
+  const owner = workspace && workspace.wallet.publicKey.toBase58();
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="card bg-fill-secondary py-3 px-6">

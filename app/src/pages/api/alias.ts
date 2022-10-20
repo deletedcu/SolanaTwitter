@@ -1,12 +1,14 @@
-import { PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { getWorkspace, notify, toCollapse } from "../../utils";
+import { toCollapse } from "../../utils";
+import { Program } from "@project-serum/anchor";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
 
-export const createUserAlias = async (alias: string) => {
-  const workspace = getWorkspace();
-  if (!workspace) return;
-  const { program, wallet } = workspace;
-
+export const createUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet,
+  alias: string
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId
@@ -21,19 +23,25 @@ export const createUserAlias = async (alias: string) => {
       })
       .rpc();
 
-    notify("Your alias was created successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was created successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
-export const updateUserAlias = async (alias: string) => {
-  const workspace = getWorkspace();
-  if (!workspace) return;
-  const { program, wallet } = workspace;
-
+export const updateUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet,
+  alias: string
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId
@@ -48,19 +56,24 @@ export const updateUserAlias = async (alias: string) => {
       })
       .rpc();
 
-    notify("Your alias was updated successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was updated successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
-export const deleteUserAlias = async () => {
-  const workspace = getWorkspace();
-  if (!workspace) return;
-  const { program, wallet } = workspace;
-
+export const deleteUserAlias = async (
+  program: Program,
+  wallet: AnchorWallet
+) => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), wallet.publicKey.toBuffer()],
     program.programId
@@ -75,19 +88,24 @@ export const deleteUserAlias = async () => {
       })
       .rpc();
 
-    notify("Your alias was deleted successfully!", "success");
+    return {
+      success: true,
+      message: "Your alias was deleted successfully!",
+    };
   } catch (err) {
     console.error(err);
-    // @ts-ignore
-    notify(err.toString(), "error");
+    return {
+      success: false,
+      // @ts-ignore
+      message: err.toString(),
+    };
   }
 };
 
-export const getUserAlias = async (publicKey: PublicKey): Promise<string> => {
-  const workspace = getWorkspace();
-  if (!workspace) return toCollapse(publicKey);
-  const { program } = workspace;
-
+export const getUserAlias = async (
+  program: Program,
+  publicKey: PublicKey
+): Promise<string> => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(
     [anchor.utils.bytes.utf8.encode("user-alias"), publicKey.toBuffer()],
     program.programId
@@ -105,11 +123,10 @@ export type AliasProps = {
   [key: string]: string;
 };
 
-export const fetchUsersAlias = async () => {
-  const workspace = getWorkspace();
-  if (!workspace) return {};
-  const { program, connection } = workspace;
-
+export const fetchUsersAlias = async (
+  program: Program,
+  connection: Connection
+) => {
   // Prepare the discriminator filter
   const aliasClient = program.account.userAlias;
   const aliasAccountName = "UserAlias";

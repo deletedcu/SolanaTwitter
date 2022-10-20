@@ -6,8 +6,9 @@ import { fetchUsers } from "../api/tweets";
 import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import RecentUsers from "../../components/RecentUsers";
+import { useWorkspace } from "../../utils";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function Users() {
   const router = useRouter();
@@ -17,7 +18,8 @@ export default function Users() {
   const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const wallet = useAnchorWallet();
+  const workspace = useWorkspace();
+  const { connected } = useWallet();
 
   const search = (str: string) => {
     router.push(`/users/${str}`);
@@ -30,14 +32,24 @@ export default function Users() {
   };
 
   useEffect(() => {
-    fetchUsers()
-      .then((fetchedUsers) => {
-        setAllUsers(fetchedUsers);
-        setFilterUsers(fetchedUsers);
-        setRecentUsers(fetchedUsers.slice(0, 5));
-      })
-      .finally(() => setLoading(false));
-  }, []);
+    if (workspace) {
+      fetchUsers(workspace.program, workspace.connection)
+        .then((fetchedUsers) => {
+          setAllUsers(fetchedUsers);
+          setFilterUsers(fetchedUsers);
+          setRecentUsers(
+            fetchedUsers
+              .sort((a, b) => b.last_timestamp - a.last_timestamp)
+              .slice(0, 5)
+          );
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setAllUsers([]);
+      setFilterUsers([]);
+      setRecentUsers([]);
+    }
+  }, [workspace, connected]);
 
   return (
     <Base>
@@ -64,12 +76,7 @@ export default function Users() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
-            {wallet && (
-              <RecentUsers
-                users={recentUsers}
-                owner={wallet.publicKey.toBase58()}
-              />
-            )}
+            <RecentUsers users={recentUsers} />
           </div>
         </div>
       </div>

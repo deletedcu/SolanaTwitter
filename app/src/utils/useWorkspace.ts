@@ -1,9 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import {
-  Provider,
-  AnchorProvider,
-  Program,
-} from "@project-serum/anchor";
+import { Provider, AnchorProvider, Program } from "@project-serum/anchor";
 import idl from "../idl/solana_twitter.json";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 
@@ -19,10 +15,14 @@ const commitment = "processed";
 const programId = new PublicKey(idl.metadata.address);
 let workspace: Workspace | null = null;
 
-export const getWorkspace = () => workspace;
+export const useWorkspace = () => workspace;
 
 export const initWorkspace = (wallet: AnchorWallet, connection: Connection) => {
-  if (workspace) return;
+  if (
+    workspace &&
+    workspace.wallet.publicKey.toBase58() === wallet.publicKey.toBase58()
+  )
+    return;
   const provider: Provider = new AnchorProvider(connection, wallet, {
     preflightCommitment,
     commitment,
@@ -38,3 +38,7 @@ export const initWorkspace = (wallet: AnchorWallet, connection: Connection) => {
     program,
   };
 };
+
+export const resetWorkspace = () => {
+  workspace = null;
+}

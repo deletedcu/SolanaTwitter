@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SuperEllipseImg } from "react-superellipse";
 import { Tweet } from "../models";
 import { Comment } from "../models/Comment";
-import { getWorkspace } from "../utils";
+import { useWorkspace } from "../utils";
 import CommentCard from "./CommentCard";
 import CommentForm from "./CommentForm";
 import TweetFormUpdate from "./TweetFormUpdate";
@@ -18,14 +18,14 @@ export default function TweetCard({
   const [isEditing, setIsEditing] = useState(false);
   const [isCommentEditing, setIsCommentEditing] = useState(false);
 
-  // @ts-ignore
-  const { wallet } = getWorkspace();
+  const workspace = useWorkspace();
   const userRoute =
-    wallet && wallet.publicKey.toBase58() === tweet.user.toBase58()
+    workspace && workspace.wallet.publicKey.toBase58() === tweet.user.toBase58()
       ? "/profile"
       : `/users/${tweet.user.toBase58()}`;
-  const isOwner: boolean =
-    wallet && wallet.publicKey.toBase58() === tweet.user.toBase58();
+  const isOwner: boolean = workspace
+    ? workspace.wallet.publicKey.toBase58() === tweet.user.toBase58()
+    : false;
 
   const addComment = (comment: Comment) => {
     tweet.comments = [comment, ...tweet.comments];
@@ -53,13 +53,19 @@ export default function TweetCard({
                 </a>
               </Link>
             </div>
-            <h3 className="inline font-semibold text-color-primary" title={tweet.user_display}>
+            <h3
+              className="inline font-semibold text-color-primary"
+              title={tweet.user_display}
+            >
               <Link href={userRoute}>
                 <a className="hover:underline">{tweet.user_display}</a>
               </Link>
             </h3>
             <span className="text-color-secondary">•</span>
-            <time className="text-sm text-color-secondary" title={tweet.created_at}>
+            <time
+              className="text-sm text-color-secondary"
+              title={tweet.created_at}
+            >
               <Link href={`/tweets/${tweet.key}`}>
                 <a className="hover:underline">{tweet.created_ago}</a>
               </Link>
@@ -88,7 +94,9 @@ export default function TweetCard({
           </div>
           <div className="ml-12 border-b border-skin-primary pb-4">
             <div className="flex flex-col py-4 px-8 border border-skin-primary rounded-lg bg-fill-secondary">
-              <p className="whitespace-pre-wrap text-color-secondary">{tweet.content}</p>
+              <p className="whitespace-pre-wrap text-color-secondary">
+                {tweet.content}
+              </p>
               <div className="flex">
                 {tweet.tag && tweet.tag !== "[untagged]" && (
                   <Link href={`/tags/${tweet.tag}`}>
@@ -183,8 +191,8 @@ export default function TweetCard({
               )}
               {tweet.comments.length > 0 &&
                 tweet.comments.map((comment, i) => (
-                    <CommentCard key={i} comment={comment} />
-                  ))}
+                  <CommentCard key={i} comment={comment} />
+                ))}
             </div>
           </div>
         </div>

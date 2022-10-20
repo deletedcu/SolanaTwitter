@@ -1,53 +1,59 @@
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { getWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace } from "../../utils";
 import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  let workspace = getWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
+  let workspace = useWorkspace();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
+    setLoading(false);
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
 
   useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
-      const filters = [userFilter(wallet.publicKey.toBase58())];
-      const newPagination = paginateTweets(filters, 5, onNewPage);
+    if (workspace) {
+      const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
+      const newPagination = paginateTweets(
+        workspace.program,
+        workspace.connection,
+        filters,
+        10,
+        onNewPage
+      );
       setTweets([]);
       setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
+      setLoading(false);
     }
-  }, [wallet, connected, workspace, connection]);
+  }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
     }
   }, [pagination]);
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
+  };
 
   return (
     <Base>
@@ -62,9 +68,9 @@ export default function Profile() {
           {pagination && (
             <TweetList
               tweets={tweets}
-              loading={pagination.loading}
+              loading={loading}
               hasMore={hasMore}
-              loadMore={pagination.getNextPage}
+              loadMore={loadMore}
             />
           )}
         </div>

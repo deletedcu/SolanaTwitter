@@ -1,8 +1,4 @@
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import RecentTweets from "../../components/RecentTweets";
@@ -10,46 +6,52 @@ import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { getWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace } from "../../utils";
 import { paginateTweets } from "../api/tweets";
 
 export default function Tweets() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [pagination, setPagination] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
   const [recentTweets, setRecentTweets] = useState<Tweet[]>([]);
 
-  let workspace = getWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
+  let workspace = useWorkspace();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
     if (page === 0) {
       setRecentTweets(newTweets.slice(0, 5));
     }
+    setLoading(false);
+    setHasMore(more);
   };
 
   useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
+    if (workspace) {
       setTweets([]);
-      const newPagination = paginateTweets([], 5, onNewPage);
+      const newPagination = paginateTweets(
+        workspace.program,
+        workspace.connection,
+        [],
+        10,
+        onNewPage
+      );
       setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
+      setRecentTweets([]);
       setInitialLoading(false);
+      setLoading(false);
     }
-  }, [wallet, connected, workspace, connection]);
+  }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
       setInitialLoading(true);
     }
@@ -58,6 +60,11 @@ export default function Tweets() {
   const addTweet = (tweet: Tweet) => {
     setTweets([tweet, ...tweets]);
     setRecentTweets((prev) => [tweet, ...prev].slice(0, 5));
+  };
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
   };
 
   return (
@@ -78,9 +85,9 @@ export default function Tweets() {
             {pagination && (
               <TweetList
                 tweets={tweets}
-                loading={pagination.loading}
+                loading={loading}
                 hasMore={hasMore}
-                loadMore={pagination.getNextPage}
+                loadMore={loadMore}
               />
             )}
           </div>
@@ -89,9 +96,7 @@ export default function Tweets() {
               <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
                 Recent Activities
               </h3>
-              {wallet && (
-                <RecentTweets tweets={recentTweets} owner={wallet.publicKey.toBase58()}/>
-              )}
+              <RecentTweets tweets={recentTweets} />
             </div>
           </div>
         </div>

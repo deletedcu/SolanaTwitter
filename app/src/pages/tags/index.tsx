@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSlug } from "../../utils";
+import { useWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import { fetchTags } from "../api/tweets";
 import TagList from "../../components/TagList";
@@ -8,6 +8,7 @@ import { TagType } from "../../models";
 import TweetSearch from "../../components/TweetSearch";
 import Base from "../../templates/Base";
 import RecentTags from "../../components/RecentTags";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function Tags() {
   const router = useRouter();
@@ -18,24 +19,28 @@ export default function Tags() {
   const [loading, setLoading] = useState(true);
 
   const slugTag = useSlug(tag);
+  const workspace = useWorkspace();
+  const { connected } = useWallet();
 
-  const search = (str: string) => {
-    router.push(`/tags/${str}`);
-  };
-
-  const fetchTweetTags = () => {
-    fetchTags()
-      .then((fetchedTags) => {
-        const countOrdered = fetchedTags.sort((a, b) => b.count - a.count);
-        const recentOrdered = fetchedTags
-          .slice(0, 5)
-          .sort((a, b) => b.timestamp - a.timestamp);
-        setAllTags(countOrdered);
-        setFilterTags(countOrdered);
-        setRecentTags(recentOrdered);
-      })
-      .finally(() => setLoading(false));
-  };
+  useEffect(() => {
+    if (workspace) {
+      fetchTags(workspace.program, workspace.connection)
+        .then((fetchedTags) => {
+          const countOrdered = fetchedTags.sort((a, b) => b.count - a.count);
+          const recentOrdered = fetchedTags
+            .slice(0, 5)
+            .sort((a, b) => b.timestamp - a.timestamp);
+          setAllTags(countOrdered);
+          setFilterTags(countOrdered);
+          setRecentTags(recentOrdered);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setAllTags([]);
+      setFilterTags([]);
+      setRecentTags([]);
+    }
+  }, [workspace, connected]);
 
   const onTextChange = (text: string) => {
     const fTags = allTags.filter((k) => k.tag.includes(text));
@@ -43,9 +48,9 @@ export default function Tags() {
     setFilterTags(fTags);
   };
 
-  useEffect(() => {
-    fetchTweetTags();
-  }, []);
+  const search = (str: string) => {
+    router.push(`/tags/${str}`);
+  };
 
   return (
     <Base>
@@ -69,7 +74,9 @@ export default function Tags() {
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
-            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">Recent Tags</h3>
+            <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
+              Recent Tags
+            </h3>
             <RecentTags tags={recentTags} />
           </div>
         </div>

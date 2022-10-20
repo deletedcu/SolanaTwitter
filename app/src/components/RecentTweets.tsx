@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { Tweet } from "../models";
+import { useWorkspace } from "../utils";
 
-export default function RecentTweets({
-  tweets,
-  owner,
-}: {
-  tweets: Tweet[];
-  owner: string;
-}) {
+export default function RecentTweets({ tweets }: { tweets: Tweet[] }) {
+  const workspace = useWorkspace();
+  const owner = workspace && workspace.wallet.publicKey.toBase58();
+
   return (
     <div className="h-full overflow-y-auto pl-2">
       <ol className="relative border-l border-skin-primary">
@@ -35,7 +33,9 @@ export default function RecentTweets({
                   </Link>
                   <span className="text-color-third ml-1">posted</span>
                 </div>
-                <div className="truncate text-color-secondary">{tweet.content}</div>
+                <div className="truncate text-color-secondary">
+                  {tweet.content}
+                </div>
                 <div>
                   <Link href={`/tags/${tweet.tag}`}>
                     <a className="text-primary-500 transition-colors hover:underline">

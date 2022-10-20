@@ -30,8 +30,8 @@ export default function WalletItem({
       menuButton={
         <MenuButton>
           <SuperEllipseImg
-            width={36}
-            height={36}
+            width={30}
+            height={30}
             href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
             r1={0.1}
             r2={0.3}
@@ -53,11 +53,9 @@ export default function WalletItem({
                 {hover ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    role="img"
                     className="iconify iconify--heroicons-outline"
                     width="20"
                     height="20"
-                    preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
                     <path
@@ -75,7 +73,6 @@ export default function WalletItem({
                     className="h-5 w-5 iconify iconify--heroicons-outline"
                     width="1em"
                     height="1em"
-                    preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
                     <path

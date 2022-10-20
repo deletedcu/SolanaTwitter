@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
 import { getUserAlias } from "../pages/api/alias";
-import { getWorkspace } from "../utils";
+import { useWorkspace } from "../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -12,12 +12,12 @@ export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [alias, setAlias] = useState("");
 
-  const workspace = getWorkspace();
+  const workspace = useWorkspace();
   const { disconnect, connected } = useWallet();
 
   useEffect(() => {
     if (workspace && !showEditModal) {
-      getUserAlias(workspace.wallet.publicKey).then((value) => setAlias(value));
+      getUserAlias(workspace.program, workspace.wallet.publicKey).then((value) => setAlias(value));
     }
   }, [workspace, showEditModal]);
 
@@ -26,7 +26,7 @@ export default function Menubar() {
       <div className="ml-72">
         <div className="duration-400 sticky top-0 z-20 ml-px">
           <div className="sticky top-0 z-40 transition-colors bg-fill-opacity backdrop-blur">
-            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-6 transition-all">
+            <div className="h-16 flex items-center justify-between border-b border-skin-primary px-2 transition-all">
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
                 <ThemeSwitcher />

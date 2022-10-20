@@ -1,26 +1,22 @@
 import { PublicKey } from "@solana/web3.js";
 import { Tweet } from "../models";
+import { AliasProps } from "../pages/api/alias";
 
 export const getPagination = (
   perPage: number,
-  prefetchCb: () => Promise<PublicKey[]>,
+  prefetchCb: () => Promise<{ pubkeys: PublicKey[]; aliasObj: AliasProps }>,
   pageCb: (page: number, pubkeys: PublicKey[]) => Promise<Tweet[]>
 ) => {
   let allPublicKeys: PublicKey[] = [];
-  let prefetchLoading = false;
-  let pageLoading = false;
+  let aliasObj: AliasProps = {};
 
-  const loading = prefetchLoading || pageLoading;
   let prefetchPromise: Promise<void>;
 
   const prefetch = () => {
     prefetchPromise = (async () => {
-      try {
-        prefetchLoading = true;
-        allPublicKeys = await prefetchCb();
-      } finally {
-        prefetchLoading = false;
-      }
+      const result = await prefetchCb();
+      allPublicKeys = result.pubkeys;
+      aliasObj = result.aliasObj;
     })();
 
     return prefetchPromise;
@@ -37,20 +33,13 @@ export const getPagination = (
   const getPage = async (page: number) => {
     await prefetchPromise;
     if (!hasPage(page)) return [];
-    try {
-      pageLoading = true;
-      return await pageCb(page, getPagePublicKeys(page));
-    } finally {
-      pageLoading = false;
-    }
+    return await pageCb(page, getPagePublicKeys(page));
   };
 
+  const getAliasObj = () => aliasObj;
+
   return {
-    perPage,
-    allPublicKeys,
-    prefetchLoading,
-    pageLoading,
-    loading,
+    getAliasObj,
     getPagePublicKeys,
     hasPage,
     getPage,

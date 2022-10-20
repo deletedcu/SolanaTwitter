@@ -1,6 +1,6 @@
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import { TagType } from "../models";
+import { useWorkspace } from "../utils";
 
 interface TagListProps {
   tags: TagType[];
@@ -9,11 +9,11 @@ interface TagListProps {
 
 export default function TagList(props: TagListProps) {
   const { tags, loading } = props;
-  const wallet = useAnchorWallet();
+  const workspace = useWorkspace();
 
   return (
     <>
-      {wallet ? (
+      {workspace ? (
         loading ? (
           <div className="p-8 text-center text-color-third">Loading...</div>
         ) : (

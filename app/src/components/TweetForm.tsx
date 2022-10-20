@@ -2,9 +2,16 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTheme } from "../contexts/themeProvider";
 import { Tweet } from "../models";
 import { sendTweet } from "../pages/api/tweets";
-import { useCountCharacterLimit, useSlug } from "../utils";
+import {
+  useWorkspace,
+  notifyLoading,
+  notifyUpdate,
+  useCountCharacterLimit,
+  useSlug,
+} from "../utils";
 
 type FormValues = {
   content: string;
@@ -20,6 +27,8 @@ export default function TweetForm({
   added: (a: Tweet) => void;
   forceTag?: string;
 }) {
+  const { theme } = useTheme();
+  const workspace = useWorkspace();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
@@ -40,9 +49,20 @@ export default function TweetForm({
 
   // Actions
   const send = async (data: FormValues) => {
-    const tweet = await sendTweet(effectiveTag, data.content);
-    if (tweet) {
-      added(tweet);
+    if (!workspace || !canTweet) return;
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
+    const result = await sendTweet(
+      workspace.program,
+      workspace.wallet,
+      effectiveTag,
+      data.content
+    );
+    notifyUpdate(toastId, result.message, result.tweet ? "success" : "error");
+    if (result.tweet) {
+      added(result.tweet);
       resetField("content");
       setTag("");
     }
