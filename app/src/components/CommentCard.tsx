@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Comment } from "../models/Comment";
-import { useWorkspace } from "../utils";
 import { SuperEllipseImg } from "react-superellipse";
+import useWorkspace from "../hooks/useWorkspace";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
   const workspace = useWorkspace();

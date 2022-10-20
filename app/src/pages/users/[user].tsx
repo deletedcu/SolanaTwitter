@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { Tweet, UserType } from "../../models";
 import { fetchUsers, paginateTweets, userFilter } from "../api/tweets";
 import TweetList from "../../components/TweetList";
-import { useWorkspace } from "../../utils";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
 import { getUserAlias } from "../api/alias";
 import { PublicKey } from "@solana/web3.js";
 import RecentUsers from "../../components/RecentUsers";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function User() {
   const router = useRouter();

@@ -1,9 +1,7 @@
-import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import Menubar from "../components/Menubar";
 import Sidebar from "../components/Sidebar";
 import { useTheme } from "../contexts/themeProvider";
-import { initWorkspace, resetWorkspace } from "../utils";
 
 interface Props {
   children?: ReactNode;
@@ -11,17 +9,6 @@ interface Props {
 
 export default function Base({ children }: Props) {
   const { theme } = useTheme();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
-  const { connected } = useWallet();
-
-  useEffect(() => {
-    if (wallet && connected) {
-      initWorkspace(wallet, connection);
-    } else {
-      resetWorkspace();
-    }
-  }, [wallet, connected, connection]);
 
   return (
     <div className={theme === "dark" ? "theme-dark" : ""}>

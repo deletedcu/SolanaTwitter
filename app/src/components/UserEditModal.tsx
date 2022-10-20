@@ -2,8 +2,9 @@ import { PublicKey } from "@solana/web3.js";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { SuperEllipseImg } from "react-superellipse";
 import { useTheme } from "../contexts/themeProvider";
+import useWorkspace from "../hooks/useWorkspace";
 import { createUserAlias, updateUserAlias } from "../pages/api/alias";
-import { useWorkspace, notifyLoading, notifyUpdate, toCollapse } from "../utils";
+import { notifyLoading, notifyUpdate, toCollapse } from "../utils";
 
 type FormValues = {
   name: string;
@@ -36,11 +37,23 @@ export default function UserEditModal({
       );
       let result;
       if (alias === toCollapse(publicKey)) {
-        result = await createUserAlias(workspace.program, workspace.wallet, data.name);
+        result = await createUserAlias(
+          workspace.program,
+          workspace.wallet,
+          data.name
+        );
       } else {
-        result = await updateUserAlias(workspace.program, workspace.wallet, data.name);
+        result = await updateUserAlias(
+          workspace.program,
+          workspace.wallet,
+          data.name
+        );
       }
-      notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+      notifyUpdate(
+        toastId,
+        result.message,
+        result.success ? "success" : "error"
+      );
       if (result.success) {
         onClose();
       }

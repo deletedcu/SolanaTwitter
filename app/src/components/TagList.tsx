@@ -1,6 +1,6 @@
 import Link from "next/link";
+import useWorkspace from "../hooks/useWorkspace";
 import { TagType } from "../models";
-import { useWorkspace } from "../utils";
 
 interface TagListProps {
   tags: TagType[];

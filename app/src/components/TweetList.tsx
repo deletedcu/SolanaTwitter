@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../contexts/themeProvider";
+import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { deleteTweet } from "../pages/api/tweets";
-import { useWorkspace, notifyLoading, notifyUpdate } from "../utils";
+import { notifyLoading, notifyUpdate } from "../utils";
 import TweetCard from "./TweetCard";
 
 interface TweetListProps {

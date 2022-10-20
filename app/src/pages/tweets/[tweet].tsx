@@ -4,29 +4,19 @@ import { useEffect, useState } from "react";
 import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
-import { AliasProps } from "../api/alias";
 import { deleteTweet, getTweet } from "../api/tweets";
-import { fetchUsersAlias } from "../api/alias";
-import { useWorkspace, notifyLoading, notifyUpdate } from "../../utils";
+import { notifyLoading, notifyUpdate } from "../../utils";
 import { useTheme } from "../../contexts/themeProvider";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function Tweet() {
   const router = useRouter();
   const [tweet, setTweet] = useState<TweetModel | null>(null);
   const [loading, setLoading] = useState(true);
-  const [usersAlias, setUsersAlias] = useState<AliasProps>({});
   const tweetAddress = router.query.tweet as string;
 
   const { theme } = useTheme();
   const workspace = useWorkspace();
-
-  useEffect(() => {
-    if (workspace) {
-      fetchUsersAlias(workspace.program, workspace.connection).then((value) =>
-        setUsersAlias(value)
-      );
-    }
-  }, [workspace]);
 
   useEffect(() => {
     if (workspace && tweetAddress) {

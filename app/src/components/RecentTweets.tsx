@@ -1,6 +1,6 @@
 import Link from "next/link";
+import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
-import { useWorkspace } from "../utils";
 
 export default function RecentTweets({ tweets }: { tweets: Tweet[] }) {
   const workspace = useWorkspace();

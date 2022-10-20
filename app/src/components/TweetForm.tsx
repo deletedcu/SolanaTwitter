@@ -3,15 +3,12 @@ import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTheme } from "../contexts/themeProvider";
+import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
+import { useSlug } from "../hooks/useSlug";
+import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { sendTweet } from "../pages/api/tweets";
-import {
-  useWorkspace,
-  notifyLoading,
-  notifyUpdate,
-  useCountCharacterLimit,
-  useSlug,
-} from "../utils";
+import { notifyLoading, notifyUpdate } from "../utils";
 
 type FormValues = {
   content: string;

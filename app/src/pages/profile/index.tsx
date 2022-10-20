@@ -2,9 +2,9 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
+import useWorkspace from "../../hooks/useWorkspace";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { useWorkspace } from "../../utils";
 import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
-import { useWorkspace } from "../utils";
 
 export default function RecentUsers({ users }: { users: UserType[] }) {
   const workspace = useWorkspace();

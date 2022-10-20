@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TagType, Tweet } from "../../models";
-import { useWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
@@ -10,6 +9,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
 import RecentTags from "../../components/RecentTags";
+import useWorkspace from "../../hooks/useWorkspace";
+import { useSlug } from "../../hooks/useSlug";
 
 export default function Tags() {
   const router = useRouter();

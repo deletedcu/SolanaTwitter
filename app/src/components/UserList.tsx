@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SuperEllipseImg } from "react-superellipse";
+import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
-import { useWorkspace } from "../utils";
 
 interface UserListProps {
   users: UserType[];

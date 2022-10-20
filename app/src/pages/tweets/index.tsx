@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import RecentTweets from "../../components/RecentTweets";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
+import useWorkspace from "../../hooks/useWorkspace";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { useWorkspace } from "../../utils";
 import { paginateTweets } from "../api/tweets";
 
 export default function Tweets() {
@@ -17,7 +17,7 @@ export default function Tweets() {
   const [initialLoading, setInitialLoading] = useState(false);
   const [recentTweets, setRecentTweets] = useState<Tweet[]>([]);
 
-  let workspace = useWorkspace();
+  const workspace = useWorkspace();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {

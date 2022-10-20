@@ -7,8 +7,8 @@ import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
 import RecentUsers from "../../components/RecentUsers";
-import { useWorkspace } from "../../utils";
 import { useWallet } from "@solana/wallet-adapter-react";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function Users() {
   const router = useRouter();

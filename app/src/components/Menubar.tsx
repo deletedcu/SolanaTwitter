@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
 import { getUserAlias } from "../pages/api/alias";
-import { useWorkspace } from "../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
+import useWorkspace from "../hooks/useWorkspace";
 
 export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
