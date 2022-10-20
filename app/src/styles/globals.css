@@ -143,3 +143,27 @@
 .wallet-adapter-dropdown-list-active {
   @apply -translate-y-3 transform md:translate-y-3;
 }
+
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+  background: rgba(163, 163, 163, 0.5);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(115 115 115);
+  border-radius: 1ex;
+  -webkit-border-radius: 1ex;
+  box-shadow: 0 1px 2px rgba(163, 163, 163, 0.75);
+  -webkit-box-shadow: 0 1px 2px rgba(163, 163, 163, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(163, 163, 163, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(82 82 82);
+}

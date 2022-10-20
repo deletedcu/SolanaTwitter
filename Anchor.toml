@@ -12,7 +12,7 @@ solana_twitter = "4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62"
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [workspace]
@@ -20,4 +20,4 @@ types = "app/idl/"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
-copy-idl = "mkdir -p app/idl && cp target/idl/solana_twitter.json app/idl/solana_twitter.json"
+copy-idl = "mkdir -p app/idl && cp target/idl/solana_twitter.json app/src/idl/solana_twitter.json"
