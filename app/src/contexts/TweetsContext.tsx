@@ -1,17 +1,38 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { PublicKey } from "@solana/web3.js";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import {
   deleteTweet,
+  getTweet,
   paginateTweets,
   sendTweet,
   updateTweet,
 } from "../pages/api/tweets";
 import { notifyLoading, notifyUpdate } from "../utils";
 
-const TweetsContext = createContext<any>({});
+interface TweetsContextConfig {
+  tweets: Tweet[];
+  recentTweets: Tweet[];
+  loading: boolean;
+  hasMore: boolean;
+  loadMore: () => void;
+  sendTweet: (tag: string, content: string) => Promise<boolean>;
+  updateTweet: (tweet: Tweet, tag: string, content: string) => Promise<boolean>;
+  deleteTweet: (tweet: Tweet) => Promise<boolean>;
+  getTweet: (pubkey: PublicKey) => Promise<Tweet | null>;
+}
+
+const TweetsContext = createContext<TweetsContextConfig>(null!);
 
 export function TweetsProvider({ children }: { children: ReactNode }) {
   const [tweets, setTweets] = useState<Tweet[]>([]);
@@ -133,6 +154,17 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     [tweets, workspace]
   );
 
+  const getTweetFromPublicKey = useCallback(
+    async (publickey: PublicKey) => {
+      if (workspace) {
+        const tweet = await getTweet(workspace, publickey);
+        return tweet;
+      }
+      return null;
+    },
+    [workspace]
+  );
+
   const loadMore = useCallback(() => {
     if (pagination) {
       setLoading(true);
@@ -150,22 +182,24 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       sendTweet: sendTweetAndRefresh,
       updateTweet: updateTweetAndRefresh,
       deleteTweet: deleteTweetAndRefresh,
+      getTweet: getTweetFromPublicKey,
     }),
     [
-      deleteTweetAndRefresh,
+      tweets,
+      recentTweets,
+      loading,
       hasMore,
       loadMore,
-      loading,
-      recentTweets,
       sendTweetAndRefresh,
-      tweets,
       updateTweetAndRefresh,
+      deleteTweetAndRefresh,
+      getTweetFromPublicKey,
     ]
   );
 
   return (
     <TweetsContext.Provider value={value}>{children}</TweetsContext.Provider>
-  )
+  );
 }
 
 export default TweetsContext;

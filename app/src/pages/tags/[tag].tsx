@@ -96,7 +96,7 @@ export default function Tags() {
           >
             {tagIcon}
           </TweetSearch>
-          <TweetForm added={addTweet} forceTag={slugTag} />
+          <TweetForm forceTag={slugTag} />
           {pagination && (
             <TweetList
               tweets={tweets}

@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
-import { deleteTweet, getTweet } from "../api/tweets";
-import { notifyLoading, notifyUpdate } from "../../utils";
-import useWorkspace from "../../hooks/useWorkspace";
-import useTheme from "../../hooks/useTheme";
+import useTweets from "../../hooks/useTweets";
 
 export default function Tweet() {
   const router = useRouter();
@@ -15,33 +12,19 @@ export default function Tweet() {
   const [loading, setLoading] = useState(true);
   const tweetAddress = router.query.tweet as string;
 
-  const { theme } = useTheme();
-  const workspace = useWorkspace();
+  const { getTweet, deleteTweet } = useTweets();
 
   useEffect(() => {
-    if (workspace && tweetAddress) {
-      getTweet(
-        workspace.program,
-        workspace.connection,
-        new PublicKey(tweetAddress)
-      )
+    if (tweetAddress) {
+      getTweet(new PublicKey(tweetAddress))
         .then((fetchedTweet) => setTweet(fetchedTweet))
         .finally(() => setLoading(false));
     }
-  }, [tweetAddress, workspace]);
+  }, [getTweet, tweetAddress]);
 
   const onDelete = async (tweet: TweetModel) => {
-    if (!workspace) return;
-    const toastId = notifyLoading(
-      "Transaction in progress. Please wait...",
-      theme
-    );
-    const result = await deleteTweet(
-      workspace,
-      tweet
-    );
-    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
-    if (result.success) {
+    const result = await deleteTweet(tweet);
+    if (result) {
       setTweet(null);
     }
   };

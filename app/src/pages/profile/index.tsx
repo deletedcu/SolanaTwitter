@@ -63,7 +63,7 @@ export default function Profile() {
               Your tweets
             </h2>
           </div>
-          <TweetForm added={addTweet} />
+          <TweetForm />
           {pagination && (
             <TweetList
               tweets={tweets}

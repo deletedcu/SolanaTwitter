@@ -104,8 +104,7 @@ export const paginateTweets = (
 };
 
 export const getTweet = async (
-  program: Program,
-  connection: Connection,
+  { program, connection }: { program: Program; connection: Connection },
   publicKey: PublicKey
 ) => {
   const account = await program.account.tweet.fetch(publicKey);
