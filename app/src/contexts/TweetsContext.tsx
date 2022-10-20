@@ -30,6 +30,7 @@ interface TweetsContextConfig {
   updateTweet: (tweet: Tweet, tag: string, content: string) => Promise<boolean>;
   deleteTweet: (tweet: Tweet) => Promise<boolean>;
   getTweet: (pubkey: PublicKey) => Promise<Tweet | null>;
+  setFilters: (filters: any[]) => void;
 }
 
 const TweetsContext = createContext<TweetsContextConfig>(null!);
@@ -41,6 +42,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
+  const [filters, setFilters] = useState<any[]>([]);
 
   const { theme } = useTheme();
   const workspace = useWorkspace();
@@ -59,7 +61,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (workspace) {
       setTweets([]);
-      const newPagination = paginateTweets(workspace, [], 10, onNewPage);
+      const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
       setPagination(newPagination);
     } else {
       setPagination(null);
@@ -67,7 +69,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       setInitialLoading(false);
       setLoading(false);
     }
-  }, [workspace, connected]);
+  }, [workspace, connected, filters]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
@@ -183,6 +185,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       updateTweet: updateTweetAndRefresh,
       deleteTweet: deleteTweetAndRefresh,
       getTweet: getTweetFromPublicKey,
+      setFilters: setFilters,
     }),
     [
       tweets,

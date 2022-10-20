@@ -1,50 +1,28 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { tagIcon } from "../../assets/icons";
-import { fetchTags } from "../api/tweets";
 import TagList from "../../components/TagList";
 import { TagType } from "../../models";
 import TweetSearch from "../../components/TweetSearch";
 import Base from "../../templates/Base";
 import RecentTags from "../../components/RecentTags";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useSlug } from "../../hooks/useSlug";
-import useWorkspace from "../../hooks/useWorkspace";
+import useTags from "../../hooks/useTags";
 
 export default function Tags() {
   const router = useRouter();
   const [tag, setTag] = useState("");
-  const [allTags, setAllTags] = useState<TagType[]>([]);
   const [filterTags, setFilterTags] = useState<TagType[]>([]);
-  const [recentTags, setRecentTags] = useState<TagType[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  
+  const { tags, recentTags, loading } = useTags();
   const slugTag = useSlug(tag);
-  const workspace = useWorkspace();
-  const { connected } = useWallet();
 
   useEffect(() => {
-    if (workspace) {
-      fetchTags(workspace.program, workspace.connection)
-        .then((fetchedTags) => {
-          const countOrdered = fetchedTags.sort((a, b) => b.count - a.count);
-          const recentOrdered = fetchedTags
-            .slice(0, 5)
-            .sort((a, b) => b.timestamp - a.timestamp);
-          setAllTags(countOrdered);
-          setFilterTags(countOrdered);
-          setRecentTags(recentOrdered);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setAllTags([]);
-      setFilterTags([]);
-      setRecentTags([]);
-    }
-  }, [workspace, connected]);
+    setFilterTags(tags);
+  }, [tags]);
 
   const onTextChange = (text: string) => {
-    const fTags = allTags.filter((k) => k.tag.includes(text));
+    const fTags = tags.filter((k) => k.tag.includes(text));
     setTag(text);
     setFilterTags(fTags);
   };

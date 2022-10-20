@@ -208,7 +208,7 @@ export const deleteTweet = async (
   }
 };
 
-export const fetchTags = async (program: Program, connection: Connection) => {
+export const fetchTags = async ({program, connection}: {program: Program, connection: Connection}) => {
   // Prepare the discriminator filter
   const tweetClient = program.account.tweet;
   const tweetAccountName = "Tweet";
