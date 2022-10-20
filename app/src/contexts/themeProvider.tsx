@@ -15,11 +15,11 @@ interface ThemeConfig {
 export const ThemeContext = createContext<ThemeConfig>(null!);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     // @ts-ignore
-    setTheme(window.localStorage.getItem("theme") === null ? "light" : window.localStorage.getItem("theme")!);
+    setTheme(window.localStorage.getItem("theme") === null ? "dark" : window.localStorage.getItem("theme")!);
   }, []);
 
   const toggleTheme = () => {
