@@ -52,9 +52,14 @@ export const paginateTweets = (
       timestamp: account.data.readInt32LE(),
     }));
 
-    return allTweetsWithTimestamps
+    const pubkeys = allTweetsWithTimestamps
       .sort((a, b) => b.timestamp - a.timestamp)
       .map(({ pubkey }) => pubkey);
+
+    // Prefetch user aliases
+    const aliasObj = await fetchUsersAlias(program, connection);
+
+    return { pubkeys, aliasObj };
   };
 
   const pageCb = async (page: number, paginatedPublicKeys: PublicKey[]) => {
@@ -70,28 +75,42 @@ export const paginateTweets = (
   };
 
   const pagination = getPagination(perPage, prefetchCb, pageCb);
-  const { hasPage, getPage } = pagination;
+  const { hasPage, getPage, getAliasObj } = pagination;
 
   const getNextPage = async () => {
+    const aliasObj = getAliasObj();
     const newPageTweets = await getPage(page + 1);
+    let result: Tweet[] = [];
 
     for (let i = 0; i < newPageTweets.length; i++) {
-      const filters = [commentTweetFilter(newPageTweets[i].key)];
-      const comments = await fetchComments(program, filters);
-      newPageTweets[i].comments = comments || [];
+      let tweet = newPageTweets[i];
+      const [aliasPDA, _] = PublicKey.findProgramAddressSync(
+        [utils.bytes.utf8.encode("user-alias"), tweet.user.toBuffer()],
+        program.programId
+      );
+      if (aliasObj[aliasPDA.toBase58()]) {
+        tweet.user_display = aliasObj[aliasPDA.toBase58()];
+      }
+      const filters = [commentTweetFilter(tweet.key)];
+      const comments = await fetchComments(program, filters, aliasObj);
+      tweet.comments = comments || [];
+      result.push(tweet);
     }
     const hasNextPage = hasPage(page + 1);
     page += 1;
-    onNewPage(newPageTweets, hasNextPage, page - 1);
+    onNewPage(result, hasNextPage, page - 1);
   };
 
   return { page, getNextPage, ...pagination };
 };
 
-export const getTweet = async (program: Program, publicKey: PublicKey) => {
+export const getTweet = async (program: Program, connection: Connection, publicKey: PublicKey) => {
   const account = await program.account.tweet.fetch(publicKey);
+  const aliasObj = await fetchUsersAlias(program, connection);
   const tweet = new Tweet(publicKey, account);
-  const comments = await fetchComments(program, [commentTweetFilter(tweet.key)]);
+  const comments = await fetchComments(program, [
+    commentTweetFilter(tweet.key),
+  ], aliasObj);
   tweet.comments = comments || [];
   return tweet;
 };

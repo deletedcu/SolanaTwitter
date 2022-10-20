@@ -11,6 +11,7 @@ export default function Profile() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let workspace = useWorkspace();
   const { connected } = useWallet();
@@ -18,6 +19,7 @@ export default function Profile() {
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
+    setLoading(false);
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
@@ -29,7 +31,7 @@ export default function Profile() {
         workspace.program,
         workspace.connection,
         filters,
-        5,
+        10,
         onNewPage
       );
       setTweets([]);
@@ -37,14 +39,21 @@ export default function Profile() {
     } else {
       setPagination(null);
       setTweets([]);
+      setLoading(false);
     }
   }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
     }
   }, [pagination]);
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
+  };
 
   return (
     <Base>
@@ -59,9 +68,9 @@ export default function Profile() {
           {pagination && (
             <TweetList
               tweets={tweets}
-              loading={pagination.loading}
+              loading={loading}
               hasMore={hasMore}
-              loadMore={pagination.getNextPage}
+              loadMore={loadMore}
             />
           )}
         </div>

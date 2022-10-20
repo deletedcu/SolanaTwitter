@@ -18,6 +18,7 @@ export default function User() {
   const [viewedUser, setViewedUser] = useState("");
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
 
   let workspace = useWorkspace();
@@ -26,6 +27,7 @@ export default function User() {
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function User() {
         workspace!.program,
         workspace!.connection,
         filters,
-        5,
+        10,
         onNewPage
       );
       setPagination(newPagination);
@@ -48,18 +50,28 @@ export default function User() {
     } else {
       setPagination(null);
       setTweets([]);
+      setRecentUsers([]);
       setViewedUser("");
+      setLoading(false);
     }
   }, [user, viewedUser, workspace, connected]);
 
   useEffect(() => {
     if (pagination && workspace) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
       fetchUsers(workspace.program, workspace.connection).then((value) =>
-        setRecentUsers(value.slice(0, 5))
+        setRecentUsers(
+          value.sort((a, b) => b.last_timestamp - a.last_timestamp).slice(0, 5)
+        )
       );
     }
   }, [pagination, workspace]);
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
+  };
 
   return (
     <Base>
@@ -77,12 +89,12 @@ export default function User() {
           {pagination && (
             <TweetList
               tweets={tweets}
-              loading={pagination.loading}
+              loading={loading}
               hasMore={hasMore}
-              loadMore={pagination.getNextPage}
+              loadMore={loadMore}
             />
           )}
-          {pagination && !pagination!.loading && tweets.length === 0 && (
+          {pagination && !loading && tweets.length === 0 && (
             <div className="p-8 text-center text-color-third">
               User not found...
             </div>

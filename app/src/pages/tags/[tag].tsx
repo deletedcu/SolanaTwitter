@@ -17,6 +17,7 @@ export default function Tags() {
   const [tag, setTag] = useState<string>(router.query.tag as string);
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [recentTags, setRecentTags] = useState<TagType[]>([]);
 
   let workspace = useWorkspace();
@@ -26,6 +27,7 @@ export default function Tags() {
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
+    setLoading(false);
   };
 
   const search = (str: string) => {
@@ -47,7 +49,7 @@ export default function Tags() {
         workspace!.program,
         workspace!.connection,
         filters,
-        5,
+        10,
         onNewPage
       );
       setPagination(newPagination);
@@ -55,11 +57,13 @@ export default function Tags() {
       setPagination(null);
       setTweets([]);
       setRecentTags([]);
+      setLoading(false);
     }
   }, [slugTag, workspace, connected]);
 
   useEffect(() => {
     if (pagination && workspace) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
       fetchTags(workspace.program, workspace.connection).then((fetchedTags) => {
         const recentOrdered = fetchedTags
@@ -69,6 +73,11 @@ export default function Tags() {
       });
     }
   }, [pagination, workspace]);
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
+  };
 
   return (
     <Base>
@@ -91,12 +100,12 @@ export default function Tags() {
           {pagination && (
             <TweetList
               tweets={tweets}
-              loading={pagination.loading}
+              loading={loading}
               hasMore={hasMore}
-              loadMore={pagination.getNextPage}
+              loadMore={loadMore}
             />
           )}
-          {pagination && !pagination.loading && tweets.length === 0 && (
+          {pagination && !loading && tweets.length === 0 && (
             <div className="p-8 text-center text-color-third">
               No tweets were found in this tag...
             </div>

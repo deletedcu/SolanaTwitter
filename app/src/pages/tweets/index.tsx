@@ -13,6 +13,7 @@ export default function Tweets() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [pagination, setPagination] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
   const [recentTweets, setRecentTweets] = useState<Tweet[]>([]);
 
@@ -21,14 +22,14 @@ export default function Tweets() {
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
     if (page === 0) {
       setRecentTweets(newTweets.slice(0, 5));
     }
+    setLoading(false);
+    setHasMore(more);
   };
 
   useEffect(() => {
-    console.log("call useEffect", workspace)
     if (workspace) {
       setTweets([]);
       const newPagination = paginateTweets(
@@ -44,11 +45,13 @@ export default function Tweets() {
       setTweets([]);
       setRecentTweets([]);
       setInitialLoading(false);
+      setLoading(false);
     }
   }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
+      setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
       setInitialLoading(true);
     }
@@ -57,6 +60,11 @@ export default function Tweets() {
   const addTweet = (tweet: Tweet) => {
     setTweets([tweet, ...tweets]);
     setRecentTweets((prev) => [tweet, ...prev].slice(0, 5));
+  };
+
+  const loadMore = () => {
+    setLoading(true);
+    pagination.getNextPage();
   };
 
   return (
@@ -77,9 +85,9 @@ export default function Tweets() {
             {pagination && (
               <TweetList
                 tweets={tweets}
-                loading={pagination.loading}
+                loading={loading}
                 hasMore={hasMore}
-                loadMore={pagination.getNextPage}
+                loadMore={loadMore}
               />
             )}
           </div>

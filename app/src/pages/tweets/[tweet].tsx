@@ -7,13 +7,11 @@ import Base from "../../templates/Base";
 import { AliasProps } from "../api/alias";
 import { deleteTweet, getTweet } from "../api/tweets";
 import { fetchUsersAlias } from "../api/alias";
-import { utils } from "@project-serum/anchor";
 import { useWorkspace, notifyLoading, notifyUpdate } from "../../utils";
 import { useTheme } from "../../contexts/themeProvider";
 
 export default function Tweet() {
   const router = useRouter();
-  const [originTweet, setOriginTweet] = useState<TweetModel | null>(null);
   const [tweet, setTweet] = useState<TweetModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [usersAlias, setUsersAlias] = useState<AliasProps>({});
@@ -32,34 +30,15 @@ export default function Tweet() {
 
   useEffect(() => {
     if (workspace && tweetAddress) {
-      getTweet(workspace.program, new PublicKey(tweetAddress))
-        .then((fetchedTweet) => setOriginTweet(fetchedTweet))
+      getTweet(
+        workspace.program,
+        workspace.connection,
+        new PublicKey(tweetAddress)
+      )
+        .then((fetchedTweet) => setTweet(fetchedTweet))
         .finally(() => setLoading(false));
     }
   }, [tweetAddress, workspace]);
-
-  useEffect(() => {
-    if (!workspace || !originTweet) return;
-    let fTweet = originTweet;
-    const [aliasPDA, _] = PublicKey.findProgramAddressSync(
-      [utils.bytes.utf8.encode("user-alias"), fTweet.user.toBuffer()],
-      workspace.program.programId
-    );
-    if (usersAlias[aliasPDA.toBase58()]) {
-      fTweet.user_display = usersAlias[aliasPDA.toBase58()];
-    }
-    fTweet.comments.map((comment) => {
-      const [aPDA, _] = PublicKey.findProgramAddressSync(
-        [utils.bytes.utf8.encode("user-alias"), comment.user.toBuffer()],
-        workspace.program.programId
-      );
-      if (usersAlias[aPDA.toBase58()]) {
-        comment.user_display = usersAlias[aPDA.toBase58()];
-      }
-      return comment;
-    });
-    setTweet(fTweet);
-  }, [originTweet, usersAlias, workspace]);
 
   const onDelete = async (tweet: TweetModel) => {
     if (!workspace) return;

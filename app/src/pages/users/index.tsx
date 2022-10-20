@@ -37,7 +37,11 @@ export default function Users() {
         .then((fetchedUsers) => {
           setAllUsers(fetchedUsers);
           setFilterUsers(fetchedUsers);
-          setRecentUsers(fetchedUsers.slice(0, 5));
+          setRecentUsers(
+            fetchedUsers
+              .sort((a, b) => b.last_timestamp - a.last_timestamp)
+              .slice(0, 5)
+          );
         })
         .finally(() => setLoading(false));
     } else {

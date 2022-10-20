@@ -1,9 +1,9 @@
-import { Program, web3 } from "@project-serum/anchor";
+import { Program, utils, web3 } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { Comment } from "../../models/Comment";
 import { sleep, toCollapse } from "../../utils";
-import { getUserAlias } from "./alias";
+import { AliasProps, getUserAlias } from "./alias";
 
 export const sendComment = async (
   program: Program,
@@ -97,14 +97,29 @@ export const deleteComment = async (
   }
 };
 
-export const fetchComments = async (program: Program, filters: any[]) => {
+export const fetchComments = async (
+  program: Program,
+  filters: any[],
+  aliasObj: AliasProps
+) => {
   const comments = await program.account.comment.all(filters);
-  const allComments = comments.map((comment) => {
-    const alias = toCollapse(comment.account.user as PublicKey);
-    return new Comment(comment.publicKey, comment.account, alias);
-  });
+  const allComments = comments
+    .map((comment) => {
+      const user = comment.account.user as PublicKey;
+      const [aliasPDA, _] = PublicKey.findProgramAddressSync(
+        [utils.bytes.utf8.encode("user-alias"), user.toBuffer()],
+        program.programId
+      );
 
-  return allComments.sort((a, b) => b.timestamp - a.timestamp);
+      const alias = aliasObj[aliasPDA.toBase58()]
+        ? aliasObj[aliasPDA.toBase58()]
+        : toCollapse(user);
+
+      return new Comment(comment.publicKey, comment.account, alias);
+    })
+    .sort((a, b) => b.timestamp - a.timestamp);
+
+  return allComments;
 };
 
 export const commentTweetFilter = (tweetKey: string) => ({
