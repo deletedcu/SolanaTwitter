@@ -1,14 +1,10 @@
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { useWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace } from "../../utils";
 import { paginateTweets, userFilter } from "../api/tweets";
 
 export default function Profile() {
@@ -17,8 +13,6 @@ export default function Profile() {
   const [hasMore, setHasMore] = useState(false);
 
   let workspace = useWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
@@ -27,17 +21,6 @@ export default function Profile() {
   };
 
   const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
-
-  useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
-    } else {
-      setPagination(null);
-      setTweets([]);
-    }
-  }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
     if (workspace) {
@@ -55,7 +38,7 @@ export default function Profile() {
       setPagination(null);
       setTweets([]);
     }
-  }, [workspace]);
+  }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination) {

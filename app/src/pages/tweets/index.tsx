@@ -1,8 +1,4 @@
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import RecentTweets from "../../components/RecentTweets";
@@ -10,7 +6,7 @@ import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { Tweet } from "../../models";
 import Base from "../../templates/Base";
-import { useWorkspace, initWorkspace } from "../../utils";
+import { useWorkspace } from "../../utils";
 import { paginateTweets } from "../api/tweets";
 
 export default function Tweets() {
@@ -21,8 +17,6 @@ export default function Tweets() {
   const [recentTweets, setRecentTweets] = useState<Tweet[]>([]);
 
   let workspace = useWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
@@ -34,34 +28,24 @@ export default function Tweets() {
   };
 
   useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
-    } else {
-      setPagination(null);
-      setTweets([]);
-      setInitialLoading(false);
-    }
-  }, [wallet, connected, workspace, connection]);
-
-  useEffect(() => {
+    console.log("call useEffect", workspace)
     if (workspace) {
       setTweets([]);
       const newPagination = paginateTweets(
         workspace.program,
         workspace.connection,
         [],
-        5,
+        10,
         onNewPage
       );
       setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
+      setRecentTweets([]);
       setInitialLoading(false);
     }
-  }, [workspace]);
+  }, [workspace, connected]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
@@ -104,12 +88,7 @@ export default function Tweets() {
               <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
                 Recent Activities
               </h3>
-              {wallet && (
-                <RecentTweets
-                  tweets={recentTweets}
-                  owner={wallet.publicKey.toBase58()}
-                />
-              )}
+              <RecentTweets tweets={recentTweets} />
             </div>
           </div>
         </div>

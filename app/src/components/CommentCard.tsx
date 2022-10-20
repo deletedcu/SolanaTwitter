@@ -4,10 +4,10 @@ import { useWorkspace } from "../utils";
 import { SuperEllipseImg } from "react-superellipse";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
-  // @ts-ignore
-  const { wallet } = useWorkspace();
+  const workspace = useWorkspace();
   const userRoute =
-    wallet && wallet.publicKey.toBase58() === comment.user.toBase58()
+    workspace &&
+    workspace.wallet.publicKey.toBase58() === comment.user.toBase58()
       ? "/profile"
       : `/users/${comment.user.toBase58()}`;
 

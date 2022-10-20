@@ -3,12 +3,8 @@ import { useEffect, useState } from "react";
 import { Tweet, UserType } from "../../models";
 import { fetchUsers, paginateTweets, userFilter } from "../api/tweets";
 import TweetList from "../../components/TweetList";
-import { useWorkspace, initWorkspace } from "../../utils";
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWorkspace } from "../../utils";
+import { useWallet } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
 import { getUserAlias } from "../api/alias";
 import { PublicKey } from "@solana/web3.js";
@@ -17,7 +13,7 @@ import RecentUsers from "../../components/RecentUsers";
 export default function User() {
   const router = useRouter();
   const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [user, setUser] = useState<string>(router.query.user as string);
+  const [user] = useState<string>(router.query.user as string);
   const [userAlias, setUserAlias] = useState("");
   const [viewedUser, setViewedUser] = useState("");
   const [pagination, setPagination] = useState<any>();
@@ -25,26 +21,12 @@ export default function User() {
   const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
 
   let workspace = useWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
   const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setHasMore(more);
   };
-
-  useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
-    } else {
-      setPagination(null);
-      setTweets([]);
-      setViewedUser("");
-    }
-  }, [wallet, connected, workspace, connection]);
 
   useEffect(() => {
     if (workspace) {
@@ -68,7 +50,7 @@ export default function User() {
       setTweets([]);
       setViewedUser("");
     }
-  }, [user, viewedUser, workspace]);
+  }, [user, viewedUser, workspace, connected]);
 
   useEffect(() => {
     if (pagination && workspace) {
@@ -85,7 +67,9 @@ export default function User() {
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-skin-primary">
             <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-color-primary">
-              {wallet && user && wallet.publicKey.toBase58() === user
+              {workspace &&
+              user &&
+              workspace.wallet.publicKey.toBase58() === user
                 ? "Your Tweets"
                 : `${userAlias}'s Tweets`}
             </h2>
@@ -109,12 +93,7 @@ export default function User() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
-            {wallet && (
-              <RecentUsers
-                users={recentUsers}
-                owner={wallet.publicKey.toBase58()}
-              />
-            )}
+            <RecentUsers users={recentUsers} />
           </div>
         </div>
       </div>

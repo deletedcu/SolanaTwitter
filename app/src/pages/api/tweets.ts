@@ -25,7 +25,7 @@ export const paginateTweets = (
   connection: Connection,
   filters: any[] = [],
   perPage = 10,
-  onNewPage = (a: Tweet[], b: boolean, c: number) => {}
+  onNewPage: (a: Tweet[], b: boolean, c: number) => void
 ) => {
   let page = 0;
 

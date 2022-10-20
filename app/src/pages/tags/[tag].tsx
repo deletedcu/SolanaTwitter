@@ -1,16 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TagType, Tweet } from "../../models";
-import { useWorkspace, initWorkspace, useSlug } from "../../utils";
+import { useWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { fetchTags, paginateTweets, tagFilter } from "../api/tweets";
-import {
-  useAnchorWallet,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
 import RecentTags from "../../components/RecentTags";
@@ -19,16 +15,12 @@ export default function Tags() {
   const router = useRouter();
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [tag, setTag] = useState<string>(router.query.tag as string);
-  const [viewedTag, setViewedTag] = useState<string>();
   const [pagination, setPagination] = useState<any>();
   const [hasMore, setHasMore] = useState(false);
   const [recentTags, setRecentTags] = useState<TagType[]>([]);
 
   let workspace = useWorkspace();
-  const wallet = useAnchorWallet();
-  const { connection } = useConnection();
   const { connected } = useWallet();
-
   const slugTag = useSlug(tag);
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
@@ -48,22 +40,8 @@ export default function Tags() {
   }, [router.query.tag]);
 
   useEffect(() => {
-    if (wallet && connected) {
-      if (!workspace) {
-        initWorkspace(wallet, connection);
-      }
-    } else {
-      setPagination(null);
-      setTweets([]);
-      setViewedTag("");
-    }
-  }, [wallet, connected, workspace, connection]);
-
-  useEffect(() => {
     if (workspace) {
-      if (slugTag === viewedTag) return;
       setTweets([]);
-      setViewedTag(slugTag);
       const filters = [tagFilter(slugTag)];
       const newPagination = paginateTweets(
         workspace!.program,
@@ -76,9 +54,9 @@ export default function Tags() {
     } else {
       setPagination(null);
       setTweets([]);
-      setViewedTag("");
+      setRecentTags([]);
     }
-  }, [slugTag, viewedTag, workspace]);
+  }, [slugTag, workspace, connected]);
 
   useEffect(() => {
     if (pagination && workspace) {
@@ -109,7 +87,7 @@ export default function Tags() {
           >
             {tagIcon}
           </TweetSearch>
-          <TweetForm added={addTweet} forceTag={viewedTag} />
+          <TweetForm added={addTweet} forceTag={slugTag} />
           {pagination && (
             <TweetList
               tweets={tweets}
