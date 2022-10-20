@@ -24,7 +24,7 @@ import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
 import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
 import { SlopeWalletAdapter } from "@solana/wallet-adapter-slope";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { ThemeProvider } from "../contexts/themeProvider";
+import { ThemeProvider } from "../contexts/ThemeContext";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);

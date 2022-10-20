@@ -37,8 +37,7 @@ export default function User() {
       setViewedUser(user);
       const filters = [userFilter(user)];
       const newPagination = paginateTweets(
-        workspace!.program,
-        workspace!.connection,
+        workspace,
         filters,
         10,
         onNewPage

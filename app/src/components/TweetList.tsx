@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useTheme } from "../contexts/themeProvider";
+import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { deleteTweet } from "../pages/api/tweets";
@@ -30,8 +30,7 @@ export default function TweetList(props: TweetListProps) {
       theme
     );
     const result = await deleteTweet(
-      workspace.program,
-      workspace.wallet,
+      workspace,
       tweet
     );
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");

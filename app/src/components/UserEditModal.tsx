@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { SuperEllipseImg } from "react-superellipse";
-import { useTheme } from "../contexts/themeProvider";
+import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { createUserAlias, updateUserAlias } from "../pages/api/alias";
 import { notifyLoading, notifyUpdate, toCollapse } from "../utils";

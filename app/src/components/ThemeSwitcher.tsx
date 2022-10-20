@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useTheme } from "../contexts/themeProvider";
+import useTheme from "../hooks/useTheme";
 
 export default function ThemeSwitcher() {
   const [hover, setHover] = useState(false);

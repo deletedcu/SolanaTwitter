@@ -2,9 +2,9 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useTheme } from "../contexts/themeProvider";
 import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
 import { useSlug } from "../hooks/useSlug";
+import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { sendTweet } from "../pages/api/tweets";
@@ -52,8 +52,7 @@ export default function TweetForm({
       theme
     );
     const result = await sendTweet(
-      workspace.program,
-      workspace.wallet,
+      workspace,
       effectiveTag,
       data.content
     );

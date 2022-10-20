@@ -28,8 +28,7 @@ export default function Profile() {
     if (workspace) {
       const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
       const newPagination = paginateTweets(
-        workspace.program,
-        workspace.connection,
+        workspace,
         filters,
         10,
         onNewPage

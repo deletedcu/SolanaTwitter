@@ -1,8 +1,8 @@
 import { PublicKey } from "@solana/web3.js";
 import TextareaAutosize from "react-autosize-textarea/lib";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useTheme } from "../contexts/themeProvider";
 import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
+import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Comment } from "../models/Comment";
 import { sendComment } from "../pages/api/comments";

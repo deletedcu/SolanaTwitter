@@ -6,8 +6,8 @@ import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
 import { deleteTweet, getTweet } from "../api/tweets";
 import { notifyLoading, notifyUpdate } from "../../utils";
-import { useTheme } from "../../contexts/themeProvider";
 import useWorkspace from "../../hooks/useWorkspace";
+import useTheme from "../../hooks/useTheme";
 
 export default function Tweet() {
   const router = useRouter();
@@ -37,8 +37,7 @@ export default function Tweet() {
       theme
     );
     const result = await deleteTweet(
-      workspace.program,
-      workspace.wallet,
+      workspace,
       tweet
     );
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");

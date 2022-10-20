@@ -33,8 +33,7 @@ export default function Tweets() {
     if (workspace) {
       setTweets([]);
       const newPagination = paginateTweets(
-        workspace.program,
-        workspace.connection,
+        workspace,
         [],
         10,
         onNewPage

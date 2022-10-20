@@ -47,8 +47,7 @@ export default function Tags() {
       setTweets([]);
       const filters = [tagFilter(slugTag)];
       const newPagination = paginateTweets(
-        workspace!.program,
-        workspace!.connection,
+        workspace,
         filters,
         10,
         onNewPage
