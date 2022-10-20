@@ -34,13 +34,19 @@ export default function useWorkspace() {
   }, [connection, wallet]);
 
   const program = useMemo(
-    // @ts-ignore
-    () => new Program(idl, programId, provider),
+    () => {
+      if (provider) {
+        // @ts-ignore
+        return new Program(idl, programId, provider)
+      } else {
+        return null;
+      }
+    },
     [provider]
   );
 
   const workspace = useMemo(() => {
-    if (wallet) {
+    if (wallet && program) {
       return {
         connection,
         program,

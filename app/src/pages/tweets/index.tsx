@@ -68,10 +68,6 @@ export default function Tweets() {
 
   return (
     <>
-      <Head>
-        <title>Solana Twitter</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
       <Base>
         <div className="flex w-full">
           <div className="mr-16 grow" style={{ position: "relative" }}>
