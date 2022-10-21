@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import { ToastContainer } from "react-toastify";
 
 // Default styles that can be overridden by your app
 import "@solana/wallet-adapter-react-ui/styles.css";
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Component {...pageProps} />
+        <ToastContainer />
       </>
     </AppContext>
   );

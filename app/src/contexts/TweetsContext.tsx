@@ -54,7 +54,6 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     setTweets((prev) => [...prev, ...newTweets]);
     setLoading(false);
     setHasMore(more);
-    if (page == 0) setRecentTweets(newTweets.slice(0, 5));
   };
 
   useEffect(() => {
@@ -73,6 +72,10 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       pagination.prefetch().then(pagination.getNextPage);
     }
   }, [pagination]);
+
+  useEffect(() => {
+    setRecentTweets(tweets.slice(0, 5));
+  }, [tweets]);
 
   const _sendTweet = useCallback(
     async (tag: string, content: string) => {
