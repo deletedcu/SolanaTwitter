@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
 import { ReactNode } from "react";
+import { TagsProvider } from "./TagsContext";
 import { ThemeProvider } from "./ThemeContext";
 import { TweetsProvider } from "./TweetsContext";
+import { UsersProvider } from "./UsersContext";
 
 const SolanaProvider = dynamic(
   () => import("./SolanaContext").then(({ SolanaProvider }) => SolanaProvider),
@@ -13,9 +15,11 @@ export default function AppContext({ children }: { children: ReactNode }) {
     <SolanaProvider>
       <ThemeProvider>
         <TweetsProvider>
-          {children}
+          <UsersProvider>
+            <TagsProvider>{children}</TagsProvider>
+          </UsersProvider>
         </TweetsProvider>
       </ThemeProvider>
     </SolanaProvider>
-  )
+  );
 }

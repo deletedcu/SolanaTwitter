@@ -103,7 +103,7 @@ export const deleteUserAlias = async (
 };
 
 export const getUserAlias = async (
-  program: Program,
+  { program }: { program: Program },
   publicKey: PublicKey
 ): Promise<string> => {
   const [userAliasPDA, _] = await PublicKey.findProgramAddress(

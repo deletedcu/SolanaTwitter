@@ -1,58 +1,21 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useState } from "react";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { useEffect } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
-import useWorkspace from "../../hooks/useWorkspace";
-import { Tweet } from "../../models";
+import useTweets from "../../hooks/useTweets";
 import Base from "../../templates/Base";
-import { paginateTweets, userFilter } from "../api/tweets";
+import { userFilter } from "../api/tweets";
 
 export default function Profile() {
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [pagination, setPagination] = useState<any>();
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  let workspace = useWorkspace();
-  const { connected } = useWallet();
-
-  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
-    setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
-    setLoading(false);
-  };
-
-  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
+  const { tweets, loading, hasMore, loadMore, setFilters } = useTweets();
+  const wallet = useAnchorWallet();
 
   useEffect(() => {
-    if (workspace) {
-      const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
-      const newPagination = paginateTweets(
-        workspace,
-        filters,
-        10,
-        onNewPage
-      );
-      setTweets([]);
-      setPagination(newPagination);
-    } else {
-      setPagination(null);
-      setTweets([]);
-      setLoading(false);
+    if (wallet) {
+      const filters = [userFilter(wallet.publicKey.toBase58())];
+      setFilters(filters);
     }
-  }, [workspace, connected]);
-
-  useEffect(() => {
-    if (pagination) {
-      setLoading(true);
-      pagination.prefetch().then(pagination.getNextPage);
-    }
-  }, [pagination]);
-
-  const loadMore = () => {
-    setLoading(true);
-    pagination.getNextPage();
-  };
+  }, [setFilters, wallet]);
 
   return (
     <Base>
@@ -64,14 +27,12 @@ export default function Profile() {
             </h2>
           </div>
           <TweetForm />
-          {pagination && (
-            <TweetList
-              tweets={tweets}
-              loading={loading}
-              hasMore={hasMore}
-              loadMore={loadMore}
-            />
-          )}
+          <TweetList
+            tweets={tweets}
+            loading={loading}
+            hasMore={hasMore}
+            loadMore={loadMore}
+          />
         </div>
         <div className="relative mb-8 w-72"></div>
       </div>

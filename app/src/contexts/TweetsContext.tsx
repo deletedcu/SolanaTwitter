@@ -69,7 +69,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       setInitialLoading(false);
       setLoading(false);
     }
-  }, [workspace, connected, filters]);
+  }, [workspace, filters]);
 
   useEffect(() => {
     if (pagination && !initialLoading) {
