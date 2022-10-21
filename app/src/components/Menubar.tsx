@@ -1,5 +1,7 @@
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
+import { Breadcrumb } from "flowbite-react";
+import { HiOutlineHome } from "react-icons/hi";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
 import { useRouter } from "next/router";
@@ -114,69 +116,35 @@ function Path() {
 
   const generatePath = (data: PathType[]) => {
     return (
-      <ul className="relative z-40 flex items-center py-0.5 px-6 text-color-secondary">
-        <li>
-          <Link href="/">
-            <a className="flex items-center hover:underline">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2 iconify iconify--heroicons-outline"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m3 12l2-2m0 0l7-7l7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"
-                ></path>
-              </svg>
-              <span className="ml-px">Home</span>
-            </a>
-          </Link>
-        </li>
+      <Breadcrumb className="py-0.5 px-6">
+        <Breadcrumb.Item href="/">
+          <span className="flex items-center text-color-secondary hover:text-color-primary">
+            <HiOutlineHome className="mr-2" size="16" />
+            <span>Home</span>
+          </span>
+        </Breadcrumb.Item>
         {data.map((item, i) => (
-          <li key={i} className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3 relative mx-1 iconify iconify--heroicons-outline"
-              width="1em"
-              height="1em"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m9 5l7 7l-7 7"
-              ></path>
-            </svg>
+          <>
             {item.path ? (
-              <span className="ml-px">
-                <Link href={item.path}>
-                  <a className="hover:underline">{item.name}</a>
-                </Link>
-              </span>
+              <Breadcrumb.Item key={i} href={item.path}>
+                <span className="text-color-secondary hover:text-color-primary">
+                  {item.name}
+                </span>
+              </Breadcrumb.Item>
             ) : (
-              <span className="ml-px">{item.name}</span>
+              <Breadcrumb.Item key={i}>
+                <span className="text-color-third">{item.name}</span>
+              </Breadcrumb.Item>
             )}
-          </li>
+          </>
         ))}
-      </ul>
+      </Breadcrumb>
     );
   };
 
   return (
     <div className="fixed">
       <div className="text-sm relative z-20 bg-gradient-to-r from-gray-800/20 to-transparent pb-px backdrop-blur transition-all">
-        <div className="glass absolute z-10 -ml-[0.5px] h-full w-full opacity-5"></div>
         {generatePaths()}
       </div>
     </div>
