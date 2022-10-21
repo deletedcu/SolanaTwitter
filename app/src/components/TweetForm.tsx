@@ -5,7 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { CONTENT_LIMIT, TAG_LIMIT } from "../constants";
 import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
 import { useSlug } from "../hooks/useSlug";
+import useTheme from "../hooks/useTheme";
 import useTweets from "../hooks/useTweets";
+import { notifyLoading, notifyUpdate } from "../utils";
 
 type FormValues = {
   content: string;
@@ -15,6 +17,7 @@ type FormValues = {
 export default function TweetForm({ forceTag }: { forceTag?: string }) {
   const { sendTweet } = useTweets();
   const { connected } = useWallet();
+  const { theme } = useTheme();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
@@ -36,9 +39,14 @@ export default function TweetForm({ forceTag }: { forceTag?: string }) {
   // Actions
   const send = async (data: FormValues) => {
     if (!canTweet) return;
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
     const result = await sendTweet(effectiveTag, data.content);
+    notifyUpdate(toastId, result.message, result.tweet ? "success" : "error");
 
-    if (result) {
+    if (result.tweet) {
       resetField("content");
       setTag("");
     }

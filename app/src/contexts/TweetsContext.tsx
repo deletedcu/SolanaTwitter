@@ -7,7 +7,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import {
@@ -17,7 +16,6 @@ import {
   sendTweet,
   updateTweet,
 } from "../pages/api/tweets";
-import { notifyLoading, notifyUpdate } from "../utils";
 
 interface TweetsContextState {
   tweets: Tweet[];
@@ -26,9 +24,18 @@ interface TweetsContextState {
   hasMore: boolean;
   prefetch(filters: any[]): void;
   loadMore(): void;
-  sendTweet(tag: string, content: string): Promise<boolean>;
-  updateTweet(tweet: Tweet, tag: string, content: string): Promise<boolean>;
-  deleteTweet(tweet: Tweet): Promise<boolean>;
+  sendTweet(
+    tag: string,
+    content: string
+  ): Promise<{ tweet: Tweet | null; message: string }>;
+  updateTweet(
+    tweet: Tweet,
+    tag: string,
+    content: string
+  ): Promise<{ success: boolean; message: string }>;
+  deleteTweet(
+    tweetKey: PublicKey
+  ): Promise<{ success: boolean; message: string }>;
   getTweet(pubkey: PublicKey): Promise<Tweet | null>;
 }
 
@@ -41,15 +48,13 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
 
-  const { theme } = useTheme();
   const workspace = useWorkspace();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setLoading(false);
     setHasMore(more);
-    if (page == 0)
-      setRecentTweets(newTweets.slice(0, 5));
+    if (page == 0) setRecentTweets(newTweets.slice(0, 5));
   };
 
   useEffect(() => {
@@ -67,80 +72,58 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
     }
-  }, [pagination])
+  }, [pagination]);
 
   const _sendTweet = useCallback(
     async (tag: string, content: string) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
         const result = await sendTweet(workspace, tag, content);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.tweet ? "success" : "error"
-        );
         if (result.tweet) {
           setTweets([result.tweet, ...tweets]);
-          return true;
         }
+        return result;
+      } else {
+        return { tweet: null, message: "Connect wallet to starting tweet..." };
       }
-
-      return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tweets, workspace]
+    [workspace]
   );
 
   const _updateTweet = useCallback(
     async (tweet: Tweet, tag: string, content: string) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
         const result = await updateTweet(workspace, tweet, tag, content);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.success ? "success" : "error"
-        );
-
-        return result.success;
+        return result;
+      } else {
+        return {
+          success: false,
+          message: "Connect wallet to update tweet...",
+        };
       }
-      return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [workspace]
   );
 
   const _deleteTweet = useCallback(
-    async (tweet: Tweet) => {
+    async (tweetKey: PublicKey) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
-        const result = await deleteTweet(workspace, tweet);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.success ? "success" : "error"
-        );
+        const result = await deleteTweet(workspace, tweetKey);
 
         if (result.success) {
           setTweets(
-            tweets.filter(
-              (t) => t.publickey.toBase58() !== tweet.publickey.toBase58()
-            )
+            tweets.filter((t) => t.publickey.toBase58() !== tweetKey.toBase58())
           );
         }
 
-        return result.success;
+        return result;
+      } else {
+        return {
+          success: false,
+          message: "Connect wallet to delete tweet...",
+        };
       }
-      return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tweets, workspace]
@@ -157,14 +140,17 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     [workspace]
   );
 
-  const prefetch = useCallback((filters: any[]) => {
-    if (workspace) {
-      setTweets([]);
-      setRecentTweets([]);
-      const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
-      setPagination(newPagination);
-    }
-  }, [workspace]);
+  const prefetch = useCallback(
+    (filters: any[]) => {
+      if (workspace) {
+        setTweets([]);
+        setRecentTweets([]);
+        const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
+        setPagination(newPagination);
+      }
+    },
+    [workspace]
+  );
 
   const loadMore = useCallback(() => {
     if (pagination) {

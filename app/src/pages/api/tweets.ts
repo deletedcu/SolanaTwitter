@@ -183,13 +183,13 @@ export const updateTweet = async (
 
 export const deleteTweet = async (
   { program, wallet }: { program: Program; wallet: AnchorWallet },
-  tweet: Tweet
+  tweetKey: PublicKey
 ) => {
   try {
     await program.methods
       .deleteTweet()
       .accounts({
-        tweet: tweet.publickey,
+        tweet: tweetKey,
         user: wallet.publicKey,
       })
       .rpc();

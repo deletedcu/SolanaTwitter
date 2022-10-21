@@ -18,7 +18,8 @@ export default function Tags() {
   const [viewedTag, setViewedTag] = useState<string>("");
 
   const workspace = useWorkspace();
-  const { tweets, loading, hasMore, loadMore, prefetch } = useTweets();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
   const { recentTags } = useTags();
 
   const search = (str: string) => {
@@ -66,6 +67,7 @@ export default function Tags() {
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
           ) : null}
         </div>
@@ -74,9 +76,7 @@ export default function Tags() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Tags
             </h3>
-            {workspace ? (
-              <RecentTags tags={recentTags} />
-            ) : null}
+            {workspace ? <RecentTags tags={recentTags} /> : null}
           </div>
         </div>
       </div>

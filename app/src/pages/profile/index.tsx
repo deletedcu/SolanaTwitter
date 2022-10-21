@@ -8,7 +8,8 @@ import { userFilter } from "../api/tweets";
 
 export default function Profile() {
   const workspace = useWorkspace();
-  const { tweets, loading, hasMore, loadMore, prefetch } = useTweets();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
 
   useEffect(() => {
     if (workspace) {
@@ -34,6 +35,7 @@ export default function Profile() {
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
           ) : null}
         </div>

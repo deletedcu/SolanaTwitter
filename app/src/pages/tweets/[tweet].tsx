@@ -5,6 +5,8 @@ import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
 import useTweets from "../../hooks/useTweets";
+import useTheme from "../../hooks/useTheme";
+import { notifyLoading, notifyUpdate } from "../../utils";
 
 export default function Tweet() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export default function Tweet() {
   const [loading, setLoading] = useState(true);
   const tweetAddress = router.query.tweet as string;
 
+  const { theme } = useTheme();
   const { getTweet, deleteTweet } = useTweets();
 
   useEffect(() => {
@@ -23,8 +26,13 @@ export default function Tweet() {
   }, [getTweet, tweetAddress]);
 
   const onDelete = async (tweet: TweetModel) => {
-    const result = await deleteTweet(tweet);
-    if (result) {
+    const toastId = notifyLoading(
+      "Transaction in progress. Please wait...",
+      theme
+    );
+    const result = await deleteTweet(tweet.publickey);
+    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
+    if (result.success) {
       setTweet(null);
     }
   };

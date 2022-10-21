@@ -1,6 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
 import { createContext, ReactNode, useCallback, useMemo } from "react";
-import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
 import { Comment } from "../models/Comment";
 import {
@@ -8,40 +7,34 @@ import {
   sendComment,
   updateComment,
 } from "../pages/api/comments";
-import { notifyLoading, notifyUpdate } from "../utils";
 
 interface CommentsContextState {
-  sendComment(tweetKey: PublicKey, content: string): Promise<Comment | null>;
-  updateComment(commentKey: PublicKey, content: string): Promise<boolean>;
-  deleteComment(commentKey: PublicKey): Promise<boolean>;
+  sendComment(
+    tweetKey: PublicKey,
+    content: string
+  ): Promise<{ comment: Comment | null; message: string }>;
+  updateComment(
+    commentKey: PublicKey,
+    content: string
+  ): Promise<{ success: boolean; message: string }>;
+  deleteComment(
+    commentKey: PublicKey
+  ): Promise<{ success: boolean; message: string }>;
 }
 
 const CommentsContext = createContext<CommentsContextState>(null!);
 
 export function CommentsProvider({ children }: { children: ReactNode }) {
   const workspace = useWorkspace();
-  const { theme } = useTheme();
 
   const _sendComment = useCallback(
     async (tweetKey: PublicKey, content: string) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
         const result = await sendComment(workspace, tweetKey, content);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.comment ? "success" : "error"
-        );
-
-        if (result.comment) {
-          return result.comment;
-        }
+        return result;
+      } else {
+        return { comment: null, message: "Connect wallet to send comment..." };
       }
-
-      return null;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [workspace]
@@ -50,20 +43,14 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
   const _updateComment = useCallback(
     async (commentKey: PublicKey, content: string) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
         const result = await updateComment(workspace, commentKey, content);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.success ? "success" : "error"
-        );
-
-        return result.success;
+        return result;
+      } else {
+        return {
+          success: false,
+          message: "Connect wallet to update comment...",
+        };
       }
-      return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [workspace]
@@ -72,20 +59,11 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
   const _deleteComment = useCallback(
     async (commentKey: PublicKey) => {
       if (workspace) {
-        const toastId = notifyLoading(
-          "Transaction in progress. Please wait...",
-          theme
-        );
         const result = await deleteComment(workspace, commentKey);
-        notifyUpdate(
-          toastId,
-          result.message,
-          result.success ? "success" : "error"
-        );
-
-        return result.success;
+        return result;
+      } else {
+        return { success: false, message: "Connect wallet to delete comment" };
       }
-      return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [workspace]

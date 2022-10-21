@@ -8,8 +8,15 @@ import Base from "../../templates/Base";
 
 export default function Tweets() {
   const workspace = useWorkspace();
-  const { tweets, recentTweets, loading, hasMore, loadMore, prefetch } =
-    useTweets();
+  const {
+    tweets,
+    recentTweets,
+    loading,
+    hasMore,
+    loadMore,
+    prefetch,
+    deleteTweet,
+  } = useTweets();
 
   useEffect(() => {
     prefetch([]);
@@ -32,6 +39,7 @@ export default function Tweets() {
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
           ) : null}
         </div>

@@ -16,7 +16,8 @@ export default function User() {
   const [viewedUser, setViewedUser] = useState("");
 
   const workspace = useWorkspace();
-  const { tweets, loading, hasMore, loadMore, prefetch } = useTweets();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
   const { recentUsers, getUserAlias } = useUsers();
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export default function User() {
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
           ) : null}
           {workspace && !loading && tweets.length === 0 && (

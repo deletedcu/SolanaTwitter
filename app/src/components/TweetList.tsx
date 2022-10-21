@@ -1,3 +1,4 @@
+import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
@@ -10,11 +11,12 @@ interface TweetListProps {
   tweets: Tweet[];
   loading: boolean;
   hasMore: boolean;
-  loadMore: () => void;
+  loadMore(): void;
+  deleteTweet(tweetKey: PublicKey): Promise<{ success: boolean, message: string }>;
 }
 
 export default function TweetList(props: TweetListProps) {
-  const { tweets, loading, hasMore, loadMore } = props;
+  const { tweets, loading, hasMore, loadMore, deleteTweet } = props;
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
   const workspace = useWorkspace();
   const { theme } = useTheme();
@@ -30,8 +32,7 @@ export default function TweetList(props: TweetListProps) {
       theme
     );
     const result = await deleteTweet(
-      workspace,
-      tweet
+      tweet.publickey
     );
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
