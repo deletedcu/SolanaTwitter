@@ -9,9 +9,9 @@ import { UsersProvider } from "./UsersContext";
 
 export default function AppContext({ children }: { children: ReactNode }) {
   return (
-    <AutoConnectProvider>
-      <SolanaProvider>
-        <ThemeProvider>
+    <ThemeProvider>
+      <AutoConnectProvider>
+        <SolanaProvider>
           <TweetsProvider>
             <UsersProvider>
               <TagsProvider>
@@ -19,8 +19,8 @@ export default function AppContext({ children }: { children: ReactNode }) {
               </TagsProvider>
             </UsersProvider>
           </TweetsProvider>
-        </ThemeProvider>
-      </SolanaProvider>
-    </AutoConnectProvider>
+        </SolanaProvider>
+      </AutoConnectProvider>
+    </ThemeProvider>
   );
 }

@@ -18,14 +18,17 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
   // @ts-ignore
-  const wallets: Adapter[] = [
-    new PhantomWalletAdapter(),
-    new TorusWalletAdapter(),
-    new LedgerWalletAdapter(),
-    new SolletWalletAdapter(),
-    new SlopeWalletAdapter(),
-    new SolflareWalletAdapter(),
-  ];
+  const wallets: Adapter[] = useMemo(
+    () => [
+      new PhantomWalletAdapter(),
+      new TorusWalletAdapter(),
+      new LedgerWalletAdapter(),
+      new SolletWalletAdapter({ network }),
+      new SlopeWalletAdapter(),
+      new SolflareWalletAdapter(),
+    ],
+    [network]
+  );
 
   return (
     <ConnectionProvider endpoint={endpoint}>

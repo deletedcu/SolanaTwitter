@@ -1,9 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { Theme } from "react-toastify";
 
 interface ThemeContextState {
@@ -17,12 +12,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    // @ts-ignore
-    setTheme(window.localStorage.getItem("theme") === null ? "dark" : window.localStorage.getItem("theme"));
+    const originTheme = window.localStorage.getItem("theme");
+    if (originTheme) {
+      setTheme(originTheme as Theme);
+    } else {
+      setTheme("dark");
+    }
   }, []);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme((prev) => {
+      const newTheme = prev === "light" ? "dark" : "light";
+      window.localStorage.setItem("theme", newTheme);
+      return newTheme;
+    });
   };
 
   return (

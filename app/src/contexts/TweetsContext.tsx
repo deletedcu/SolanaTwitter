@@ -40,7 +40,6 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(false);
   const [filters, setFilters] = useState<any[]>([]);
 
   const { theme } = useTheme();
@@ -58,26 +57,25 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (workspace) {
-      console.log("call useEffect workspace", filters);
+      console.log("call useEffect workspace in TweetsContext", filters);
       setTweets([]);
       const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
       setPagination(newPagination);
     } else {
       setPagination(null);
       setTweets([]);
-      setInitialLoading(false);
       setLoading(false);
+      setFilters([]);
     }
   }, [workspace, filters]);
 
   useEffect(() => {
-    if (pagination && !initialLoading) {
-      console.log("call useEffect pagination", filters);
+    if (pagination) {
+      console.log("call useEffect pagination in TweetsContext");
       setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
-      setInitialLoading(true);
     }
-  }, [initialLoading, pagination]);
+  }, [pagination]);
 
   const sendTweetAndRefresh = useCallback(
     async (tag: string, content: string) => {
