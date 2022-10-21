@@ -144,7 +144,7 @@ export default function UserEditModal({
                           })}
                           id="name"
                           type="text"
-                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary focus:focus-input focus:ring-0"
+                          className="form-input block w-full h-12 flex-1 text-color-secondary bg-transparent rounded-none rounded-r-md border-skin-primary"
                           placeholder={alias}
                           autoComplete="off"
                           maxLength={LIMIT}

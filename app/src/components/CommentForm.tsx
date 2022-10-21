@@ -62,7 +62,7 @@ export default function CommentForm({
         })}
         id="content"
         rows={1}
-        className="mb-3 w-full resize-none text-lg text-color-secondary focus:outline-none bg-transparent"
+        className="mb-3 w-full resize-none text-lg text-color-secondary"
         placeholder="Add Comment..."
       />
       <div className="-m-2 flex flex-wrap items-center justify-between">

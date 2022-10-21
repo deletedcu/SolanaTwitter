@@ -58,10 +58,6 @@
     text-shadow: 0 1px rgb(0 0 0 / 5%);
   }
 
-  .focus-input {
-    @apply outline-none border border-skin-secondary;
-  }
-
   /** ------------------------ThemeSwitcher component--------------------------------- */
   .swap {
     position: relative;
@@ -114,6 +110,18 @@
     opacity: 0;
   }
   /** -------------------------------------------------------------------------------- */
+}
+
+[type='text']:focus {
+  @apply outline-none border border-skin-secondary ring-transparent;
+}
+
+textarea {
+  @apply border-transparent bg-transparent;
+}
+
+textarea:focus {
+  @apply outline-none border-transparent ring-transparent;
 }
 
 .szh-menu {

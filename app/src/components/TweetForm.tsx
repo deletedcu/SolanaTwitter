@@ -67,7 +67,7 @@ export default function TweetForm({ forceTag }: { forceTag?: string }) {
             })}
             id="content"
             rows={1}
-            className="mb-3 w-full resize-none text-xl focus:outline-none text-color-secondary bg-transparent"
+            className="mb-3 w-full resize-none text-xl text-color-secondary"
             placeholder="What's happening?"
           />
           <div className="-m-2 flex flex-wrap items-center justify-between">
@@ -79,7 +79,7 @@ export default function TweetForm({ forceTag }: { forceTag?: string }) {
                 value={effectiveTag}
                 type="text"
                 placeholder="tag"
-                className="text-primary-500 rounded-full bg-fill-secondary focus:focus-input py-2 pl-10 pr-4"
+                className="text-primary-500 rounded-full bg-fill-secondary border-transparent y-2 pl-10 pr-4"
                 disabled={!!forceTag}
                 autoComplete="off"
               />
