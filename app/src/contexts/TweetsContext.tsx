@@ -24,12 +24,12 @@ interface TweetsContextState {
   recentTweets: Tweet[];
   loading: boolean;
   hasMore: boolean;
-  loadMore: () => void;
-  sendTweet: (tag: string, content: string) => Promise<boolean>;
-  updateTweet: (tweet: Tweet, tag: string, content: string) => Promise<boolean>;
-  deleteTweet: (tweet: Tweet) => Promise<boolean>;
-  getTweet: (pubkey: PublicKey) => Promise<Tweet | null>;
-  setFilters: (filters: any[]) => void;
+  prefetch(filters: any[]): void;
+  loadMore(): void;
+  sendTweet(tag: string, content: string): Promise<boolean>;
+  updateTweet(tweet: Tweet, tag: string, content: string): Promise<boolean>;
+  deleteTweet(tweet: Tweet): Promise<boolean>;
+  getTweet(pubkey: PublicKey): Promise<Tweet | null>;
 }
 
 const TweetsContext = createContext<TweetsContextState>(null!);
@@ -40,7 +40,6 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
   const [pagination, setPagination] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const [filters, setFilters] = useState<any[]>([]);
 
   const { theme } = useTheme();
   const workspace = useWorkspace();
@@ -49,35 +48,28 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     setTweets((prev) => [...prev, ...newTweets]);
     setLoading(false);
     setHasMore(more);
+    if (page == 0)
+      setRecentTweets(newTweets.slice(0, 5));
   };
 
   useEffect(() => {
-    setRecentTweets(tweets.slice(0, 5));
-  }, [tweets]);
-
-  useEffect(() => {
-    if (workspace) {
-      console.log("call useEffect workspace in TweetsContext", filters);
-      setTweets([]);
-      const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
-      setPagination(newPagination);
-    } else {
+    if (!workspace) {
       setPagination(null);
       setTweets([]);
+      setRecentTweets([]);
       setLoading(false);
-      setFilters([]);
     }
-  }, [workspace, filters]);
+  }, [workspace]);
 
   useEffect(() => {
     if (pagination) {
-      console.log("call useEffect pagination in TweetsContext");
+      console.log("call useEffect tweets pagination");
       setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
     }
-  }, [pagination]);
+  }, [pagination])
 
-  const sendTweetAndRefresh = useCallback(
+  const _sendTweet = useCallback(
     async (tag: string, content: string) => {
       if (workspace) {
         const toastId = notifyLoading(
@@ -102,7 +94,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     [tweets, workspace]
   );
 
-  const updateTweetAndRefresh = useCallback(
+  const _updateTweet = useCallback(
     async (tweet: Tweet, tag: string, content: string) => {
       if (workspace) {
         const toastId = notifyLoading(
@@ -124,7 +116,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     [workspace]
   );
 
-  const deleteTweetAndRefresh = useCallback(
+  const _deleteTweet = useCallback(
     async (tweet: Tweet) => {
       if (workspace) {
         const toastId = notifyLoading(
@@ -165,6 +157,15 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
     [workspace]
   );
 
+  const prefetch = useCallback((filters: any[]) => {
+    if (workspace) {
+      setTweets([]);
+      setRecentTweets([]);
+      const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
+      setPagination(newPagination);
+    }
+  }, [workspace]);
+
   const loadMore = useCallback(() => {
     if (pagination) {
       setLoading(true);
@@ -178,22 +179,23 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       recentTweets,
       loading,
       hasMore,
-      loadMore: loadMore,
-      sendTweet: sendTweetAndRefresh,
-      updateTweet: updateTweetAndRefresh,
-      deleteTweet: deleteTweetAndRefresh,
+      prefetch,
+      loadMore,
+      sendTweet: _sendTweet,
+      updateTweet: _updateTweet,
+      deleteTweet: _deleteTweet,
       getTweet: getTweetFromPublicKey,
-      setFilters: setFilters,
     }),
     [
       tweets,
       recentTweets,
       loading,
       hasMore,
+      prefetch,
       loadMore,
-      sendTweetAndRefresh,
-      updateTweetAndRefresh,
-      deleteTweetAndRefresh,
+      _sendTweet,
+      _updateTweet,
+      _deleteTweet,
       getTweetFromPublicKey,
     ]
   );

@@ -15,8 +15,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const originTheme = window.localStorage.getItem("theme");
     if (originTheme) {
       setTheme(originTheme as Theme);
-    } else {
-      setTheme("dark");
     }
   }, []);
 

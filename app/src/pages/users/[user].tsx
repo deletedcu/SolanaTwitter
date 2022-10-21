@@ -7,25 +7,34 @@ import { PublicKey } from "@solana/web3.js";
 import RecentUsers from "../../components/RecentUsers";
 import useTweets from "../../hooks/useTweets";
 import useUsers from "../../hooks/useUsers";
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function User() {
   const router = useRouter();
-  const [user] = useState<string>(router.query.user as string);
+  const [user, setUser] = useState<string>("");
   const [userAlias, setUserAlias] = useState("");
   const [viewedUser, setViewedUser] = useState("");
 
-  const { tweets, loading, hasMore, loadMore, setFilters } = useTweets();
+  const workspace = useWorkspace();
+  const { tweets, loading, hasMore, loadMore, prefetch } = useTweets();
   const { recentUsers, getUserAlias } = useUsers();
-  const wallet = useAnchorWallet();
 
   useEffect(() => {
-    if (user === viewedUser) return;
-    getUserAlias(new PublicKey(user)).then((value) => setUserAlias(value));
-    setViewedUser(user);
-    const filters = [userFilter(user)];
-    setFilters(filters);
-  }, [getUserAlias, setFilters, user, viewedUser]);
+    setUser(router.query.user as string);
+  }, [router.query]);
+
+  useEffect(() => {
+    if (workspace) {
+      if (user === viewedUser) return;
+      getUserAlias(new PublicKey(user)).then((value) => setUserAlias(value));
+      setViewedUser(user);
+      const filters = [userFilter(user)];
+      prefetch(filters);
+    } else {
+      setViewedUser("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, workspace]);
 
   return (
     <Base>
@@ -33,18 +42,22 @@ export default function User() {
         <div className="mr-16 grow" style={{ position: "relative" }}>
           <div className="mb-8 flex space-x-6 whitespace-nowrap border-b border-skin-primary">
             <h2 className="-mb-px flex border-b-2 border-sky-500 pb-2.5 font-semibold leading-6 text-color-primary">
-              {wallet && user && wallet.publicKey.toBase58() === user
+              {workspace &&
+              user &&
+              workspace.wallet.publicKey.toBase58() === user
                 ? "Your Tweets"
                 : `${userAlias}'s Tweets`}
             </h2>
           </div>
-          <TweetList
-            tweets={tweets}
-            loading={loading}
-            hasMore={hasMore}
-            loadMore={loadMore}
-          />
-          {!loading && tweets.length === 0 && (
+          {workspace ? (
+            <TweetList
+              tweets={tweets}
+              loading={loading}
+              hasMore={hasMore}
+              loadMore={loadMore}
+            />
+          ) : null}
+          {workspace && !loading && tweets.length === 0 && (
             <div className="p-8 text-center text-color-third">
               User not found...
             </div>
@@ -55,7 +68,7 @@ export default function User() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
-            <RecentUsers users={recentUsers} />
+            {workspace ? <RecentUsers users={recentUsers} /> : null}
           </div>
         </div>
       </div>

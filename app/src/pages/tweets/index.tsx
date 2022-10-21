@@ -1,11 +1,20 @@
+import { useEffect } from "react";
 import RecentTweets from "../../components/RecentTweets";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import useTweets from "../../hooks/useTweets";
+import useWorkspace from "../../hooks/useWorkspace";
 import Base from "../../templates/Base";
 
 export default function Tweets() {
-  const { tweets, recentTweets, loading, hasMore, loadMore } = useTweets();
+  const workspace = useWorkspace();
+  const { tweets, recentTweets, loading, hasMore, loadMore, prefetch } =
+    useTweets();
+
+  useEffect(() => {
+    prefetch([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace]);
 
   return (
     <Base>
@@ -17,19 +26,21 @@ export default function Tweets() {
             </h2>
           </div>
           <TweetForm />
-          <TweetList
-            tweets={tweets}
-            loading={loading}
-            hasMore={hasMore}
-            loadMore={loadMore}
-          />
+          {workspace ? (
+            <TweetList
+              tweets={tweets}
+              loading={loading}
+              hasMore={hasMore}
+              loadMore={loadMore}
+            />
+          ) : null}
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Activities
             </h3>
-            <RecentTweets tweets={recentTweets} />
+            {workspace ? <RecentTweets tweets={recentTweets} /> : null}
           </div>
         </div>
       </div>

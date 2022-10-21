@@ -1,21 +1,22 @@
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { useEffect } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import useTweets from "../../hooks/useTweets";
+import useWorkspace from "../../hooks/useWorkspace";
 import Base from "../../templates/Base";
 import { userFilter } from "../api/tweets";
 
 export default function Profile() {
-  const { tweets, loading, hasMore, loadMore, setFilters } = useTweets();
-  const wallet = useAnchorWallet();
+  const workspace = useWorkspace();
+  const { tweets, loading, hasMore, loadMore, prefetch } = useTweets();
 
   useEffect(() => {
-    if (wallet) {
-      const filters = [userFilter(wallet.publicKey.toBase58())];
-      setFilters(filters);
+    if (workspace) {
+      const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
+      prefetch(filters);
     }
-  }, [setFilters, wallet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace]);
 
   return (
     <Base>
@@ -27,12 +28,14 @@ export default function Profile() {
             </h2>
           </div>
           <TweetForm />
-          <TweetList
-            tweets={tweets}
-            loading={loading}
-            hasMore={hasMore}
-            loadMore={loadMore}
-          />
+          {workspace ? (
+            <TweetList
+              tweets={tweets}
+              loading={loading}
+              hasMore={hasMore}
+              loadMore={loadMore}
+            />
+          ) : null}
         </div>
         <div className="relative mb-8 w-72"></div>
       </div>
