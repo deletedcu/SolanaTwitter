@@ -82,7 +82,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
       if (workspace) {
         const result = await sendTweet(workspace, tag, content);
         if (result.tweet) {
-          setTweets([result.tweet, ...tweets]);
+          setTweets((prev) => [result.tweet, ...prev]);
         }
         return result;
       } else {
@@ -115,8 +115,8 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
         const result = await deleteTweet(workspace, tweetKey);
 
         if (result.success) {
-          setTweets(
-            tweets.filter((t) => t.publickey.toBase58() !== tweetKey.toBase58())
+          setTweets((prev) =>
+            prev.filter((t) => t.publickey.toBase58() !== tweetKey.toBase58())
           );
         }
 
