@@ -6,12 +6,12 @@ import {
 } from "react";
 import { Theme } from "react-toastify";
 
-interface ThemeConfig {
+interface ThemeContextState {
   theme: Theme;
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeConfig>(null!);
+const ThemeContext = createContext<ThemeContextState>(null!);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");

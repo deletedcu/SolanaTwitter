@@ -1,25 +1,25 @@
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
-import { getUserAlias } from "../pages/api/alias";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import useWorkspace from "../hooks/useWorkspace";
+import useUsers from "../hooks/useUsers";
 
 export default function Menubar() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [alias, setAlias] = useState("");
 
-  const workspace = useWorkspace();
-  const { disconnect, connected } = useWallet();
+  const { getUserAlias } = useUsers();
+  const wallet = useAnchorWallet();
+  const { connected } = useWallet();
 
   useEffect(() => {
-    if (workspace && !showEditModal) {
-      getUserAlias(workspace.program, workspace.wallet.publicKey).then((value) => setAlias(value));
+    if (wallet && !showEditModal) {
+      getUserAlias(wallet.publicKey).then((value) => setAlias(value));
     }
-  }, [workspace, showEditModal]);
+  }, [wallet, showEditModal, getUserAlias]);
 
   return (
     <div className="fixed top-0 w-full z-40">
@@ -30,13 +30,12 @@ export default function Menubar() {
               <div className="relative flex w-full items-center"></div>
               <div className="flex items-center gap-5">
                 <ThemeSwitcher />
-                {workspace && connected && (
+                {wallet && connected && (
                   <>
                     <WalletItem
-                      publicKey={workspace.wallet.publicKey}
+                      publicKey={wallet.publicKey}
                       alias={alias}
                       showModal={() => setShowEditModal(true)}
-                      disconnect={disconnect}
                     />
                   </>
                 )}
@@ -50,11 +49,11 @@ export default function Menubar() {
           </div>
         </div>
       </div>
-      {workspace && (
+      {wallet && (
         <UserEditModal
           visible={showEditModal}
           setVisible={setShowEditModal}
-          publicKey={workspace.wallet.publicKey}
+          publicKey={wallet.publicKey}
           alias={alias}
         />
       )}

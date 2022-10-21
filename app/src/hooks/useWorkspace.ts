@@ -5,7 +5,6 @@ import {
   AnchorWallet,
   useAnchorWallet,
   useConnection,
-  useWallet,
 } from "@solana/wallet-adapter-react";
 import { useMemo } from "react";
 
@@ -23,7 +22,6 @@ const programId = new PublicKey(idl.metadata.address);
 export default function useWorkspace() {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
-  const { connected } = useWallet();
 
   const provider = useMemo(() => {
     if (wallet) {
@@ -49,7 +47,7 @@ export default function useWorkspace() {
   );
 
   const workspace = useMemo(() => {
-    if (wallet && program && connected) {
+    if (wallet && program) {
       return {
         connection,
         program,
@@ -59,7 +57,7 @@ export default function useWorkspace() {
     } else {
       return null;
     }
-  }, [connection, program, wallet, connected]);
+  }, [connection, program, wallet]);
 
   return workspace;
 }

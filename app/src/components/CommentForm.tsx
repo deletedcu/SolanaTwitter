@@ -1,20 +1,14 @@
 import { PublicKey } from "@solana/web3.js";
 import TextareaAutosize from "react-autosize-textarea/lib";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { CONTENT_LIMIT } from "../constants";
+import useComments from "../hooks/useComments";
 import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
-import useTheme from "../hooks/useTheme";
-import useWorkspace from "../hooks/useWorkspace";
 import { Comment } from "../models/Comment";
-import { sendComment } from "../pages/api/comments";
-import {
-  notifyLoading,
-  notifyUpdate,
-} from "../utils";
 
 type FormValues = {
   content: string;
 };
-const LIMIT = 280;
 
 export default function CommentForm({
   tweet,
@@ -25,34 +19,24 @@ export default function CommentForm({
   added: (a: Comment) => void;
   onClose: () => void;
 }) {
-  const { theme } = useTheme();
+  const { sendComment } = useComments();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
-  const workspace = useWorkspace();
 
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
   let characterLimitColor = "text-color-third";
-  if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
-  if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
+  if (CONTENT_LIMIT - characterLimit <= 10)
+    characterLimitColor = "text-yellow-500";
+  if (CONTENT_LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
 
-  const canComment = watch("content") && LIMIT - characterLimit > 0;
+  const canComment = watch("content") && CONTENT_LIMIT - characterLimit > 0;
 
   const send = async (data: FormValues) => {
-    if (!workspace) return;
-    const toastId = notifyLoading(
-      "Transaction in progress. Please wait...",
-      theme
-    );
-    const result = await sendComment(
-      workspace.program,
-      workspace.wallet,
-      tweet,
-      data.content
-    );
-    notifyUpdate(toastId, result.message, result.comment ? "success" : "error");
-    if (result.comment) {
-      added(result.comment);
+    if (!canComment) return;
+    const comment = await sendComment(tweet, data.content);
+    if (comment) {
+      added(comment);
       resetField("content");
       onClose();
     }
@@ -66,7 +50,7 @@ export default function CommentForm({
       <TextareaAutosize
         {...register("content", {
           required: true,
-          maxLength: LIMIT,
+          maxLength: CONTENT_LIMIT,
         })}
         id="content"
         rows={1}
@@ -78,7 +62,7 @@ export default function CommentForm({
           {/* <!-- Character limit. --> */}
           <div className="text-sm">
             <span className={characterLimitColor}>{characterLimit}</span>
-            <span className="text-color-secondary">{` / ${LIMIT}`}</span>
+            <span className="text-color-secondary">{` / ${CONTENT_LIMIT}`}</span>
           </div>
           {/* <!-- Cancel button. --> */}
           <button

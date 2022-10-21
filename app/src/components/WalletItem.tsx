@@ -6,19 +6,20 @@ import { toCollapse } from "../utils";
 
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function WalletItem({
   publicKey,
   alias,
   showModal,
-  disconnect,
 }: {
   publicKey: PublicKey;
   alias: string;
   showModal: () => void;
-  disconnect: () => Promise<void>;
 }) {
   const [copyLabel, setCopyLabel] = useState("Copy to clipboard");
+
+  const { disconnect } = useWallet();
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(publicKey.toBase58());
@@ -154,7 +155,7 @@ export default function WalletItem({
       <MenuItem>
         <button
           className="flex w-full h-8 items-center px-3 text-color-primary"
-          onClick={disconnect}
+          onClick={() => disconnect()}
         >
           Disconnect wallet
         </button>

@@ -3,13 +3,13 @@ import useWorkspace from "../hooks/useWorkspace";
 import { TagType } from "../models";
 import { fetchTags } from "../pages/api/tweets";
 
-interface TagsContextConfig {
+interface TagsContextState {
   tags: TagType[];
   recentTags: TagType[];
   loading: boolean;
 }
 
-const TagsContext = createContext<TagsContextConfig>(null!);
+const TagsContext = createContext<TagsContextState>(null!);
 
 export function TagsProvider({ children }: { children: ReactNode }) {
   const [tags, setTags] = useState<TagType[]>([]);

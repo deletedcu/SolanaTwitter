@@ -5,14 +5,14 @@ import { UserType } from "../models";
 import { getUserAlias } from "../pages/api/alias";
 import { fetchUsers } from "../pages/api/tweets";
 
-interface UsersContextConfig {
+interface UsersContextState {
   users: UserType[];
   recentUsers: UserType[];
   loading: boolean;
   getUserAlias: (publickey: PublicKey) => Promise<string>;
 }
 
-const UsersContext = createContext<UsersContextConfig>(null!);
+const UsersContext = createContext<UsersContextState>(null!);
 
 export function UsersProvider({ children }: { children: ReactNode }) {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -39,7 +39,7 @@ export function UsersProvider({ children }: { children: ReactNode }) {
 
   const getUserAliasFromPublicKey = useCallback(async (publicKey: PublicKey) => {
     if (workspace) {
-      const alias = await getUserAlias(workspace, publicKey);
+      const alias = await getUserAlias(workspace.program, publicKey);
       return alias;
     } else {
       return "";

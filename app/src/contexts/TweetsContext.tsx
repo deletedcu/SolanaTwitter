@@ -1,4 +1,3 @@
-import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import {
   createContext,
@@ -20,7 +19,7 @@ import {
 } from "../pages/api/tweets";
 import { notifyLoading, notifyUpdate } from "../utils";
 
-interface TweetsContextConfig {
+interface TweetsContextState {
   tweets: Tweet[];
   recentTweets: Tweet[];
   loading: boolean;
@@ -33,7 +32,7 @@ interface TweetsContextConfig {
   setFilters: (filters: any[]) => void;
 }
 
-const TweetsContext = createContext<TweetsContextConfig>(null!);
+const TweetsContext = createContext<TweetsContextState>(null!);
 
 export function TweetsProvider({ children }: { children: ReactNode }) {
   const [tweets, setTweets] = useState<Tweet[]>([]);
@@ -46,7 +45,6 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
 
   const { theme } = useTheme();
   const workspace = useWorkspace();
-  const { connected } = useWallet();
 
   const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
     setTweets((prev) => [...prev, ...newTweets]);
@@ -60,6 +58,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (workspace) {
+      console.log("call useEffect workspace", filters);
       setTweets([]);
       const newPagination = paginateTweets(workspace, filters, 10, onNewPage);
       setPagination(newPagination);
@@ -73,6 +72,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (pagination && !initialLoading) {
+      console.log("call useEffect pagination", filters);
       setLoading(true);
       pagination.prefetch().then(pagination.getNextPage);
       setInitialLoading(true);
