@@ -1,77 +1,41 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Tweet, UserType } from "../../models";
-import { fetchUsers, paginateTweets, userFilter } from "../api/tweets";
+import { userFilter } from "../api/tweets";
 import TweetList from "../../components/TweetList";
-import { useWorkspace } from "../../utils";
-import { useWallet } from "@solana/wallet-adapter-react";
 import Base from "../../templates/Base";
-import { getUserAlias } from "../api/alias";
 import { PublicKey } from "@solana/web3.js";
 import RecentUsers from "../../components/RecentUsers";
+import useTweets from "../../hooks/useTweets";
+import useUsers from "../../hooks/useUsers";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function User() {
   const router = useRouter();
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [user] = useState<string>(router.query.user as string);
+  const [user, setUser] = useState<string>("");
   const [userAlias, setUserAlias] = useState("");
   const [viewedUser, setViewedUser] = useState("");
-  const [pagination, setPagination] = useState<any>();
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
 
-  let workspace = useWorkspace();
-  const { connected } = useWallet();
+  const workspace = useWorkspace();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
+  const { recentUsers, getUserAlias } = useUsers();
 
-  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
-    setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
-    setLoading(false);
-  };
+  useEffect(() => {
+    setUser(router.query.user as string);
+  }, [router.query]);
 
   useEffect(() => {
     if (workspace) {
       if (user === viewedUser) return;
-      setTweets([]);
+      getUserAlias(new PublicKey(user)).then((value) => setUserAlias(value));
       setViewedUser(user);
       const filters = [userFilter(user)];
-      const newPagination = paginateTweets(
-        workspace!.program,
-        workspace!.connection,
-        filters,
-        10,
-        onNewPage
-      );
-      setPagination(newPagination);
-      getUserAlias(workspace!.program, new PublicKey(user)).then((value) =>
-        setUserAlias(value)
-      );
+      prefetch(filters);
     } else {
-      setPagination(null);
-      setTweets([]);
-      setRecentUsers([]);
       setViewedUser("");
-      setLoading(false);
     }
-  }, [user, viewedUser, workspace, connected]);
-
-  useEffect(() => {
-    if (pagination && workspace) {
-      setLoading(true);
-      pagination.prefetch().then(pagination.getNextPage);
-      fetchUsers(workspace.program, workspace.connection).then((value) =>
-        setRecentUsers(
-          value.sort((a, b) => b.last_timestamp - a.last_timestamp).slice(0, 5)
-        )
-      );
-    }
-  }, [pagination, workspace]);
-
-  const loadMore = () => {
-    setLoading(true);
-    pagination.getNextPage();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, workspace]);
 
   return (
     <Base>
@@ -86,15 +50,16 @@ export default function User() {
                 : `${userAlias}'s Tweets`}
             </h2>
           </div>
-          {pagination && (
+          {workspace ? (
             <TweetList
               tweets={tweets}
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
-          )}
-          {pagination && !loading && tweets.length === 0 && (
+          ) : null}
+          {workspace && !loading && tweets.length === 0 && (
             <div className="p-8 text-center text-color-third">
               User not found...
             </div>
@@ -105,7 +70,7 @@ export default function User() {
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Users
             </h3>
-            <RecentUsers users={recentUsers} />
+            {workspace ? <RecentUsers users={recentUsers} /> : null}
           </div>
         </div>
       </div>

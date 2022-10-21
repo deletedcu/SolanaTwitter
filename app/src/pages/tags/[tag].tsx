@@ -1,83 +1,47 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { TagType, Tweet } from "../../models";
-import { useWorkspace, useSlug } from "../../utils";
 import { tagIcon } from "../../assets/icons";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
-import { fetchTags, paginateTweets, tagFilter } from "../api/tweets";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { tagFilter } from "../api/tweets";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
 import RecentTags from "../../components/RecentTags";
+import useTweets from "../../hooks/useTweets";
+import useTags from "../../hooks/useTags";
+import { getSlug } from "../../utils";
+import useWorkspace from "../../hooks/useWorkspace";
 
 export default function Tags() {
   const router = useRouter();
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [tag, setTag] = useState<string>(router.query.tag as string);
-  const [pagination, setPagination] = useState<any>();
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [recentTags, setRecentTags] = useState<TagType[]>([]);
+  const [tag, setTag] = useState<string>("");
+  const [viewedTag, setViewedTag] = useState<string>("");
 
-  let workspace = useWorkspace();
-  const { connected } = useWallet();
-  const slugTag = useSlug(tag);
-
-  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
-    setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
-    setLoading(false);
-  };
+  const workspace = useWorkspace();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
+  const { recentTags } = useTags();
 
   const search = (str: string) => {
     router.push(`/tags/${str}`);
   };
 
-  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
-
   useEffect(() => {
-    setTweets([]);
-    setTag(router.query.tag as string);
+    const slugTag = getSlug(router.query.tag as string);
+    setTag(slugTag);
   }, [router.query.tag]);
 
   useEffect(() => {
     if (workspace) {
-      setTweets([]);
-      const filters = [tagFilter(slugTag)];
-      const newPagination = paginateTweets(
-        workspace!.program,
-        workspace!.connection,
-        filters,
-        10,
-        onNewPage
-      );
-      setPagination(newPagination);
+      if (tag === viewedTag) return;
+      const filters = [tagFilter(tag)];
+      prefetch(filters);
+      setViewedTag(tag);
     } else {
-      setPagination(null);
-      setTweets([]);
-      setRecentTags([]);
-      setLoading(false);
+      setViewedTag("");
     }
-  }, [slugTag, workspace, connected]);
-
-  useEffect(() => {
-    if (pagination && workspace) {
-      setLoading(true);
-      pagination.prefetch().then(pagination.getNextPage);
-      fetchTags(workspace.program, workspace.connection).then((fetchedTags) => {
-        const recentOrdered = fetchedTags
-          .slice(0, 5)
-          .sort((a, b) => b.timestamp - a.timestamp);
-        setRecentTags(recentOrdered);
-      });
-    }
-  }, [pagination, workspace]);
-
-  const loadMore = () => {
-    setLoading(true);
-    pagination.getNextPage();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tag, workspace]);
 
   return (
     <Base>
@@ -90,33 +54,29 @@ export default function Tags() {
           </div>
           <TweetSearch
             placeholder="tag"
-            disabled={!slugTag}
-            modelValue={slugTag}
+            disabled={!tag}
+            modelValue={tag}
             search={search}
           >
             {tagIcon}
           </TweetSearch>
-          <TweetForm added={addTweet} forceTag={slugTag} />
-          {pagination && (
+          <TweetForm forceTag={tag} />
+          {workspace ? (
             <TweetList
               tweets={tweets}
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
-          )}
-          {pagination && !loading && tweets.length === 0 && (
-            <div className="p-8 text-center text-color-third">
-              No tweets were found in this tag...
-            </div>
-          )}
+          ) : null}
         </div>
         <div className="relative mb-8 w-72">
           <div className="duration-400 fixed h-full w-72 pb-44 transition-all">
             <h3 className="mb-4 pb-2.5 font-semibold leading-6 text-color-primary">
               Recent Tags
             </h3>
-            <RecentTags tags={recentTags} />
+            {workspace ? <RecentTags tags={recentTags} /> : null}
           </div>
         </div>
       </div>

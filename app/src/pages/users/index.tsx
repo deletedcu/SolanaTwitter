@@ -2,54 +2,32 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { userIcon } from "../../assets/icons";
 import { UserType } from "../../models";
-import { fetchUsers } from "../api/tweets";
 import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
 import TweetSearch from "../../components/TweetSearch";
 import RecentUsers from "../../components/RecentUsers";
-import { useWorkspace } from "../../utils";
-import { useWallet } from "@solana/wallet-adapter-react";
+import useUsers from "../../hooks/useUsers";
 
 export default function Users() {
   const router = useRouter();
   const [user, setUser] = useState("");
-  const [allUsers, setAllUsers] = useState<UserType[]>([]);
   const [filterUsers, setFilterUsers] = useState<UserType[]>([]);
-  const [recentUsers, setRecentUsers] = useState<UserType[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const workspace = useWorkspace();
-  const { connected } = useWallet();
+  const { users, recentUsers, loading } = useUsers();
 
   const search = (str: string) => {
     router.push(`/users/${str}`);
   };
 
   const onTextChange = (text: string) => {
-    const fUsers = allUsers.filter((k) => k.user.toBase58().includes(text));
+    const fUsers = users.filter((k) => k.user.toBase58().includes(text));
     setUser(text);
     setFilterUsers(fUsers);
   };
 
   useEffect(() => {
-    if (workspace) {
-      fetchUsers(workspace.program, workspace.connection)
-        .then((fetchedUsers) => {
-          setAllUsers(fetchedUsers);
-          setFilterUsers(fetchedUsers);
-          setRecentUsers(
-            fetchedUsers
-              .sort((a, b) => b.last_timestamp - a.last_timestamp)
-              .slice(0, 5)
-          );
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setAllUsers([]);
-      setFilterUsers([]);
-      setRecentUsers([]);
-    }
-  }, [workspace, connected]);
+    setFilterUsers(users);
+  }, [users]);
 
   return (
     <Base>

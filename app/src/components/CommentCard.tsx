@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { Comment } from "../models/Comment";
-import { useWorkspace } from "../utils";
 import { SuperEllipseImg } from "react-superellipse";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
-  const workspace = useWorkspace();
+  const wallet = useAnchorWallet();
   const userRoute =
-    workspace &&
-    workspace.wallet.publicKey.toBase58() === comment.user.toBase58()
+    wallet && wallet.publicKey.toBase58() === comment.user.toBase58()
       ? "/profile"
       : `/users/${comment.user.toBase58()}`;
 

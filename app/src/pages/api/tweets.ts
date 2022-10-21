@@ -21,8 +21,7 @@ export const fetchTweets = async (program: Program, filters: any[] = []) => {
 };
 
 export const paginateTweets = (
-  program: Program,
-  connection: Connection,
+  { program, connection }: { program: Program; connection: Connection },
   filters: any[] = [],
   perPage = 10,
   onNewPage: (a: Tweet[], b: boolean, c: number) => void
@@ -104,20 +103,24 @@ export const paginateTweets = (
   return { page, getNextPage, ...pagination };
 };
 
-export const getTweet = async (program: Program, connection: Connection, publicKey: PublicKey) => {
+export const getTweet = async (
+  { program, connection }: { program: Program; connection: Connection },
+  publicKey: PublicKey
+) => {
   const account = await program.account.tweet.fetch(publicKey);
   const aliasObj = await fetchUsersAlias(program, connection);
   const tweet = new Tweet(publicKey, account);
-  const comments = await fetchComments(program, [
-    commentTweetFilter(tweet.key),
-  ], aliasObj);
+  const comments = await fetchComments(
+    program,
+    [commentTweetFilter(tweet.key)],
+    aliasObj
+  );
   tweet.comments = comments || [];
   return tweet;
 };
 
 export const sendTweet = async (
-  program: Program,
-  wallet: AnchorWallet,
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
   tag: string,
   content: string
 ) => {
@@ -154,8 +157,7 @@ export const sendTweet = async (
 };
 
 export const updateTweet = async (
-  program: Program,
-  wallet: AnchorWallet,
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
   tweet: Tweet,
   tag: string,
   content: string
@@ -180,15 +182,14 @@ export const updateTweet = async (
 };
 
 export const deleteTweet = async (
-  program: Program,
-  wallet: AnchorWallet,
-  tweet: Tweet
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
+  tweetKey: PublicKey
 ) => {
   try {
     await program.methods
       .deleteTweet()
       .accounts({
-        tweet: tweet.publickey,
+        tweet: tweetKey,
         user: wallet.publicKey,
       })
       .rpc();
@@ -207,7 +208,13 @@ export const deleteTweet = async (
   }
 };
 
-export const fetchTags = async (program: Program, connection: Connection) => {
+export const fetchTags = async ({
+  program,
+  connection,
+}: {
+  program: Program;
+  connection: Connection;
+}) => {
   // Prepare the discriminator filter
   const tweetClient = program.account.tweet;
   const tweetAccountName = "Tweet";
@@ -250,7 +257,13 @@ export const fetchTags = async (program: Program, connection: Connection) => {
   return Object.values(tags);
 };
 
-export const fetchUsers = async (program: Program, connection: Connection) => {
+export const fetchUsers = async ({
+  program,
+  connection,
+}: {
+  program: Program;
+  connection: Connection;
+}) => {
   // Prepare the discriminator filter
   const tweetClient = program.account.tweet;
   const tweetAccountName = "Tweet";

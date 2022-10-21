@@ -1,59 +1,23 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
-import { Tweet } from "../../models";
+import useTweets from "../../hooks/useTweets";
+import useWorkspace from "../../hooks/useWorkspace";
 import Base from "../../templates/Base";
-import { useWorkspace } from "../../utils";
-import { paginateTweets, userFilter } from "../api/tweets";
+import { userFilter } from "../api/tweets";
 
 export default function Profile() {
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [pagination, setPagination] = useState<any>();
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  let workspace = useWorkspace();
-  const { connected } = useWallet();
-
-  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
-    setTweets((prev) => [...prev, ...newTweets]);
-    setHasMore(more);
-    setLoading(false);
-  };
-
-  const addTweet = (tweet: Tweet) => setTweets([tweet, ...tweets]);
+  const workspace = useWorkspace();
+  const { tweets, loading, hasMore, loadMore, prefetch, deleteTweet } =
+    useTweets();
 
   useEffect(() => {
     if (workspace) {
       const filters = [userFilter(workspace.wallet.publicKey.toBase58())];
-      const newPagination = paginateTweets(
-        workspace.program,
-        workspace.connection,
-        filters,
-        10,
-        onNewPage
-      );
-      setTweets([]);
-      setPagination(newPagination);
-    } else {
-      setPagination(null);
-      setTweets([]);
-      setLoading(false);
+      prefetch(filters);
     }
-  }, [workspace, connected]);
-
-  useEffect(() => {
-    if (pagination) {
-      setLoading(true);
-      pagination.prefetch().then(pagination.getNextPage);
-    }
-  }, [pagination]);
-
-  const loadMore = () => {
-    setLoading(true);
-    pagination.getNextPage();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace]);
 
   return (
     <Base>
@@ -64,15 +28,16 @@ export default function Profile() {
               Your tweets
             </h2>
           </div>
-          <TweetForm added={addTweet} />
-          {pagination && (
+          <TweetForm />
+          {workspace ? (
             <TweetList
               tweets={tweets}
               loading={loading}
               hasMore={hasMore}
               loadMore={loadMore}
+              deleteTweet={deleteTweet}
             />
-          )}
+          ) : null}
         </div>
         <div className="relative mb-8 w-72"></div>
       </div>

@@ -48,11 +48,11 @@ export default function Sidebar() {
           <Link href="/">
             <a
               className={
-                (router.pathname.startsWith("/tweets") ? "font-bold " : "") +
+                ((router.pathname.startsWith("/tweets") || router.pathname === "/") ? "font-bold " : "") +
                 "inline-flex items-center space-x-4 rounded-full p-3 hover:bg-fill-third md:w-full"
               }
             >
-              {router.pathname.startsWith("/tweets") ? (
+              {(router.pathname.startsWith("/tweets") || router.pathname === "/") ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"

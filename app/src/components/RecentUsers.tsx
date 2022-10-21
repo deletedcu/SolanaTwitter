@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
+import { SuperEllipseImg } from "react-superellipse";
+import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
-import { useWorkspace } from "../utils";
 
 export default function RecentUsers({ users }: { users: UserType[] }) {
   const workspace = useWorkspace();
@@ -22,11 +22,14 @@ export default function RecentUsers({ users }: { users: UserType[] }) {
             >
               <div className="flex items-center">
                 <div className="mr-3 p-0.5">
-                  <Image
-                    src={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
-                    width={40}
-                    height={40}
-                    alt={user.user.toBase58()}
+                  <SuperEllipseImg
+                    width={36}
+                    height={36}
+                    href={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
+                    r1={0.1}
+                    r2={0.3}
+                    strokeColor="rgba(156, 163, 175, 0.3)"
+                    strokeWidth={1}
                   />
                 </div>
                 <div>

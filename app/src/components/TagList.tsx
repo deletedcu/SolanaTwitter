@@ -1,6 +1,6 @@
+import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import { TagType } from "../models";
-import { useWorkspace } from "../utils";
 
 interface TagListProps {
   tags: TagType[];
@@ -9,18 +9,20 @@ interface TagListProps {
 
 export default function TagList(props: TagListProps) {
   const { tags, loading } = props;
-  const workspace = useWorkspace();
+  const { connected } = useWallet();
 
   return (
     <>
-      {workspace ? (
+      {connected ? (
         loading ? (
           <div className="p-8 text-center text-color-third">Loading...</div>
         ) : (
           <div className="flex flex-wrap m-4">
-            {tags.map((tag, i) => (
-              <TagBadge key={i} tag={tag} />
-            ))}
+            {tags
+              .sort((a, b) => b.count - a.count)
+              .map((tag, i) => (
+                <TagBadge key={i} tag={tag} />
+              ))}
           </div>
         )
       ) : (

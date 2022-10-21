@@ -6,8 +6,7 @@ import { sleep, toCollapse } from "../../utils";
 import { AliasProps, getUserAlias } from "./alias";
 
 export const sendComment = async (
-  program: Program,
-  wallet: AnchorWallet,
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
   tweet: PublicKey,
   content: string
 ) => {
@@ -44,8 +43,7 @@ export const sendComment = async (
 };
 
 export const updateComment = async (
-  program: Program,
-  wallet: AnchorWallet,
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
   commentKey: PublicKey,
   content: string
 ) => {
@@ -73,8 +71,7 @@ export const updateComment = async (
 };
 
 export const deleteComment = async (
-  program: Program,
-  wallet: AnchorWallet,
+  { program, wallet }: { program: Program; wallet: AnchorWallet },
   commentKey: PublicKey
 ) => {
   try {

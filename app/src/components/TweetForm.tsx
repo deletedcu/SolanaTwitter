@@ -2,33 +2,22 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useTheme } from "../contexts/themeProvider";
-import { Tweet } from "../models";
-import { sendTweet } from "../pages/api/tweets";
-import {
-  useWorkspace,
-  notifyLoading,
-  notifyUpdate,
-  useCountCharacterLimit,
-  useSlug,
-} from "../utils";
+import { CONTENT_LIMIT, TAG_LIMIT } from "../constants";
+import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
+import { useSlug } from "../hooks/useSlug";
+import useTheme from "../hooks/useTheme";
+import useTweets from "../hooks/useTweets";
+import { notifyLoading, notifyUpdate } from "../utils";
 
 type FormValues = {
   content: string;
   tag: string;
 };
 
-const LIMIT = 280;
-
-export default function TweetForm({
-  added,
-  forceTag,
-}: {
-  added: (a: Tweet) => void;
-  forceTag?: string;
-}) {
+export default function TweetForm({ forceTag }: { forceTag?: string }) {
+  const { sendTweet } = useTweets();
+  const { connected } = useWallet();
   const { theme } = useTheme();
-  const workspace = useWorkspace();
   const { register, resetField, handleSubmit, watch } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = (data) => send(data);
 
@@ -40,29 +29,24 @@ export default function TweetForm({
   // Character limit / count-down
   const characterLimit = useCountCharacterLimit(watch("content"));
   let characterLimitColor = "text-color-third";
-  if (LIMIT - characterLimit <= 10) characterLimitColor = "text-yellow-500";
-  if (LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
+  if (CONTENT_LIMIT - characterLimit <= 10)
+    characterLimitColor = "text-yellow-500";
+  if (CONTENT_LIMIT - characterLimit < 0) characterLimitColor = "text-red-500";
 
   // Permissions
-  const { connected } = useWallet();
-  const canTweet = watch("content") && LIMIT - characterLimit > 0;
+  const canTweet = watch("content") && CONTENT_LIMIT - characterLimit > 0;
 
   // Actions
   const send = async (data: FormValues) => {
-    if (!workspace || !canTweet) return;
+    if (!canTweet) return;
     const toastId = notifyLoading(
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await sendTweet(
-      workspace.program,
-      workspace.wallet,
-      effectiveTag,
-      data.content
-    );
+    const result = await sendTweet(effectiveTag, data.content);
     notifyUpdate(toastId, result.message, result.tweet ? "success" : "error");
+
     if (result.tweet) {
-      added(result.tweet);
       resetField("content");
       setTag("");
     }
@@ -79,7 +63,7 @@ export default function TweetForm({
           <TextareaAutosize
             {...register("content", {
               required: true,
-              maxLength: LIMIT,
+              maxLength: CONTENT_LIMIT,
             })}
             id="content"
             rows={1}
@@ -90,7 +74,7 @@ export default function TweetForm({
             {/* <!-- Topic field. --> */}
             <div className="relative m-2 mr-4">
               <input
-                {...register("tag")}
+                {...register("tag", { maxLength: TAG_LIMIT })}
                 onChange={(e) => setTag(e.target.value)}
                 value={effectiveTag}
                 type="text"
@@ -121,7 +105,7 @@ export default function TweetForm({
               {/* <!-- Character limit. --> */}
               <div className="text-sm">
                 <span className={characterLimitColor}>{characterLimit}</span>
-                <span className="text-color-secondary">{` / ${LIMIT}`}</span>
+                <span className="text-color-secondary">{` / ${CONTENT_LIMIT}`}</span>
               </div>
               {/* <!-- Tweet button. --> */}
               <button

@@ -4,53 +4,33 @@ import { useEffect, useState } from "react";
 import TweetCard from "../../components/TweetCard";
 import { Tweet as TweetModel } from "../../models";
 import Base from "../../templates/Base";
-import { AliasProps } from "../api/alias";
-import { deleteTweet, getTweet } from "../api/tweets";
-import { fetchUsersAlias } from "../api/alias";
-import { useWorkspace, notifyLoading, notifyUpdate } from "../../utils";
-import { useTheme } from "../../contexts/themeProvider";
+import useTweets from "../../hooks/useTweets";
+import useTheme from "../../hooks/useTheme";
+import { notifyLoading, notifyUpdate } from "../../utils";
 
 export default function Tweet() {
   const router = useRouter();
   const [tweet, setTweet] = useState<TweetModel | null>(null);
   const [loading, setLoading] = useState(true);
-  const [usersAlias, setUsersAlias] = useState<AliasProps>({});
   const tweetAddress = router.query.tweet as string;
 
   const { theme } = useTheme();
-  const workspace = useWorkspace();
+  const { getTweet, deleteTweet } = useTweets();
 
   useEffect(() => {
-    if (workspace) {
-      fetchUsersAlias(workspace.program, workspace.connection).then((value) =>
-        setUsersAlias(value)
-      );
-    }
-  }, [workspace]);
-
-  useEffect(() => {
-    if (workspace && tweetAddress) {
-      getTweet(
-        workspace.program,
-        workspace.connection,
-        new PublicKey(tweetAddress)
-      )
+    if (tweetAddress) {
+      getTweet(new PublicKey(tweetAddress))
         .then((fetchedTweet) => setTweet(fetchedTweet))
         .finally(() => setLoading(false));
     }
-  }, [tweetAddress, workspace]);
+  }, [getTweet, tweetAddress]);
 
   const onDelete = async (tweet: TweetModel) => {
-    if (!workspace) return;
     const toastId = notifyLoading(
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await deleteTweet(
-      workspace.program,
-      workspace.wallet,
-      tweet
-    );
+    const result = await deleteTweet(tweet.publickey);
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
       setTweet(null);
