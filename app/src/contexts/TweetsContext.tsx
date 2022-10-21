@@ -50,7 +50,7 @@ export function TweetsProvider({ children }: { children: ReactNode }) {
 
   const workspace = useWorkspace();
 
-  const onNewPage = (newTweets: Tweet[], more: boolean, page: number) => {
+  const onNewPage = (newTweets: Tweet[], more: boolean) => {
     setTweets((prev) => [...prev, ...newTweets]);
     setLoading(false);
     setHasMore(more);

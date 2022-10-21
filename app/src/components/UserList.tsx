@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SuperEllipseImg } from "react-superellipse";
 import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
+import Loader from "./Loader";
 
 interface UserListProps {
   users: UserType[];
@@ -16,7 +17,7 @@ export default function UserList(props: UserListProps) {
     <>
       {workspace ? (
         loading ? (
-          <div className="p-8 text-center text-color-third">Loading...</div>
+          <Loader />
         ) : (
           <div className="overflow-x-auto relative">
             <table className="w-full text-sm text-left text-color-secondary">
