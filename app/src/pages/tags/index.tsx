@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { tagIcon } from "../../assets/icons";
+import { HiHashtag } from "react-icons/hi";
 import TagList from "../../components/TagList";
 import { TagType } from "../../models";
 import TweetSearch from "../../components/TweetSearch";
@@ -13,7 +13,7 @@ export default function Tags() {
   const router = useRouter();
   const [tag, setTag] = useState("");
   const [filterTags, setFilterTags] = useState<TagType[]>([]);
-  
+
   const { tags, recentTags, loading } = useTags();
   const slugTag = useSlug(tag);
 
@@ -47,7 +47,7 @@ export default function Tags() {
             setModelValue={onTextChange}
             search={search}
           >
-            {tagIcon}
+            <HiHashtag size={20} />
           </TweetSearch>
           <TagList tags={filterTags} loading={loading} />
         </div>

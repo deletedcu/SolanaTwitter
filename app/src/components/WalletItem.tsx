@@ -2,6 +2,12 @@ import { useState } from "react";
 import { Menu, MenuButton, MenuDivider, MenuItem } from "@szhsin/react-menu";
 import { PublicKey } from "@solana/web3.js";
 import { SuperEllipseImg } from "react-superellipse";
+import {
+  HiOutlineKey,
+  HiOutlinePencilAlt,
+  HiOutlineUserCircle,
+  HiOutlineClipboardCopy,
+} from "react-icons/hi";
 import { toCollapse } from "../utils";
 
 import "@szhsin/react-menu/dist/index.css";
@@ -52,39 +58,9 @@ export default function WalletItem({
             >
               <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary-500 text-primary-100">
                 {hover ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="iconify iconify--heroicons-outline"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1M8 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M8 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m0 0h2a2 2 0 0 1 2 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                    />
-                  </svg>
+                  <HiOutlineClipboardCopy size={20} />
                 ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 iconify iconify--heroicons-outline"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 7a2 2 0 0 1 2 2m4 0a6 6 0 0 1-7.743 5.743L11 17H9v2H7v2H4a1 1 0 0 1-1-1v-2.586a1 1 0 0 1 .293-.707l5.964-5.964A6 6 0 1 1 21 9Z"
-                    ></path>
-                  </svg>
+                  <HiOutlineKey size={20} />
                 )}
               </div>
               <div>
@@ -106,41 +82,9 @@ export default function WalletItem({
             >
               <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary-500 text-primary-100">
                 {hover ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="iconify iconify--heroicons-outline"
-                    width="20"
-                    height="20"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z"
-                    ></path>
-                  </svg>
+                  <HiOutlinePencilAlt size={20} />
                 ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="iconify iconify--heroicons-outline"
-                    width="20"
-                    height="20"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5.121 17.804A13.937 13.937 0 0 1 12 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 1 1-6 0a3 3 0 0 1 6 0Zm6 2a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z"
-                    ></path>
-                  </svg>
+                  <HiOutlineUserCircle size={20} />
                 )}
               </div>
               <div>

@@ -30,7 +30,7 @@ export default function TweetSearch({
         {...register("search")}
         type="text"
         value={text}
-        className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary focus:focus-input"
+        className="w-full bg-fill-secondary py-4 pl-16 pr-32 text-color-secondary border-transparent"
         placeholder={placeholder}
         onChange={(e) => {
           setText(e.target.value);

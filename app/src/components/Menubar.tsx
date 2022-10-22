@@ -117,7 +117,7 @@ function Path() {
   const generatePath = (data: PathType[]) => {
     return (
       <Breadcrumb className="py-0.5 px-6">
-        <Breadcrumb.Item href="/">
+        <Breadcrumb.Item href="/" key="home">
           <span className="flex items-center text-color-secondary hover:text-color-primary">
             <HiOutlineHome className="mr-2" size="16" />
             <span>Home</span>
