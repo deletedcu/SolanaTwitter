@@ -14,10 +14,13 @@ import {
   HiOutlineUserGroup,
 } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
+import { Tooltip } from "flowbite-react";
+import useTheme from "../hooks/useTheme";
 
 export default function Sidebar() {
   const router = useRouter();
   const { connected } = useWallet();
+  const { theme } = useTheme();
 
   return (
     <aside className="fixed h-full w-72">
@@ -124,14 +127,16 @@ export default function Sidebar() {
           )}
         </div>
         <div className="absolute bottom-4 left-6">
-          <Link href="https://github.com/curest0x1021/SolanaTwitter">
-            <a target="_blank" rel="noopener noreferrer">
-              <FaGithub
-                size={24}
-                className="text-color-third hover:text-color-primary"
-              />
-            </a>
-          </Link>
+          <Tooltip content="View on GitHub" style={theme}>
+            <Link href="https://github.com/curest0x1021/SolanaTwitter">
+              <a target="_blank" rel="noopener noreferrer">
+                <FaGithub
+                  size={24}
+                  className="text-color-third hover:text-color-primary"
+                />
+              </a>
+            </Link>
+          </Tooltip>
         </div>
       </div>
     </aside>

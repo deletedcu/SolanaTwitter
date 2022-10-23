@@ -58,7 +58,7 @@ export default function Tags() {
             modelValue={tag}
             search={search}
           >
-            <HiHashtag size={20} />
+            <HiHashtag size={20} className="text-color-third" />
           </TweetSearch>
           <TweetForm forceTag={tag} />
           {workspace ? (

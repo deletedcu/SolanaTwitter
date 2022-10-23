@@ -5,7 +5,6 @@ import { HiOutlineHome } from "react-icons/hi";
 import WalletItem from "./WalletItem";
 import UserEditModal from "./UserEditModal";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
 import useUsers from "../hooks/useUsers";
 
@@ -134,7 +133,7 @@ function Path() {
             );
           else
             return (
-              <Breadcrumb.Item key={i}>
+              <Breadcrumb.Item key={i + 1}>
                 <span className="text-color-third">{item.name}</span>
               </Breadcrumb.Item>
             );
