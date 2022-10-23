@@ -45,7 +45,7 @@ export default function Users() {
             setModelValue={onTextChange}
             search={search}
           >
-            <HiOutlineKey size={20} />
+            <HiOutlineKey size={20} className="text-color-third" />
           </TweetSearch>
           <UserList users={filterUsers} loading={loading} />
         </div>

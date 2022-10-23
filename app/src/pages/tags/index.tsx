@@ -47,7 +47,7 @@ export default function Tags() {
             setModelValue={onTextChange}
             search={search}
           >
-            <HiHashtag size={20} />
+            <HiHashtag size={20} className="text-color-third" />
           </TweetSearch>
           <TagList tags={filterTags} loading={loading} />
         </div>

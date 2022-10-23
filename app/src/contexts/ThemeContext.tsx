@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import windowExist from "../utils/windowExist";
 
-export type ThemeMode = "dark" | "light"
+export type ThemeMode = "dark" | "light";
 interface ThemeContextState {
   theme: ThemeMode;
   toggleTheme: () => void;
@@ -21,16 +21,23 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    savePreference(theme);
+    if (windowExist()) {
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  }, [theme]);
+
   const toggleTheme = () => {
     if (windowExist()) {
       document.documentElement.classList.toggle("dark");
     }
 
-    setTheme((prev) => {
-      const newTheme = prev === "light" ? "dark" : "light";
-      savePreference(newTheme);
-      return newTheme;
-    });
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   return (

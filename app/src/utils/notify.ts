@@ -1,9 +1,10 @@
-import { TypeOptions, toast, Slide, Id, Theme } from "react-toastify";
+import { TypeOptions, toast, Slide, Id } from "react-toastify";
+import { ThemeMode } from "../contexts/ThemeContext";
 
 export const notify = (
   message: string,
   type: TypeOptions,
-  theme: Theme = "light"
+  theme: ThemeMode = "light"
 ) => {
   toast(message, {
     position: "bottom-right",
@@ -17,7 +18,7 @@ export const notify = (
   });
 };
 
-export const notifyLoading = (message: string, theme: Theme = "light") => {
+export const notifyLoading = (message: string, theme: ThemeMode = "light") => {
   return toast.loading(message, {
     position: "bottom-right",
     theme: theme,
