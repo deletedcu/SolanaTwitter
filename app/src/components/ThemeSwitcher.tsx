@@ -18,11 +18,11 @@ export default function ThemeSwitcher() {
       >
         <HiOutlineMoon
           size={24}
-          className={theme === "dark" ? "swap-on" : "swap-off"}
+          className={theme === "dark" ? "swap-off" : "swap-on"}
         />
         <HiOutlineSun
           size={24}
-          className={theme === "dark" ? "swap-off" : "swap-on"}
+          className={theme === "dark" ? "swap-on" : "swap-off"}
         />
       </button>
     </div>
