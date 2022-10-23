@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { userIcon } from "../../assets/icons";
+import { HiOutlineKey } from "react-icons/hi";
 import { UserType } from "../../models";
 import UserList from "../../components/UserList";
 import Base from "../../templates/Base";
@@ -45,7 +45,7 @@ export default function Users() {
             setModelValue={onTextChange}
             search={search}
           >
-            {userIcon}
+            <HiOutlineKey size={20} />
           </TweetSearch>
           <UserList users={filterUsers} loading={loading} />
         </div>

@@ -1,6 +1,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import { TagType } from "../models";
+import Loader from "./Loader";
 
 interface TagListProps {
   tags: TagType[];
@@ -15,7 +16,7 @@ export default function TagList(props: TagListProps) {
     <>
       {connected ? (
         loading ? (
-          <div className="p-8 text-center text-color-third">Loading...</div>
+          <Loader />
         ) : (
           <div className="flex flex-wrap m-4">
             {tags

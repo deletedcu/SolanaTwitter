@@ -24,7 +24,7 @@ export const paginateTweets = (
   { program, connection }: { program: Program; connection: Connection },
   filters: any[] = [],
   perPage = 10,
-  onNewPage: (a: Tweet[], b: boolean, c: number) => void
+  onNewPage: (a: Tweet[], b: boolean) => void
 ) => {
   let page = 0;
 
@@ -95,9 +95,9 @@ export const paginateTweets = (
       tweet.comments = comments || [];
       result.push(tweet);
     }
-    const hasNextPage = hasPage(page + 1);
     page += 1;
-    onNewPage(result, hasNextPage, page - 1);
+    const hasNextPage = hasPage(page);
+    onNewPage(result, hasNextPage);
   };
 
   return { page, getNextPage, ...pagination };

@@ -1,27 +1,34 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Theme } from "react-toastify";
+import windowExist from "../utils/windowExist";
 
+export type ThemeMode = "dark" | "light"
 interface ThemeContextState {
-  theme: Theme;
+  theme: ThemeMode;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextState>(null!);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<ThemeMode>("dark");
+
+  const savePreference = (m: string) => localStorage.setItem("theme", m);
 
   useEffect(() => {
     const originTheme = window.localStorage.getItem("theme");
     if (originTheme) {
-      setTheme(originTheme as Theme);
+      setTheme(originTheme as ThemeMode);
     }
   }, []);
 
   const toggleTheme = () => {
+    if (windowExist()) {
+      document.documentElement.classList.toggle("dark");
+    }
+
     setTheme((prev) => {
       const newTheme = prev === "light" ? "dark" : "light";
-      window.localStorage.setItem("theme", newTheme);
+      savePreference(newTheme);
       return newTheme;
     });
   };

@@ -6,7 +6,7 @@
   :root {
     --text-color-primary: 17 24 39;
     --text-color-secondary: 55 65 81;
-    --text-color-third: 75, 85, 99;
+    --text-color-third: 107 114 128;
     --fill-color-primary: 255 255 255;
     --fill-color-secondary: 243 244 246;
     --fill-color-third: 229 231 235;
@@ -16,7 +16,7 @@
     --focus-color: 107 114 128;
   }
 
-  .theme-dark {
+  .dark {
     --text-color-primary: 245 245 245;
     --text-color-secondary: 212 212 212;
     --text-color-third: 115 115 115;
@@ -56,10 +56,6 @@
       linear-gradient(100deg, rgb(128 128 128 / 50%) 25%, rgb(0 0 0 / 5%) 25%);
     box-shadow: 0 0 0 1px rgb(128 128 128 / 50%) inset, 0 0 0 2px #0000000d;
     text-shadow: 0 1px rgb(0 0 0 / 5%);
-  }
-
-  .focus-input {
-    @apply outline-none border border-skin-secondary;
   }
 
   /** ------------------------ThemeSwitcher component--------------------------------- */
@@ -114,6 +110,18 @@
     opacity: 0;
   }
   /** -------------------------------------------------------------------------------- */
+}
+
+[type='text']:focus {
+  @apply outline-none border border-skin-secondary ring-transparent;
+}
+
+textarea {
+  @apply border-transparent bg-transparent;
+}
+
+textarea:focus {
+  @apply outline-none border-transparent ring-transparent;
 }
 
 .szh-menu {

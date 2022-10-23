@@ -5,6 +5,7 @@ import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { deleteTweet } from "../pages/api/tweets";
 import { notifyLoading, notifyUpdate } from "../utils";
+import Loader from "./Loader";
 import TweetCard from "./TweetCard";
 
 interface TweetListProps {
@@ -12,7 +13,9 @@ interface TweetListProps {
   loading: boolean;
   hasMore: boolean;
   loadMore(): void;
-  deleteTweet(tweetKey: PublicKey): Promise<{ success: boolean, message: string }>;
+  deleteTweet(
+    tweetKey: PublicKey
+  ): Promise<{ success: boolean; message: string }>;
 }
 
 export default function TweetList(props: TweetListProps) {
@@ -31,9 +34,7 @@ export default function TweetList(props: TweetListProps) {
       "Transaction in progress. Please wait...",
       theme
     );
-    const result = await deleteTweet(
-      tweet.publickey
-    );
+    const result = await deleteTweet(tweet.publickey);
     notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result.success) {
       const fTweets = filteredTweets.filter(
@@ -50,7 +51,7 @@ export default function TweetList(props: TweetListProps) {
           <TweetCard key={i} tweet={tweet} onDelete={onDelete} />
         ))}
         {loading ? (
-          <div className="p-8 text-center text-color-third">Loading...</div>
+          <Loader />
         ) : (
           hasMore && (
             <div className="m-4 text-center">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { HiHashtag } from "react-icons/hi";
 import { CONTENT_LIMIT, TAG_LIMIT } from "../constants";
 import { useCountCharacterLimit } from "../hooks/useCountCharacterLimit";
 import { useSlug } from "../hooks/useSlug";
@@ -56,11 +57,7 @@ export default function TweetFormUpdate({
       theme
     );
     const result = await updateTweet(tweet, slugTag, data.content);
-    notifyUpdate(
-      toastId,
-      result.message,
-      result.success ? "success" : "error"
-    );
+    notifyUpdate(toastId, result.message, result.success ? "success" : "error");
     if (result) {
       onClose();
     }
@@ -93,7 +90,7 @@ export default function TweetFormUpdate({
           })}
           id="content"
           rows={1}
-          className="mb-3 w-full resize-none text-xl focus:outline-none text-color-secondary bg-transparent"
+          className="mb-3 w-full resize-none text-xl text-color-secondary"
           placeholder="What's happening?"
         />
         <div className="-m-2 flex flex-wrap items-center justify-between">
@@ -105,25 +102,17 @@ export default function TweetFormUpdate({
               value={slugTag}
               type="text"
               placeholder="tag"
-              className="text-primary-500 rounded-full bg-fill-secondary focus:focus-input py-2 pl-10 pr-4"
+              className="text-primary-500 rounded-full bg-fill-secondary border-transparent py-2 pl-10 pr-4"
               disabled={!slugTag}
             />
             <div className="absolute inset-y-0 left-0 flex pl-3 pr-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <HiHashtag
+                size={20}
                 className={
                   (slugTag ? "text-primary-500 " : "text-color-third ") +
-                  "m-auto h-5 w-5"
+                  "m-auto"
                 }
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              />
             </div>
           </div>
           <div className="m-2 ml-auto flex items-center space-x-4">

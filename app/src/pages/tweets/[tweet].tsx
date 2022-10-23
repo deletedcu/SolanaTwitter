@@ -7,6 +7,7 @@ import Base from "../../templates/Base";
 import useTweets from "../../hooks/useTweets";
 import useTheme from "../../hooks/useTheme";
 import { notifyLoading, notifyUpdate } from "../../utils";
+import Loader from "../../components/Loader";
 
 export default function Tweet() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function Tweet() {
           </div>
           <div className="pt-4">
             {loading ? (
-              <div className="text-center text-color-third">Loading...</div>
+              <Loader />
             ) : (
               <>
                 {tweet ? (

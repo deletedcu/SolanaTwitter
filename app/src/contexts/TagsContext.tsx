@@ -20,6 +20,7 @@ export function TagsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (workspace) {
+      setLoading(true);
       fetchTags(workspace)
         .then((data) => {
           setTags(data);

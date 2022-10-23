@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { tagIcon } from "../../assets/icons";
+import { HiHashtag } from "react-icons/hi";
 import TweetForm from "../../components/TweetForm";
 import TweetList from "../../components/TweetList";
 import { tagFilter } from "../api/tweets";
@@ -58,7 +58,7 @@ export default function Tags() {
             modelValue={tag}
             search={search}
           >
-            {tagIcon}
+            <HiHashtag size={20} />
           </TweetSearch>
           <TweetForm forceTag={tag} />
           {workspace ? (

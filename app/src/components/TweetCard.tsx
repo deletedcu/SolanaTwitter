@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { SuperEllipseImg } from "react-superellipse";
+import {
+  HiOutlinePencilAlt,
+  HiOutlinePencil,
+  HiOutlineTrash,
+  HiOutlineChatAlt2,
+} from "react-icons/hi";
 import useWorkspace from "../hooks/useWorkspace";
 import { Tweet } from "../models";
 import { Comment } from "../models/Comment";
@@ -71,25 +77,7 @@ export default function TweetCard({
               </Link>
             </time>
             {tweet.state && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="h-4 w-4 p-0.5 text-color-third iconify iconify--heroicons-outline"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"
-                ></path>
-              </svg>
+              <HiOutlinePencilAlt className="text-color-third" size={16} />
             )}
           </div>
           <div className="ml-12 border-b border-skin-primary pb-4">
@@ -111,25 +99,10 @@ export default function TweetCard({
                       onClick={() => onDelete(tweet)}
                       title="Delete tweet"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="none"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"
-                        ></path>
-                      </svg>
+                      <HiOutlineTrash
+                        className="m-1 text-color-third hover:text-primary-500"
+                        size={20}
+                      />
                     </button>
                   )}
                   {isOwner && (
@@ -137,48 +110,20 @@ export default function TweetCard({
                       title="Update tweet"
                       onClick={() => setIsEditing(true)}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        role="img"
-                        className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="none"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732Z"
-                        ></path>
-                      </svg>
+                      <HiOutlinePencil
+                        className="m-1 text-color-third hover:text-primary-500"
+                        size={20}
+                      />
                     </button>
                   )}
                   <button
                     title="Add Comment"
                     onClick={() => setIsCommentEditing(true)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 p-1 text-color-third hover:text-primary-600 iconify iconify--heroicons-outline"
-                      width="1em"
-                      height="1em"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a1.994 1.994 0 0 1-1.414-.586m0 0L11 14h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v4l.586-.586Z"
-                      ></path>
-                    </svg>
+                    <HiOutlineChatAlt2
+                      className="m-1 text-color-third hover:text-primary-500"
+                      size={20}
+                    />
                   </button>
                 </div>
               </div>

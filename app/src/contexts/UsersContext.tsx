@@ -1,5 +1,12 @@
 import { PublicKey } from "@solana/web3.js";
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
 import { getUserAlias } from "../pages/api/alias";
@@ -23,35 +30,41 @@ export function UsersProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (workspace) {
-      fetchUsers(workspace).then((data) => {
-        setUsers(data);
-        const recentOrdered = data
-          .sort((a, b) => b.last_timestamp - a.last_timestamp)
-          .slice(0, 5);
-        setRecentUsers(recentOrdered);
-        setLoading(false);
-      });
+      setLoading(true);
+      fetchUsers(workspace)
+        .then((data) => {
+          setUsers(data);
+          const recentOrdered = data
+            .sort((a, b) => b.last_timestamp - a.last_timestamp)
+            .slice(0, 5);
+          setRecentUsers(recentOrdered);
+        })
+        .finally(() => setLoading(false));
     } else {
       setUsers([]);
       setRecentUsers([]);
+      setLoading(false);
     }
   }, [workspace]);
 
-  const getUserAliasFromPublicKey = useCallback(async (publicKey: PublicKey) => {
-    if (workspace) {
-      const alias = await getUserAlias(workspace.program, publicKey);
-      return alias;
-    } else {
-      return "";
-    }
-  }, [workspace])
+  const getUserAliasFromPublicKey = useCallback(
+    async (publicKey: PublicKey) => {
+      if (workspace) {
+        const alias = await getUserAlias(workspace.program, publicKey);
+        return alias;
+      } else {
+        return "";
+      }
+    },
+    [workspace]
+  );
 
   const value = useMemo(
     () => ({
       users,
       recentUsers,
       loading,
-      getUserAlias: getUserAliasFromPublicKey
+      getUserAlias: getUserAliasFromPublicKey,
     }),
     [users, recentUsers, loading, getUserAliasFromPublicKey]
   );
