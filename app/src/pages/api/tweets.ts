@@ -1,6 +1,6 @@
 import bs58 from "bs58";
 import { Connection, PublicKey } from "@solana/web3.js";
-import { TagType, Tweet, UserType } from "../../models";
+import { TagType, Tweet, TweetState, UserType } from "../../models";
 import { sleep } from "../../utils";
 import { web3, utils, Program } from "@project-serum/anchor";
 import { getPagination } from "../../utils";
@@ -173,6 +173,7 @@ export const updateTweet = async (
 
     tweet.tag = tag;
     tweet.content = content;
+    tweet.state = TweetState.Edited;
     return { success: true, message: "Your tweet was updated successfully!" };
   } catch (err) {
     console.error(err);
