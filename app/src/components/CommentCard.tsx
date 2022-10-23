@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Comment } from "../models/Comment";
-import { SuperEllipseImg } from "react-superellipse";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { Avatar } from "flowbite-react";
 
 export default function CommentCard({ comment }: { comment: Comment }) {
   const wallet = useAnchorWallet();
@@ -16,14 +16,10 @@ export default function CommentCard({ comment }: { comment: Comment }) {
         <div className="mr-2">
           <Link href={userRoute}>
             <a>
-              <SuperEllipseImg
-                width={28}
-                height={28}
-                href={`https://avatars.dicebear.com/api/jdenticon/${comment.user.toBase58()}.svg`}
-                r1={0.1}
-                r2={0.3}
-                strokeColor="rgba(156, 163, 175, 0.3)"
-                strokeWidth={1}
+              <Avatar
+                img={`https://avatars.dicebear.com/api/jdenticon/${comment.user.toBase58()}.svg`}
+                size="sm"
+                rounded={true}
               />
             </a>
           </Link>

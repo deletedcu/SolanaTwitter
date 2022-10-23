@@ -2509,7 +2509,7 @@ dayjs@^1.11.5:
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.5.tgz#00e8cc627f231f9499c19b38af49f56dc0ac5e93"
   integrity sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==
 
-debounce@^1.2.0, debounce@^1.2.1:
+debounce@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
   integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
@@ -4833,15 +4833,6 @@ react-qr-reader@^2.2.1:
     prop-types "^15.7.2"
     webrtc-adapter "^7.2.1"
 
-react-superellipse@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/react-superellipse/-/react-superellipse-0.0.6.tgz#2d79df0fc435ab06825d8c5ec05244288eae48c8"
-  integrity sha512-2SXAfbDY4EHor1vD2/D0Eg/38UKg+FcbontVOdxx0dztR4MIWXOXaobV7npj0JPuMv912QfUN0xe6mYEL//FPA==
-  dependencies:
-    react-use-measure "^2.0.0"
-    resize-observer-polyfill "^1.5.1"
-    superellipsejs "^0.0.6"
-
 react-toastify@^9.0.8:
   version "9.0.8"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.0.8.tgz#3876c89fc6211a29027b3075010b5ec39ebe4f7e"
@@ -4853,13 +4844,6 @@ react-transition-state@^1.1.4:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-1.1.5.tgz#22accee21d0011b1d0245be24b6262ae67f494c3"
   integrity sha512-ITY2mZqc2dWG2eitJkYNdcSFW8aKeOlkL2A/vowRrLL8GH3J6Re/SpD/BLvQzrVOTqjsP0b5S9N10vgNNzwMUQ==
-
-react-use-measure@^2.0.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-use-measure/-/react-use-measure-2.1.1.tgz#5824537f4ee01c9469c45d5f7a8446177c6cc4ba"
-  integrity sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==
-  dependencies:
-    debounce "^1.2.1"
 
 react@16.13.1:
   version "16.13.1"
@@ -4933,11 +4917,6 @@ require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
-
-resize-observer-polyfill@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-dir@^1.0.0, resolve-dir@^1.0.1:
   version "1.0.1"
@@ -5358,11 +5337,6 @@ styled-jsx@5.0.7:
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-5.0.7.tgz#be44afc53771b983769ac654d355ca8d019dff48"
   integrity sha512-b3sUzamS086YLRuvnaDigdAewz1/EFYlHpYBP5mZovKEdQQOIIYq8lApylub3HHZ6xFjV051kkGU7cudJmrXEA==
-
-superellipsejs@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/superellipsejs/-/superellipsejs-0.0.6.tgz#3649b61140d02fd6deeb6271ee1fd2cc2dbf2b08"
-  integrity sha512-l6v/YtKBTt+3oM0ZrqgO+omkDvwJuKu+6emMzjfolcBcjfi+68T8HEzsca13wt2pYmr3wBoL5qR627j5WLD+ig==
 
 superstruct@^0.14.2:
   version "0.14.2"

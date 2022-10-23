@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SuperEllipseImg } from "react-superellipse";
+import { Avatar } from "flowbite-react";
 import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
 import Loader from "./Loader";
@@ -56,14 +56,10 @@ export default function UserList(props: UserListProps) {
                         <td className="py-4 px-3">
                           <Link href={userRoute}>
                             <a>
-                              <SuperEllipseImg
-                                width={36}
-                                height={36}
-                                href={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
-                                r1={0.1}
-                                r2={0.3}
-                                strokeColor="rgba(156, 163, 175, 0.3)"
-                                strokeWidth={1}
+                              <Avatar
+                                img={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
+                                size="md"
+                                rounded={true}
                               />
                             </a>
                           </Link>

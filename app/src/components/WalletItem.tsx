@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Menu, MenuButton, MenuDivider, MenuItem } from "@szhsin/react-menu";
 import { PublicKey } from "@solana/web3.js";
-import { SuperEllipseImg } from "react-superellipse";
 import {
   HiOutlineKey,
   HiOutlinePencilAlt,
@@ -13,6 +12,7 @@ import { toCollapse } from "../utils";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { Avatar } from "flowbite-react";
 
 export default function WalletItem({
   publicKey,
@@ -36,14 +36,10 @@ export default function WalletItem({
     <Menu
       menuButton={
         <MenuButton>
-          <SuperEllipseImg
-            width={30}
-            height={30}
-            href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
-            r1={0.1}
-            r2={0.3}
-            strokeColor="rgba(156, 163, 175, 0.3)"
-            strokeWidth={1}
+          <Avatar
+            img={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
+            size="md"
+            rounded={true}
           />
         </MenuButton>
       }
