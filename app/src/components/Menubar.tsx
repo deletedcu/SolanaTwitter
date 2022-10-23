@@ -117,27 +117,28 @@ function Path() {
   const generatePath = (data: PathType[]) => {
     return (
       <Breadcrumb className="py-0.5 px-6">
-        <Breadcrumb.Item href="/" key="home">
+        <Breadcrumb.Item href="/" key={0}>
           <span className="flex items-center text-color-secondary hover:text-color-primary">
             <HiOutlineHome className="mr-2" size="16" />
             <span>Home</span>
           </span>
         </Breadcrumb.Item>
-        {data.map((item, i) => (
-          <>
-            {item.path ? (
-              <Breadcrumb.Item key={i} href={item.path}>
+        {data.map((item, i) => {
+          if (item.path)
+            return (
+              <Breadcrumb.Item key={i + 1} href={item.path}>
                 <span className="text-color-secondary hover:text-color-primary">
                   {item.name}
                 </span>
               </Breadcrumb.Item>
-            ) : (
+            );
+          else
+            return (
               <Breadcrumb.Item key={i}>
                 <span className="text-color-third">{item.name}</span>
               </Breadcrumb.Item>
-            )}
-          </>
-        ))}
+            );
+        })}
       </Breadcrumb>
     );
   };
