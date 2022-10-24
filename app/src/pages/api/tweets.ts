@@ -351,6 +351,7 @@ export const tagFilter = (tag: string) => ({
       8 + // Discriminator.
       32 + // User public key.
       8 + // Timestamp.
+      1 + // State
       4, // Tag string prefix.
     bytes: bs58.encode(Buffer.from(tag)),
   },
