@@ -3,10 +3,10 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-solana_twitter = "4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62"
+solana_twitter = "EPtFrLBeq4sVLXYWx2CeioaDf2ADPByxg1mnTQCV1drG"
 
 [programs.devnet]
-solana_twitter = "4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62"
+solana_twitter = "EPtFrLBeq4sVLXYWx2CeioaDf2ADPByxg1mnTQCV1drG"
 
 [registry]
 url = "https://anchor.projectserum.com"

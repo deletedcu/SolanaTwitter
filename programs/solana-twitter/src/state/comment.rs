@@ -12,8 +12,8 @@ pub struct Comment {
 
 #[derive(Accounts)]
 pub struct SendComment<'info> {
-    // space: 8 discriminator + 32 user + 32 tweet + 32 parent + 8 timestamp + (4 prefix + 280 * 4) content + 1 edited state
-    #[account(init, payer = user, space = 8 + 32 + 32 + 32 + 8 + (4 + 280 * 4) + 1)]
+    // space: 8 discriminator + 32 user + 32 tweet + 32 parent + 8 timestamp + 1 state + (4 prefix + 280 * 4) content
+    #[account(init, payer = user, space = 8 + 32 + 32 + 32 + 8 + 1 + (4 + 280 * 4))]
     pub comment: Account<'info, Comment>,
     #[account(mut)]
     pub user: Signer<'info>,
