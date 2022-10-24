@@ -4,15 +4,15 @@ use anchor_lang::prelude::*;
 pub struct Tweet {
     pub user: Pubkey,
     pub timestamp: i64,
+    pub state: Option<TweetState>,
     pub tag: String,
     pub content: String,
-    pub state: Option<TweetState>,
 }
 
 #[derive(Accounts)]
 pub struct SendTweet<'info> {
-    // space: 8 discriminator + 32 user pubkey + 8 timestamp + (4 prefix + 50 * 4) tag + (4 prefix + 280 * 4) content + 1 state
-    #[account(init, payer = user, space = 8 + 32 + 8 + (4 + 50 * 4) + (4 + 280 * 4) + 1)]
+    // space: 8 discriminator + 32 user pubkey + 8 timestamp + 1 state + (4 prefix + 50 * 4) tag + (4 prefix + 280 * 4) content
+    #[account(init, payer = user, space = 8 + 32 + 8 + 1 + (4 + 50 * 4) + (4 + 280 * 4))]
     pub tweet: Account<'info, Tweet>,
     #[account(mut)]
     pub user: Signer<'info>,

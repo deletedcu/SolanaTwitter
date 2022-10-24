@@ -1,7 +1,7 @@
 import { Program, utils, web3 } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { Comment } from "../../models/Comment";
+import { Comment, CommentState } from "../../models/Comment";
 import { sleep, toCollapse } from "../../utils";
 import { AliasProps, getUserAlias } from "./alias";
 
@@ -114,6 +114,7 @@ export const fetchComments = async (
 
       return new Comment(comment.publicKey, comment.account, alias);
     })
+    .filter((a) => a.state !== CommentState.Deleted)
     .sort((a, b) => b.timestamp - a.timestamp);
 
   return allComments;

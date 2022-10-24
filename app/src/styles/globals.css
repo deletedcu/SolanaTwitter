@@ -14,6 +14,9 @@
     --border-color: 156 163 175;
     --border-opacity: 0.3;
     --focus-color: 107 114 128;
+    --scrollbar-background: 229 231 235;
+    --scrollbar-thumb: 156 163 175;
+    --scrollbar-thumb-hover: 107 114 128;
   }
 
   .dark {
@@ -27,6 +30,9 @@
     --border-color: 82 82 82;
     --border-opacity: 0.5;
     --focus-color: 115 115 115;
+    --scrollbar-background: 64 64 64;
+    --scrollbar-thumb: 115 115 115;
+    --scrollbar-thumb-hover: 162 162 162;
   }
 }
 
@@ -112,7 +118,7 @@
   /** -------------------------------------------------------------------------------- */
 }
 
-[type='text']:focus {
+[type="text"]:focus {
   @apply outline-none border border-skin-secondary ring-transparent;
 }
 
@@ -155,23 +161,23 @@ textarea:focus {
 ::-webkit-scrollbar {
   height: 12px;
   width: 12px;
-  background: rgba(163, 163, 163, 0.5);
+  background: rgb(var(--scrollbar-background));
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(115 115 115);
+  background: rgb(var(--scrollbar-thumb));
   border-radius: 1ex;
   -webkit-border-radius: 1ex;
-  box-shadow: 0 1px 2px rgba(163, 163, 163, 0.75);
-  -webkit-box-shadow: 0 1px 2px rgba(163, 163, 163, 0.75);
+  box-shadow: 0 1px 2px rgb(var(--scrollbar-background));
+  -webkit-box-shadow: 0 1px 2px rgb(var(--scrollbar-background));
 }
 
 ::-webkit-scrollbar-corner {
-  background: rgba(163, 163, 163, 0.5);
+  background: rgb(var(--scrollbar-background));
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(82 82 82);
+  background: rgb(var(--scrollbar-thumb-hover));
 }

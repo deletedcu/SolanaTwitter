@@ -20,9 +20,9 @@ export class Tweet {
   publickey: PublicKey;
   user: PublicKey;
   timestamp: number;
+  state: TweetState | undefined;
   tag: string;
   content: string;
-  state: TweetState | undefined;
   user_display: string;
   comments: Comment[] = [];
 
@@ -30,9 +30,9 @@ export class Tweet {
     this.publickey = publickey;
     this.user = account.user;
     this.timestamp = account.timestamp;
+    this.state = account.state;
     this.tag = account.tag;
     this.content = account.content;
-    this.state = account.state;
     this.user_display = alias || toCollapse(this.user);
   }
 

@@ -33,9 +33,9 @@ pub fn update_tweet(ctx: Context<UpdateTweet>, new_tag: String, new_content: Str
     require!(new_content.chars().count() <= 280, ErrorCode::TooLong);
     require!(new_content.chars().count() > 0, ErrorCode::NoContent);
 
+    tweet.state = Some(TweetState::Edited);
     tweet.tag = new_tag;
     tweet.content = new_content;
-    tweet.state = Some(TweetState::Edited);
 
     Ok(())
 }
@@ -43,9 +43,9 @@ pub fn update_tweet(ctx: Context<UpdateTweet>, new_tag: String, new_content: Str
 pub fn delete_tweet(ctx: Context<DeleteTweet>) -> Result<()> {
     let tweet = &mut ctx.accounts.tweet;
 
+    tweet.state = Some(TweetState::Deleted);
     tweet.tag = "[deleted]".to_string();
     tweet.content = "".to_string();
-    tweet.state = Some(TweetState::Deleted);
 
     Ok(())
 }

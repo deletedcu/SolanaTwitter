@@ -156,8 +156,8 @@ describe("tweets", () => {
     assert.ok(userTweets.every(tweet => tweet.account.user.toBase58() === user.publicKey.toBase58()));
 
     const tagTweets = await program.account.tweet.all([
-      // offset: 8 Deiscriminator + 32 user public key + 8 timestamp + 4 tag string prefix
-      { memcmp: { offset: 8 + 32 + 8 + 4, bytes: bs58.encode(Buffer.from("veganism")) } }
+      // offset: 8 Deiscriminator + 32 user public key + 8 timestamp + 1 state + 4 tag string prefix
+      { memcmp: { offset: 8 + 32 + 8 + 1 + 4, bytes: bs58.encode(Buffer.from("veganism")) } }
     ]);
     assert.equal(tagTweets.length, 1);
     assert.ok(tagTweets.every(tweet => tweet.account.tag === "veganism"));

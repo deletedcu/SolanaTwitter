@@ -493,16 +493,16 @@
             "type": "i64"
           },
           {
-            "name": "content",
-            "type": "string"
-          },
-          {
             "name": "state",
             "type": {
               "option": {
                 "defined": "CommentState"
               }
             }
+          },
+          {
+            "name": "content",
+            "type": "string"
           }
         ]
       }
@@ -591,20 +591,20 @@
             "type": "i64"
           },
           {
-            "name": "tag",
-            "type": "string"
-          },
-          {
-            "name": "content",
-            "type": "string"
-          },
-          {
             "name": "state",
             "type": {
               "option": {
                 "defined": "TweetState"
               }
             }
+          },
+          {
+            "name": "tag",
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "type": "string"
           }
         ]
       }
@@ -760,6 +760,6 @@
     }
   ],
   "metadata": {
-    "address": "4hFWErito2uEohRQ2eoSv39xyKjLrcuPARCks8iDjX62"
+    "address": "EPtFrLBeq4sVLXYWx2CeioaDf2ADPByxg1mnTQCV1drG"
   }
 }
