@@ -6,8 +6,8 @@ pub struct Comment {
     pub tweet: Pubkey,  // Pubkey of commented tweet
     pub parent: Pubkey, // Pubkey of parent, might be another comment or the commented tweet
     pub timestamp: i64,
-    pub content: String,
-    pub state: Option<CommentState>
+    pub state: Option<CommentState>,
+    pub content: String
 }
 
 #[derive(Accounts)]

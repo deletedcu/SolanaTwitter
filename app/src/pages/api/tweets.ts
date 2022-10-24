@@ -39,17 +39,20 @@ export const paginateTweets = (
       memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
     };
 
-    // Prefetch all tweets with their timestamps only
+    // Prefetch all tweets with their timestamps + state only
     const allTweets = await connection.getProgramAccounts(program.programId, {
       filters: [tweetDiscriminatorFilter, ...filters],
-      dataSlice: { offset: 40, length: 8 },
+      dataSlice: { offset: 40, length: 8 + 1 },
     });
 
     // Parse the timestamp from the account's data
-    const allTweetsWithTimestamps = allTweets.map(({ account, pubkey }) => ({
-      pubkey,
-      timestamp: account.data.readInt32LE(),
-    }));
+    const allTweetsWithTimestamps = allTweets
+      .map(({ account, pubkey }) => ({
+        pubkey,
+        timestamp: account.data.subarray(0, 8).readInt32LE(),
+        state: account.data.subarray(8, 8 + 1).readInt8(),
+      }))
+      .filter((a) => a.state !== TweetState.Deleted);
 
     const pubkeys = allTweetsWithTimestamps
       .sort((a, b) => b.timestamp - a.timestamp)
@@ -66,11 +69,9 @@ export const paginateTweets = (
       paginatedPublicKeys
     );
 
-    return tweets
-      .map((tweet, index) => {
-        return new Tweet(paginatedPublicKeys[index], tweet);
-      })
-      .filter((tweet) => tweet.tag !== "[deleted]");
+    return tweets.map((tweet, index) => {
+      return new Tweet(paginatedPublicKeys[index], tweet);
+    });
   };
 
   const pagination = getPagination(perPage, prefetchCb, pageCb);
@@ -223,18 +224,24 @@ export const fetchTags = async ({
     memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
   };
 
-  // Prefetch all tweets with their timestamp + tags only
+  // Prefetch all tweets with their timestamp + state + tags only
   const allTweets = await connection.getProgramAccounts(program.programId, {
     filters: [tweetDiscriminatorFilter],
-    dataSlice: { offset: 8 + 32, length: 8 + 4 + 50 * 4 },
+    dataSlice: { offset: 8 + 32, length: 8 + 1 + 4 + 50 * 4 },
   });
 
-  const allTags = allTweets.map(({ pubkey, account }) => {
-    const timestamp = account.data.subarray(0, 8).readInt32LE();
-    const prefix = account.data.subarray(8, 8 + 4).readInt8();
-    const tag = account.data.subarray(12, 12 + prefix).toString();
-    return new TagType(tag, 1, pubkey, timestamp);
-  });
+  const allTags = allTweets
+    .filter(({ account }) => {
+      const state = account.data.subarray(8, 8 + 1).readInt8();
+      return state !== TweetState.Deleted;
+    })
+    .map(({ pubkey, account }) => {
+      const timestamp = account.data.subarray(0, 8).readInt32LE();
+      const state = account.data.subarray(8, 8 + 1).readInt8();
+      const prefix = account.data.subarray(9, 9 + 4).readInt8();
+      const tag = account.data.subarray(13, 13 + prefix).toString();
+      return new TagType(tag, 1, pubkey, timestamp);
+    });
 
   type tagProps = {
     [key: string]: TagType;
@@ -272,19 +279,24 @@ export const fetchUsers = async ({
     memcmp: tweetClient.coder.accounts.memcmp(tweetAccountName),
   };
 
-  // Prefetch all tweets with their user + timestamp + tag only
+  // Prefetch all tweets with their user + timestamp + state + tag only
   const allTweets = await connection.getProgramAccounts(program.programId, {
     filters: [tweetDiscriminatorFilter],
-    dataSlice: { offset: 8, length: 32 + 8 + 4 + 50 * 4 },
+    dataSlice: { offset: 8, length: 32 + 8 + 1 + 4 + 50 * 4 },
   });
 
-  const tweetMap = allTweets.map(({ pubkey, account }) => {
-    const user = new PublicKey(account.data.subarray(0, 32));
-    const timestamp = account.data.subarray(32, 32 + 8).readInt32LE();
-    const prefix = account.data.subarray(40, 40 + 4).readInt8();
-    const tag = account.data.subarray(44, 44 + prefix).toString();
-    return new UserType(user, pubkey, tag, timestamp, 0);
-  });
+  const tweetMap = allTweets
+    .filter(({ account }) => {
+      const state = account.data.subarray(40, 40 + 1).readInt8();
+      return state !== TweetState.Deleted;
+    })
+    .map(({ pubkey, account }) => {
+      const user = new PublicKey(account.data.subarray(0, 32));
+      const timestamp = account.data.subarray(32, 32 + 8).readInt32LE();
+      const prefix = account.data.subarray(41, 41 + 4).readInt8();
+      const tag = account.data.subarray(45, 45 + prefix).toString();
+      return new UserType(user, pubkey, tag, timestamp, 0);
+    });
 
   type accType = {
     [key: string]: UserType;

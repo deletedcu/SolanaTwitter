@@ -13,8 +13,8 @@ export class Comment {
   tweet: PublicKey;
   parent?: PublicKey;
   timestamp: number;
-  content: string;
   state: CommentState | undefined;
+  content: string;
   user_display: string;
 
   constructor(publicKey: PublicKey, account: any, alias?: string) {
@@ -23,8 +23,8 @@ export class Comment {
     this.tweet = account.tweet;
     this.parent = account.parent;
     this.timestamp = account.timestamp;
-    this.content = account.content;
     this.state = account.state;
+    this.content = account.content;
     this.user_display = alias || toCollapse(this.user);
   }
 
