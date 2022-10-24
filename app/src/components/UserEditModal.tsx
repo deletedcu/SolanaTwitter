@@ -1,7 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { SuperEllipseImg } from "react-superellipse";
-import { Modal } from "flowbite-react";
+import { Avatar, Modal } from "flowbite-react";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import useTheme from "../hooks/useTheme";
 import useWorkspace from "../hooks/useWorkspace";
@@ -73,14 +72,10 @@ export default function UserEditModal({
       <Modal.Body>
         <div className="text-center">
           <div className="flex items-center justify-center">
-            <SuperEllipseImg
-              width={50}
-              height={50}
-              href={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
-              r1={0.1}
-              r2={0.3}
-              strokeColor="rgba(156, 163, 175, 0.3)"
-              strokeWidth={1}
+            <Avatar
+              img={`https://avatars.dicebear.com/api/jdenticon/${publicKey.toBase58()}.svg`}
+              size="lg"
+              rounded={true}
             />
           </div>
           <h2 className="mt-4 text-lg font-medium leading-6 text-color-primary">

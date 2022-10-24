@@ -1,5 +1,5 @@
+import { Avatar } from "flowbite-react";
 import Link from "next/link";
-import { SuperEllipseImg } from "react-superellipse";
 import useWorkspace from "../hooks/useWorkspace";
 import { UserType } from "../models";
 
@@ -22,14 +22,10 @@ export default function RecentUsers({ users }: { users: UserType[] }) {
             >
               <div className="flex items-center">
                 <div className="mr-3 p-0.5">
-                  <SuperEllipseImg
-                    width={36}
-                    height={36}
-                    href={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
-                    r1={0.1}
-                    r2={0.3}
-                    strokeColor="rgba(156, 163, 175, 0.3)"
-                    strokeWidth={1}
+                  <Avatar
+                    img={`https://avatars.dicebear.com/api/jdenticon/${user.user.toBase58()}.svg`}
+                    size="md"
+                    rounded={true}
                   />
                 </div>
                 <div>
