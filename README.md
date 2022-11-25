@@ -1,5 +1,7 @@
 # Solana Twitter
 
+Solana decentralized application like Twitter.
+
 ## Set up
 
 ```
